@@ -8,20 +8,20 @@ import { cn } from "@/lib/utils";
 export default function Sidebar({ title, setTitle }) {
   // Define a constant for link styles
   const linkStyles = cn(
-    "flex py-2.5 px-2 transition duration-200 hover:scale-110 hover:text-white"
+    "flex items-center justify-center p-2 transition duration-200 hover:scale-110 text-gray-300 hover:text-gray-100"
   );
   const linkStylesSelected = cn(
-    "flex py-2.5 px-2 bg-cyan-600 rounded transition duration-200 ease-in scale-110 text-white"
+    "flex p-2 items-center justify-center bg-indigo-700 rounded transition duration-200 ease-in scale-110 text-white"
   );
   // Define a constant for icon styles
-  const iconStyles = "inline-block ";
+  const iconStyles = cn("inline-block ");
 
   return (
-    <div className="hidden flex-col justify-around items-center bg-blue-800 h-full rounded-2xl  lg:w-16  sm:w-12 sm:flex ">
+    <div className="flex flex-col justify-around items-center bg-gray-800 min-h-full rounded-2xl  lg:w-16  sm:w-12">
       {/*  */}
       {/*  */}
       {/* All pages in the sidebar */}
-      <nav className="flex flex-col items-center justify-center gap-2 ">
+      <nav className="flex flex-col items-center justify-center gap-3">
         <Link
           onClick={() => setTitle("Dashboard")}
           to="/admin"
