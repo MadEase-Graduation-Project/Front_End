@@ -1,3 +1,0 @@
-السلام عليكم 
-
-This services folder for Api services with using axios
