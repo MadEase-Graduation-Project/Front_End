@@ -7,11 +7,11 @@ const baseEndpoint = "/diseasescategory";
 export async function getAllDiseaseCategories(token) {
   try {
     const response = await api.get(`${baseEndpoint}`, {
-      Headers: {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error fetching disease categories", error);
     return [];
@@ -20,12 +20,16 @@ export async function getAllDiseaseCategories(token) {
 
 export async function showDiseaseCategory(id, token) {
   try {
-    const response = await api.get(`${baseEndpoint}/${id}`, {
-      Headers: {
+    const response = await api.get(`${baseEndpoint}`, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    // Filter the diseasesCategories array to find the one matching the id
+    const diseaseCategory = response.data?.data.find(
+      (diseasesCategory) => diseasesCategory._id === id
+    );
+    return diseaseCategory || null;
   } catch (error) {
     console.error("Error fetching disease category", error);
     return [];

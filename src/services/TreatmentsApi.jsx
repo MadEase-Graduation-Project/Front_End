@@ -7,11 +7,11 @@ const baseEndpoint = "/treatment";
 export async function getAllTreatments(token) {
   try {
     const response = await api.get(`${baseEndpoint}`, {
-      Headers: {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error fetching advices", error);
     return [];
@@ -20,12 +20,16 @@ export async function getAllTreatments(token) {
 
 export async function showTreatment(id, token) {
   try {
-    const response = await api.get(`${baseEndpoint}/${id}`, {
-      Headers: {
+    const response = await api.get(`${baseEndpoint}`, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    // filter the treatments array to find the one matching the id
+    const treatment = response.data?.data.find(
+      (treatment) => treatment._id === id
+    );
+    return treatment || null;
   } catch (error) {
     console.error("Error fetching advices", error);
     return [];

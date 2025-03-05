@@ -6,8 +6,8 @@ const baseEndpoint = "/advice";
 //* not authorized endpoints
 export async function getAllAdvices() {
   try {
-    const response = await api.get(baseEndpoint);
-    return response.data;
+    const response = await api.get(`${baseEndpoint}`);
+    return response.data?.data;
   } catch (error) {
     console.error("Error fetching advices", error);
     return [];
@@ -16,8 +16,10 @@ export async function getAllAdvices() {
 
 export async function showAdvice(id) {
   try {
-    const response = await api.get(`${baseEndpoint}/${id}`);
-    return response.data;
+    const response = await api.get(`${baseEndpoint}`);
+    // filter the advices array to find the one matching the id
+    const advice = response.data?.data.find((advice) => advice._id === id);
+    return advice || null;
   } catch (error) {
     console.error("Error fetching advices", error);
     return [];

@@ -11,7 +11,7 @@ export async function getAllAppointments(token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error fetching appointments", error);
     return [];
@@ -25,7 +25,7 @@ export async function showAppointment(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error fetching appointment", error);
     return [];
