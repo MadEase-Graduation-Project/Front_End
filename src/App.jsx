@@ -4,6 +4,10 @@ import Admin_Layout from "./layouts/Admin_Layout";
 import Overview from "./pages/admin/Overview";
 import Appointments from "./pages/admin/Appointments";
 import Diseases from "./pages/admin/Diseases";
+import Patients from "./pages/admin/Patients";
+import Doctors from "./pages/admin/Doctors";
+import Admins from "./pages/admin/Admins";
+import Advices from "./pages/admin/Advices";
 
 function App() {
   return (
@@ -18,7 +22,11 @@ function App() {
       <Route path="/admin" element={<Admin_Layout />}>
         <Route index element={<Overview />} />
         <Route path="appointments" element={<Appointments />} />
+        <Route path="patients" element={<Patients />} />
+        <Route path="doctors" element={<Doctors />} />
+        <Route path="admins" element={<Admins />} />
         <Route path="diseases" element={<Diseases />} />
+        <Route path="advices" element={<Advices />} />
       </Route>
     </Routes>
   );

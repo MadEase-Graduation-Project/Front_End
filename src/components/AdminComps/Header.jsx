@@ -1,10 +1,45 @@
 import { GoBellFill, GoSearch } from "react-icons/go";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Header({ title }) {
+export default function Header({ currentPath }) {
   const [search, setSearch] = useState("");
+  const [title, setTitle] = useState("Dashboard");
+  useEffect(() => {
+    switch (currentPath) {
+      case "/admin":
+        setTitle("Dashboard");
+        break;
+      case "/admin/appointments":
+        setTitle("Appointments");
+        break;
+      case "/admin/patients":
+        setTitle("Patients");
+        break;
+      case "/admin/doctors":
+        setTitle("Doctors");
+        break;
+      case "/admin/admins":
+        setTitle("Admins");
+        break;
+      case "/admin/diseases":
+        setTitle("Diseases");
+        break;
+      case "/admin/advices":
+        setTitle("Advices");
+        break;
+      case "/admin/chat":
+        setTitle("Chat");
+        break;
+      case "/admin/setting":
+        setTitle("Setting");
+        break;
+      default:
+        setTitle("Dashboard");
+    }
+  }, [currentPath]);
+  
   return (
     <header className="flex h-12 lg:h-16 md:h-14 ">
       <div className="flex w-full items-center justify-between">

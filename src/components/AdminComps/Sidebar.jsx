@@ -5,14 +5,17 @@ import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
 import { FaUserDoctor, FaUserShield, FaDisease } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 
-export default function Sidebar({ title, setTitle }) {
+//* links classes
+const linkStyles = cn(
+  "flex items-center justify-center p-2 transition duration-200 hover:scale-110 text-gray-300 hover:text-gray-100"
+);
+const linkStylesSelected = cn(
+  "flex p-2 items-center justify-center bg-indigo-700 rounded transition duration-200 ease-in scale-110 text-white"
+);
+// ----------------------------------------------------------------
+
+export default function Sidebar({ currentPath }) {
   // Define a constant for link styles
-  const linkStyles = cn(
-    "flex items-center justify-center p-2 transition duration-200 hover:scale-110 text-gray-300 hover:text-gray-100"
-  );
-  const linkStylesSelected = cn(
-    "flex p-2 items-center justify-center bg-indigo-700 rounded transition duration-200 ease-in scale-110 text-white"
-  );
   // Define a constant for icon styles
   const iconStyles = cn("inline-block ");
 
@@ -22,93 +25,86 @@ export default function Sidebar({ title, setTitle }) {
       {/*  */}
       {/* All pages in the sidebar */}
       <nav className="flex flex-col items-center justify-center gap-3">
-        <Link
-          onClick={() => setTitle("Dashboard")}
-          to="/admin"
-          className={title === "Dashboard" ? linkStylesSelected : linkStyles}
-        >
+        <NavItem to={"/admin"} isActive={currentPath === "/admin"}>
           <GoHomeFill className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="">Overview</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Appointments")}
-          to="/admin/appointments"
-          className={title === "Appointments" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/appointments"}
+          isActive={currentPath === "/admin/appointments"}
         >
           <MdDateRange className={iconStyles} size={20} />
           {/* {isCollapsed ? null : (
             <span className="  self-center">Appointments</span>
           )} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Patients")}
-          to="/"
-          className={title === "Patients" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/patients"}
+          isActive={currentPath === "/admin/patients"}
         >
           <HiUsers className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Patients</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Doctors")}
-          to="/"
-          className={title === "Doctors" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/doctors"}
+          isActive={currentPath === "/admin/doctors"}
         >
           <FaUserDoctor className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Doctors</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Admins")}
-          to="/"
-          className={title === "Admins" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/admins"}
+          isActive={currentPath === "/admin/admins"}
         >
           <FaUserShield className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Admins</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Diseases")}
-          to="/admin/diseases"
-          className={title === "Diseases" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/diseases"}
+          isActive={currentPath === "/admin/diseases"}
         >
           <FaDisease className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Diseases</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Advices")}
-          to="/admin"
-          className={title === "Advices" ? linkStylesSelected : linkStyles}
+        <NavItem
+          to={"/admin/advices"}
+          isActive={currentPath === "/admin/advices"}
         >
           <MdArticle className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Advices</span>} */}
-        </Link>
+        </NavItem>
         {/*  */}
-        <Link
-          onClick={() => setTitle("Chat")}
-          to="/admin"
-          className={title === "Chat" ? linkStylesSelected : linkStyles}
-        >
+        <NavItem to={"/admin/chat"} isActive={currentPath === "/admin/chat"}>
           <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
           {/* {isCollapsed ? null : <span className="  self-center">Chat</span>} */}
-        </Link>
-        {/* <Link to="" className={linkStyles}>
-          <MdSettingsSuggest className={iconStyles} size={20} />
-        </Link> */}
+        </NavItem>
       </nav>
       {/*  */}
-      <Link
-        onClick={() => setTitle("Setting")}
-        to="/admin"
-        className={title === "Setting" ? linkStylesSelected : linkStyles}
+      <NavItem
+        to={"/admin/setting"}
+        isActive={currentPath === "/admin/setting"}
       >
         <MdSettingsSuggest className={iconStyles} size={20} />
         {/* {isCollapsed ? null : <span className="  self-center">Settings</span>} */}
-      </Link>
+      </NavItem>
       {/*  */}
     </div>
+  );
+}
+
+function NavItem({ to, isActive, children }) {
+  return (
+    <Link
+      to={to}
+      className={`nav-item ${isActive ? linkStylesSelected : linkStyles}`}
+    >
+      {children}
+    </Link>
   );
 }

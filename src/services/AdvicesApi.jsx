@@ -7,22 +7,27 @@ const baseEndpoint = "/advice";
 export async function getAllAdvices() {
   try {
     const response = await api.get(`${baseEndpoint}`);
+    if (!response.data?.data) {
+      throw new Error("No data received from server");
+    }
     return response.data?.data;
   } catch (error) {
     console.error("Error fetching advices", error);
-    return [];
+    throw error;
   }
 }
 
 export async function showAdvice(id) {
   try {
     const response = await api.get(`${baseEndpoint}`);
-    // filter the advices array to find the one matching the id
     const advice = response.data?.data.find((advice) => advice._id === id);
-    return advice || null;
+    if (!advice) {
+      throw new Error(`Advice with id ${id} not found`);
+    }
+    return advice;
   } catch (error) {
-    console.error("Error fetching advices", error);
-    return [];
+    console.error("Error fetching advice", error);
+    throw error;
   }
 }
 //----------------------------------------------

@@ -1,7 +1,0 @@
-السلام عليكم
-
-This pages folders for every user pages like ..
-patient has his pages like >> dashboard - appointments - medical records - profile
-doctor has his pages like >> dashboard - patient list - schedule - reports - profile
-nurse has his pages like >> dashboard - patient list - schedule - reports - profile
-admin has his pages like >> dashboard - ...

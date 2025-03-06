@@ -18,7 +18,7 @@ export const fetchDiseaseById = createAsyncThunk(
 const diseasesSlice = createSlice({
   name: "diseases",
   initialState: {
-    items: [],
+    diseases: [],
     selectedDisease: {},
     loading: false,
     error: null,

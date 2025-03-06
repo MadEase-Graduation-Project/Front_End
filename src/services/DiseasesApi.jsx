@@ -13,7 +13,7 @@ export async function getAllDiseases(token) {
     });
     return response.data?.data;
   } catch (error) {
-    console.error("Error fetching diseases", error);
+    console.error("Error fetching diseases is ...........", error);
     return [];
   }
 }

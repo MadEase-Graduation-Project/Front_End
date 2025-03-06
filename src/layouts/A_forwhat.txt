@@ -1,9 +1,0 @@
-السلام عليكم
-
-This layouts folder for common layouts like ..
-MainLayout for home page and articles pages
-Patient layout
-doctor layout
-nurse layout 
-admin layout 
- 
