@@ -103,7 +103,7 @@ export async function getUser(id, token) {
 export async function loginUser(user) {
   try {
     const response = await api.post(`${baseEndpoint}/login`, user);
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error logging in user", error);
     return [];
@@ -113,7 +113,7 @@ export async function loginUser(user) {
 export async function registerUser(newUser) {
   try {
     const response = await api.post(`${baseEndpoint}/register`, newUser);
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error registering user", error);
     return [];

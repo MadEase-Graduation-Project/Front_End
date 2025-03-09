@@ -41,10 +41,10 @@ export async function addDisease(addedDisease, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
-    console.error("Error adding disease", error);
-    return [];
+    console.error("Error adding disease", error.response?.data);
+    return null; // Changed from [] to null to be consistent with error handling
   }
 }
 
@@ -55,7 +55,7 @@ export async function editDisease(id, editedDisease, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error editing disease", error);
     return [];
@@ -69,7 +69,7 @@ export async function deleteDisease(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error deleting disease", error);
     return [];

@@ -39,7 +39,7 @@ export async function addAppointment(addedAppointment, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error adding appointment", error);
     return [];
@@ -53,7 +53,7 @@ export async function editAppointment(id, editedAppointment, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error editing appointment", error);
     return [];
@@ -67,7 +67,7 @@ export async function deleteAppointment(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error deleting appointment", error);
     return [];

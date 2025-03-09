@@ -43,7 +43,7 @@ export async function addDiseaseCategory(addedCategory, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error adding disease category", error);
     return [];
@@ -57,7 +57,7 @@ export async function editDiseaseCategory(id, editedCategory, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error editing disease category", error);
     return [];
@@ -71,7 +71,7 @@ export async function deleteDiseaseCategory(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error deleting disease category", error);
     return [];

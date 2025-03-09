@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTI0Mjk2NiwiZXhwIjoxNzQxMjU3MzY2fQ.2YxYcHRR0yuMsmgh3l0rH42xd7maC-oNR2vh0xdphoI";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTQzNjM1NCwiZXhwIjoxNzQxNDUwNzU0fQ.ZqWC4xKdqaW2JICcS8O-GtN6hZSV81HOmyhm73s_EGo";
 
 export default function Diseases() {
   const dispatch = useDispatch();

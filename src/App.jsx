@@ -16,18 +16,18 @@ import Advices from "./pages/admin/Advices";
 
 function App() {
   return (
-  <Routes>
+    <Routes>
       {/* layouts and inside them their children  */}
 
       {/* layout like down */}
-      <Route path="/" element={<Main_Layout />}>
+      <Route path="/" element={<Main_Layout />}></Route>
       <Route path="tasneem" element={<Doctor_Dashboard_Layout />}>
-          <Route index element={<Main_Grid />} />
-          <Route path="messages" element={<Messages />} />
-        </Route>
-        {/* children (pages that use this layout) like down */}
-        {/* <Route index element={<Home/>}/> */}
+        <Route index element={<Main_Grid />} />
+        <Route path="messages" element={<Messages />} />
       </Route>
+      {/* children (pages that use this layout) like down */}
+      {/* <Route index element={<Home/>}/> */}
+
       <Route path="/admin" element={<Admin_Layout />}>
         <Route index element={<Overview />} />
         <Route path="appointments" element={<Appointments />} />

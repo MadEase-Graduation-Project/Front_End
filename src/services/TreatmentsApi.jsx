@@ -43,7 +43,7 @@ export async function addTreatment(addedTreatment, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error adding advice", error);
     return [];
@@ -56,7 +56,7 @@ export async function editTreatment(id, editedTreatment, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error editing treatment", error);
     return [];
@@ -70,7 +70,7 @@ export async function deleteTreatment(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data?.data;
   } catch (error) {
     console.error("Error deleting treatment", error);
     return [];
