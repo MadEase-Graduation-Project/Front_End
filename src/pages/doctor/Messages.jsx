@@ -1,6 +1,6 @@
 import React from 'react'
-import { Messages_List_Panel } from './Messages_List_Panel'
-import ChatPanel from './ChatPanel'
+import { Messages_List_Panel } from '../../components/doctor/Messages/Messages_List_Panel'
+import ChatPanel from '../../components/doctor/Messages/ChatPanel'
 
 export const Messages = () => {
   return (

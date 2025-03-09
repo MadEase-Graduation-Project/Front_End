@@ -16,11 +16,11 @@ const data = [
 ];
 
 const MonthlyOverviewChart = () => {
-  return (<div className='col-span-7 rounded-lg border-1 border-gray-200 shadow-sm bg-white pt-5 h-[350px]'>
+  return (<div className='col-span-7 rounded-lg border-1 border-gray-200 shadow-sm bg-white pt-5 h-[400px]'>
     <div className='flex items-center justify-center'>
       <h2 className="text-xl font-semibold">Appointments Monthly Overview</h2>
       </div>
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
         <XAxis dataKey="name" stroke="#37568d" />

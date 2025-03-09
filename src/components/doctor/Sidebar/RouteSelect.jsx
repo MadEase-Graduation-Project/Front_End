@@ -1,24 +1,30 @@
+import { HospitalIcon } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { FiHome, FiLogOut, FiMessageCircle, FiSettings } from "react-icons/fi";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import {RiHealthBookLine} from "react-icons/ri"
 
-const RouteItem = ({ isSelected, Icon, title, onClick }) => {
+const RouteItem = ({ isSelected, Icon, title, onClick, expanded }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center justify-start gap-2 w-full rounded-lg px-2 py-1.5 text-sm transition-[box-shadow,_background-color,_color] ${
+      className={` ${expanded ? "w-full" : ""} rounded-lg px-2 py-1.5 text-lg transition-[box-shadow,_background-color,_color] ${
         isSelected
-          ? "bg-gray-50 text-gray-950 shadow"
-          : "hover:bg-gray-200 bg-transparent text-gray-500 shadow-none"
+          ? "bg-white text-gray-950 shadow"
+          : expanded 
+            ? "hover:bg-gray-200 bg-transparent text-gray-500 shadow-none" 
+            : "hover:bg-[#1e3356] bg-transparent text-gray-500 shadow-none"
       }`}
+      
     >
-      <Icon />
-      <span>{title}</span>
+      
+      {expanded ? <div className="flex items-center justify-start gap-2"><Icon className="text-2xl" /> <span>{title}</span></div> : <Icon className={`text-2xl ${isSelected ? "text-[#37568d]" : "text-white"}`} />
+    }
     </button>
   );
 };
 
-export const RouteSelect = () => {
+export const RouteSelect = ({expanded}) => {
   // Get the current location so we can initialize the selected route.
   const location = useLocation();
   const [selectedRoute, setSelectedRoute] = useState(location.pathname);
@@ -33,14 +39,16 @@ export const RouteSelect = () => {
   };
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 flex-col flex ">
       <Link to="/tasneem" onClick={() => handleRouteClick("/tasneem")}>
-        <RouteItem isSelected={selectedRoute === "/tasneem"} Icon={FiHome} title="Main Dashboard" />
+        <RouteItem isSelected={selectedRoute === "/tasneem"} Icon={FiHome} title="Main Dashboard" expanded={expanded}/>
       </Link>
       <Link to="/tasneem/messages" onClick={() => handleRouteClick("/tasneem/messages")}>
-        <RouteItem isSelected={selectedRoute === "/tasneem/messages"} Icon={FiMessageCircle} title="Messages" />
+        <RouteItem isSelected={selectedRoute === "/tasneem/messages"} Icon={FiMessageCircle} title="Messages" expanded={expanded}/>
       </Link>
-      
+      <Link to="/tasneem/diseases" onClick={() => handleRouteClick("/tasneem/diseases")}>
+        <RouteItem isSelected={selectedRoute === "/tasneem/diseases"} Icon={RiHealthBookLine} title="Diseases" expanded={expanded}/>
+      </Link>
     </div>
   );
 };

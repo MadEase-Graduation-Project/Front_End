@@ -39,12 +39,18 @@ export async function addDisease(addedDisease, token) {
     const response = await api.post(`${baseEndpoint}`, addedDisease, {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
-    return response.data;
+    
+    if (!response.data) {
+      throw new Error('No data received from server');
+    }
+    
+    return response.data?.data;
   } catch (error) {
-    console.error("Error adding disease", error);
-    return [];
+    console.error("Error adding disease:", error.response?.data || error.message);
+    throw error; // Propagate the error to be handled by the component
   }
 }
 
