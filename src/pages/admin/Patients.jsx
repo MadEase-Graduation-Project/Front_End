@@ -3,9 +3,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPatients } from "@/store/Slices/Patients";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTI3MTUwOCwiZXhwIjoxNzQxMjg1OTA4fQ.GFp3K7zavbuFH48dKT_CJhqaNgLXYGp5p0QvM55Mx-Y";
-
 export default function Patients() {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.patients);
@@ -14,7 +11,7 @@ export default function Patients() {
 
   useEffect(() => {
     console.log("the appointments data ya wald ...........<<");
-    dispatch(fetchAllPatients(token));
+    dispatch(fetchAllPatients(localStorage.getItem("token")));
   }, [dispatch]);
 
   return (

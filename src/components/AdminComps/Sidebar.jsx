@@ -7,27 +7,36 @@ import { cn } from "@/lib/utils";
 
 //* links classes
 const linkStyles = cn(
-  "flex items-center justify-center p-2 transition duration-200 hover:scale-110 text-gray-300 hover:text-gray-100"
+  "flex items-center gap-3 pl-2 h-10 transition duration-300 ease-in text-gray-300 hover:text-[#88cce7] w-full"
 );
 const linkStylesSelected = cn(
-  "flex p-2 items-center justify-center bg-indigo-700 rounded transition duration-200 ease-in scale-110 text-white"
+  "flex items-center gap-3 pl-2 h-10 bg-[#007eb1] rounded-r transition duration-300 ease-in text-white w-full border-l-4 border-white"
 );
 // ----------------------------------------------------------------
 
-export default function Sidebar({ currentPath }) {
-  // Define a constant for link styles
+export default function Sidebar({ currentPath, isCollapsed }) {
   // Define a constant for icon styles
-  const iconStyles = cn("inline-block ");
+  const iconStyles = cn(`min-w-[20px] flex-shrink-0`);
 
   return (
-    <div className="flex flex-col justify-around items-center bg-gray-800 min-h-full rounded-2xl  lg:w-16  sm:w-12">
+    <div
+      className={`fixed top-0 left-0 flex flex-col justify-between items-start bg-[#142139] h-screen shadow-lg shadow-gray-900/50 ${
+        isCollapsed
+          ? "w-screen lg:w-44 sm:w-40"
+          : "hidden lg:w-14 sm:flex sm:w-12"
+      } transition-all duration-300 ease-in-out  lg:p-2 overflow-hidden `}
+    >
       {/*  */}
+      <div className="w-full mb-auto flex items-center gap-3 h-10 text-white">
+        <img src="/logo.png" alt="logo" className="w-10 self-center" />
+        {isCollapsed && <span className="text-xl">MadEase</span>}
+      </div>
       {/*  */}
       {/* All pages in the sidebar */}
-      <nav className="flex flex-col items-center justify-center gap-3">
+      <nav className="flex flex-col items-start justify-center gap-3 w-full">
         <NavItem to={"/admin"} isActive={currentPath === "/admin"}>
           <GoHomeFill className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="">Overview</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Overview</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -35,9 +44,7 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/appointments"}
         >
           <MdDateRange className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : (
-            <span className="  self-center">Appointments</span>
-          )} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Appointments</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -45,7 +52,7 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/patients"}
         >
           <HiUsers className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Patients</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -53,7 +60,7 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/doctors"}
         >
           <FaUserDoctor className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Doctors</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Doctors</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -61,7 +68,7 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/admins"}
         >
           <FaUserShield className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Admins</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Admins</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -69,7 +76,7 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/diseases"}
         >
           <FaDisease className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Diseases</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Diseases</span>
         </NavItem>
         {/*  */}
         <NavItem
@@ -77,22 +84,24 @@ export default function Sidebar({ currentPath }) {
           isActive={currentPath === "/admin/advices"}
         >
           <MdArticle className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Advices</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
         </NavItem>
         {/*  */}
         <NavItem to={"/admin/chat"} isActive={currentPath === "/admin/chat"}>
           <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
-          {/* {isCollapsed ? null : <span className="  self-center">Chat</span>} */}
+          <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
         </NavItem>
       </nav>
       {/*  */}
-      <NavItem
-        to={"/admin/setting"}
-        isActive={currentPath === "/admin/setting"}
-      >
-        <MdSettingsSuggest className={iconStyles} size={20} />
-        {/* {isCollapsed ? null : <span className="  self-center">Settings</span>} */}
-      </NavItem>
+      <div className="w-full mt-auto">
+        <NavItem
+          to={"/admin/setting"}
+          isActive={currentPath === "/admin/setting"}
+        >
+          <MdSettingsSuggest className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Settings</span>
+        </NavItem>
+      </div>
       {/*  */}
     </div>
   );

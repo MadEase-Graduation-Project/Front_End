@@ -14,9 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, useMemo } from "react";
-import { fetchAppointments } from "@/store/Slices/Appointments";
+import { useState, useMemo } from "react";
 
 const months = [
   "Jan",
@@ -35,22 +33,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTUyOTQ4NCwiZXhwIjoxNzQxNTQzODg0fQ.QpHJO0bp04wuT3-qnFW8xC-r2f6UFgYxidRyUxK0vzQ";
-
-export function ChartBar() {
-  const dispatch = useDispatch();
-  const {
-    items: appointments,
-    loading,
-    error,
-  } = useSelector((state) => state.appointments);
+export function ChartBar({ appointments }) {
   const [chartType, setChartType] = useState("day");
-
-  useEffect(() => {
-    dispatch(fetchAppointments(token));
-  }, [dispatch]);
-
   // Process days data
   const daysData = useMemo(() => {
     if (!appointments?.length) return [];
@@ -126,8 +110,6 @@ export function ChartBar() {
 
   return (
     <div className="w-full md:w-2/3">
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error}</div>}
       {appointments && (
         <Card>
           <CardHeader>
@@ -173,7 +155,7 @@ export function ChartBar() {
             <button
               className={`px-4 py-2 rounded-md ${
                 chartType === "day"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-[#37568d] text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
               onClick={toggleChartType}

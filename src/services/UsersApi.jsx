@@ -103,10 +103,10 @@ export async function getUser(id, token) {
 export async function loginUser(user) {
   try {
     const response = await api.post(`${baseEndpoint}/login`, user);
-    return response.data?.data;
+    return response.data;
   } catch (error) {
     console.error("Error logging in user", error);
-    return [];
+    return { token: null };
   }
 }
 

@@ -3,21 +3,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../../../assets/doctor-F.png";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById } from "@/store/Slices/Users";
 
 // Settings
 
 export const Settings = () => {
-  const [brandColor, setBrandColor] = useState("#37568d");
-  const [showModal, setShowModal] = useState(false);
+    const [brandColor, setBrandColor] = useState('#37568d');
+    const [showModal, setShowModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const { selectedUser } = useSelector((state) => state.users);
+  console.log(selectedUser);
+  useEffect(() => {
+    dispatch(
+      fetchUserById({
+        id: "67ca34e0f2d6e1f39d3e1759",
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTY0OTkyNCwiZXhwIjoxNzQxNjY0MzI0fQ.nyMbDcYdIrdlM8gFioplJF7vb0sFbmmTSI4yD5UPbjI",
+      })
+    );
+  }, [dispatch]);
+
+  console.log(selectedUser);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  useEffect(() => {
+    if (selectedUser) {
+      setName(selectedUser.name || "");
+      setEmail(selectedUser.email || "");
+      setPhone(selectedUser.phone || "");
+    }
+  }, [selectedUser]);
 
   const handleChangePassword = () => {
     if (newPassword !== confirmPassword) {
@@ -28,12 +56,25 @@ export const Settings = () => {
     console.log("Password changed successfully!");
     setShowModal(false);
   };
+
+  const handleNamechange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handlePhonechange = (e) => {
+    setPhone(e.target.value);
+  };
+
+  const handleEmailchange = (e) => {
+    setEmail(e.target.value);
+  };
+
   return (
-    <div className="px-4 grid grid-cols-12">
+    <div className="px-4">
       <div className="border-b mb-2 pb-4 border-gray-200 col-span-12">
         <h1 className="font-semibold block text-3xl">Settings</h1>
       </div>
-      <Tabs defaultValue="profile" className="w-full mt-4 col-span-12">
+      <Tabs defaultValue="profile" className="w-full mt-4">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
@@ -42,8 +83,8 @@ export const Settings = () => {
 
         {/* Profile Section */}
         <TabsContent value="profile">
-          <div className="w-full px-2 grid grid-cols-12 gap-3">
-            <Card className="col-span-12">
+          <div className="w-full px-2">
+            <Card className="mb-3">
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
@@ -70,16 +111,24 @@ export const Settings = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="col-span-12">
+            <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>First Name</Label>
-                    <Input defaultValue="Tasneem" className="h-10" />
+                    <Input
+                      onChange={handleNamechange}
+                      defaultValue={selectedUser.name}
+                      className="h-10"
+                    />
                   </div>
                   <div>
                     <Label>Last Name</Label>
-                    <Input defaultValue="Fahmi" className="h-10" />
+                    <Input
+                      onChange={handleNamechange}
+                      defaultValue={name}
+                      className="h-10"
+                    />
                   </div>
                   <div>
                     <Label>Username</Label>
@@ -91,7 +140,11 @@ export const Settings = () => {
                   </div>
                   <div>
                     <Label>Phone</Label>
-                    <Input defaultValue="+20 109 767 5029" className="h-10" />
+                    <Input
+                      onChange={handlePhonechange}
+                      defaultValue={phone}
+                      className="h-10"
+                    />
                   </div>
                   <div>
                     <Label>Status</Label>
@@ -138,117 +191,6 @@ export const Settings = () => {
                 </div>
               </CardContent>
             </Card>
-            <div className="gap-3 col-span-4">
-              <h2 className="text-lg font-semibold">
-                Consultation Preferences
-              </h2>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-4">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="in person"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">In Person</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="online"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Online</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="emergency"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Emergency</span>
-                      </label>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="gap-3 col-span-4">
-              <h2 className="text-lg font-semibold">
-                Consultation Preferences
-              </h2>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-4">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="in person"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">In Person</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="online"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Online</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="emergency"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Emergency</span>
-                      </label>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="gap-3 col-span-4">
-              <h2 className="text-lg font-semibold">
-                Consultation Preferences
-              </h2>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-4">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="in person"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">In Person</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="online"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Online</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value="emergency"
-                          className="w-5 h-5 accent-[#37568d] rounded focus:ring-[#37568d]"
-                        />
-                        <span className="text-gray-600">Emergency</span>
-                      </label>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
           <div className="mt-6 flex justify-end space-x-2 px-2">
             <button className="bg-inherit border-2 border-[#37568d] text-gray-900 px-4 py-2 rounded-lg">

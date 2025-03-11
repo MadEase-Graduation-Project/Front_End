@@ -3,9 +3,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllDoctors } from "@/store/Slices/Doctors";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTI0Mjk2NiwiZXhwIjoxNzQxMjU3MzY2fQ.2YxYcHRR0yuMsmgh3l0rH42xd7maC-oNR2vh0xdphoI";
-
 export default function Doctors() {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.doctors);
@@ -14,7 +11,7 @@ export default function Doctors() {
 
   useEffect(() => {
     console.log("the doctors data ya wald ...........<<");
-    dispatch(fetchAllDoctors(token));
+    dispatch(fetchAllDoctors(localStorage.getItem("token")));
   }, [dispatch]);
 
   return (

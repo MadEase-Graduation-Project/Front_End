@@ -15,6 +15,7 @@ import Admins from "./pages/admin/Admins";
 import Advices from "./pages/admin/Advices";
 import { Settings } from "./pages/doctor/Settings/Settings";
 import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
+import Blabal from "./layouts/blabal";
 
 function App() {
   return (
@@ -23,11 +24,12 @@ function App() {
 
       {/* layout like down */}
       <Route path="/" element={<Main_Layout />}></Route>
+      <Route path="/blabal" element={<Blabal />}></Route>
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="messages" element={<Messages />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="diseases" element={<Diseases_doctor/>} />
+        <Route path="diseases" element={<Diseases_doctor />} />
       </Route>
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
