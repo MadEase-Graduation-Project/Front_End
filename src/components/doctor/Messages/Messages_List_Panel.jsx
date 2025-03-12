@@ -25,7 +25,7 @@ const emails = [
   { id: 18, sender: "Mr. Liam O'Connor", subject: "New Symptoms: What Should I Do?", time: "6:50 AM", unread: true, archived: false },
 ];
 
-export const Messages_List_Panel = () => {
+export const Messages_List_Panel = ({ onMessageSelect }) => {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [filter, setFilter] = useState("all");
 
@@ -38,16 +38,21 @@ export const Messages_List_Panel = () => {
 
   const unreadCount = emails.filter(email => email.unread && !email.archived).length;
 
+  const handleEmailClick = (emailId) => {
+    setSelectedEmail(emailId);
+    onMessageSelect && onMessageSelect(emailId);
+  };
+
   return (
-    <div className="col-span-4 rounded-lg border border-gray-200 shadow-sm bg-white h-full">
+    <div className="rounded-lg border border-gray-200 shadow-sm bg-white h-[calc(100vh_-_180px)] flex flex-col">
       <Messages_Filter_Bar filter={filter} setFilter={setFilter} unreadCount={unreadCount} />
-      <main className="flex-1 overflow-y-auto p-4 bg-white h-[calc(100vh_-_300px)]">
+      <main className="flex-1 overflow-y-auto p-4 bg-white">
         <div className="space-y-2">
           {filteredEmails.length > 0 ? (
             filteredEmails.map((email) => (
               <div
                 key={email.id}
-                onClick={() => setSelectedEmail(email.id)}
+                onClick={() => handleEmailClick(email.id)}
                 className={`flex justify-between p-3 rounded-lg cursor-pointer border ${
                   email.unread ? "border-green-500" : "border-gray-300"
                 } ${selectedEmail === email.id ? "bg-gray-200" : "hover:bg-gray-100"}`}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCallback, useState } from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Hypertension", value: 456 },
@@ -57,27 +57,29 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
-
 export const DiagnosisChart = () => {
   return (
-    <div className='col-span-5 rounded-lg border-1 border-gray-200 bg-white shadow-sm'>
+    <div className='col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-5 rounded-lg border-1 border-gray-200 bg-white shadow-sm'>
       <div className='flex items-center justify-center mt-4'>
-      <h2 className="text-xl font-semibold">Average Diagnoses</h2>
+        <h2 className="text-lg md:text-xl font-semibold">Average Diagnoses</h2>
       </div>
-      <PieChart width={475} height={300}>
-      <Pie
-  data={data}
-  cx="50%"
-  cy="50%"
-  label={renderCustomizedLabel} // This enables proper labels inside each slice
-  outerRadius={90} // Slightly increased for better layout
-  dataKey="value"
-  stroke="none" // Removes extra borders for a cleaner look
-    >
-      {data.map((entry, index) => (
-        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-      ))}
-    </Pie>
-  </PieChart></div>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            label={renderCustomizedLabel}
+            outerRadius={90}
+            dataKey="value"
+            stroke="none"
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   )
 }

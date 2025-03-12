@@ -23,13 +23,13 @@ export const StatCards = () => {
 }
 const Card = ({ title, value, pilltext, trend, period }) => {
     return(
-        <div className='p-4 bg-white col-span-3 rounded-lg border-1 border-gray-200 shadow-sm'>
+        <div className='p-4 bg-white col-span-1 sm:col-span-1 md:col-span-3 lg:col-span-3 rounded-lg border-1 border-gray-200 shadow-sm'>
             <div className='flex mb-8 justify-between items-start'> 
                 <div>
                     <h3 className='text-gray-500 mb-2 text-sm'>
                         {title}
                     </h3>
-                    <p className='text-3xl font-semibold'>
+                    <p className='text-2xl md:text-3xl font-semibold'>
                         {value}
                     </p>
                 </div>

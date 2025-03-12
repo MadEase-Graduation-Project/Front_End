@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import React, { useEffect, useState } from "react";
-import profile from "../../../assets/doctor-F.png";
+import profile from "../../../src/assets/doctor-F.png";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -70,12 +70,12 @@ export const Settings = () => {
   };
 
   return (
-    <div className="px-4">
+    <div className="px-2 sm:px-4">
       <div className="border-b mb-2 pb-4 border-gray-200 col-span-12">
-        <h1 className="font-semibold block text-3xl">Settings</h1>
+        <h1 className="font-semibold block text-2xl sm:text-3xl">Settings</h1>
       </div>
       <Tabs defaultValue="profile" className="w-full mt-4">
-        <TabsList>
+        <TabsList className="flex flex-wrap">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
@@ -83,11 +83,11 @@ export const Settings = () => {
 
         {/* Profile Section */}
         <TabsContent value="profile">
-          <div className="w-full px-2">
+          <div className="w-full px-0 sm:px-2">
             <Card className="mb-3">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+              <CardContent className="p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4">
                     <Avatar className="w-16 h-16">
                       <AvatarImage src={profile} alt="Profile" />
                     </Avatar>
@@ -100,20 +100,20 @@ export const Settings = () => {
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <button className="bg-[#37568d] text-white px-4 py-2 rounded-lg mr-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button className="w-full sm:w-auto bg-[#37568d] text-white px-4 py-2 rounded-lg">
                       Change Picture
                     </button>
-                    <button className="bg-inherit border-2 border-[#37568d] text-gray-900 px-4 py-2 rounded-lg">
+                    <button className="w-full sm:w-auto bg-inherit border-2 border-[#37568d] text-gray-900 px-4 py-2 rounded-lg">
                       Delete Picture
                     </button>
-                  </div>{" "}
+                  </div>
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="p-4 sm:p-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label>First Name</Label>
                     <Input
@@ -192,19 +192,19 @@ export const Settings = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="mt-6 flex justify-end space-x-2 px-2">
-            <button className="bg-inherit border-2 border-[#37568d] text-gray-900 px-4 py-2 rounded-lg">
-              Cancel
-            </button>
-            <button className="bg-[#37568d] text-white px-4 py-2 rounded-lg mr-2">
+          <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 px-2">
+            <button className="w-full sm:w-auto bg-[#37568d] text-white px-4 py-2 rounded-lg">
               Save Changes
+            </button>
+            <button className="w-full sm:w-auto bg-inherit border-2 border-[#37568d] text-gray-900 px-4 py-2 rounded-lg">
+              Cancel
             </button>
           </div>
         </TabsContent>
 
         {/* Account Section */}
         <TabsContent value="account">
-          <div className="space-y-4 px-2">
+          <div className="space-y-4 px-0 sm:px-2">
             <div>
               <label className="block text-gray-700 font-medium">Email</label>
               <input
@@ -218,10 +218,10 @@ export const Settings = () => {
               <label className="block text-gray-700 font-medium">
                 Password
               </label>
-              <div className="grid grid-cols-10 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-10 gap-6">
                 <button
                   onClick={() => setShowModal(true)}
-                  className="bg-[#37568d] text-white px-4 py-2 rounded-lg mr-2 col-span-2"
+                  className="w-full sm:w-auto bg-[#37568d] text-white px-4 py-2 rounded-lg col-span-1 sm:col-span-2"
                 >
                   Change Password
                 </button>
@@ -229,11 +229,11 @@ export const Settings = () => {
             </div>
           </div>
           {/* Save and Cancel Buttons */}
-          <div className="mt-6 flex justify-end space-x-2 px-2">
-            <button className="bg-inherit border-2 border-red-700 text-gray-900 px-4 py-2 rounded-lg">
+          <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 px-2">
+            <button className="w-full sm:w-auto bg-inherit border-2 border-red-700 text-gray-900 px-4 py-2 rounded-lg">
               Delete Account
             </button>
-            <button className="bg-red-700 text-white px-4 py-2 rounded-lg mr-2">
+            <button className="w-full sm:w-auto bg-red-700 text-white px-4 py-2 rounded-lg">
               Disable Account
             </button>
           </div>
@@ -256,23 +256,22 @@ export const Settings = () => {
         {/* Appearance Section */}
         <TabsContent value="appearance">
           <Card>
-            <CardContent className="space-y-4 p-6">
+            <CardContent className="space-y-4 p-4 sm:p-6">
               <div>
                 <Label>Brand Color</Label>
                 <Input
                   type="color"
                   value={brandColor}
                   onChange={(e) => setBrandColor(e.target.value)}
+                  className="w-full sm:w-auto"
                 />
               </div>
               <div>
                 <Label>Dashboard Charts</Label>
-                <ToggleGroup type="single" defaultValue="default">
-                  <ToggleGroupItem value="default">Default</ToggleGroupItem>
-                  <ToggleGroupItem value="simplified">
-                    Simplified
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="custom">Custom CSS</ToggleGroupItem>
+                <ToggleGroup type="single" defaultValue="default" className="flex flex-wrap gap-2">
+                  <ToggleGroupItem value="default" className="flex-1">Default</ToggleGroupItem>
+                  <ToggleGroupItem value="simplified" className="flex-1">Simplified</ToggleGroupItem>
+                  <ToggleGroupItem value="custom" className="flex-1">Custom CSS</ToggleGroupItem>
                 </ToggleGroup>
               </div>
             </CardContent>
@@ -280,8 +279,8 @@ export const Settings = () => {
         </TabsContent>
       </Tabs>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-[24rem]">
             <h2 className="text-lg font-bold mb-4">Change Password</h2>
             <input
               type="password"
@@ -305,15 +304,15 @@ export const Settings = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <PasswordStrengthBar password={newPassword} />
-            <div className="flex justify-end space-x-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2">
               <button
-                className="px-4 py-2 bg-gray-400 text-white rounded-lg"
+                className="w-full sm:w-auto px-4 py-2 bg-gray-400 text-white rounded-lg"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-[#37568d] text-white rounded-lg"
+                className="w-full sm:w-auto px-4 py-2 bg-[#37568d] text-white rounded-lg"
                 onClick={handleChangePassword}
               >
                 Save
