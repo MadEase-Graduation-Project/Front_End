@@ -10,12 +10,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserById } from "@/store/Slices/Users";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
+import { CheckboxItem } from "@radix-ui/react-dropdown-menu";
 
 // Settings
 
 export const Settings = () => {
-    const [brandColor, setBrandColor] = useState('#37568d');
-    const [showModal, setShowModal] = useState(false);
+  const [brandColor, setBrandColor] = useState("#37568d");
+  const [showModal, setShowModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -38,12 +41,15 @@ export const Settings = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+
 
   useEffect(() => {
     if (selectedUser) {
       setName(selectedUser.name || "");
       setEmail(selectedUser.email || "");
       setPhone(selectedUser.phone || "");
+      setDateOfBirth(selectedUser.dateOfBirth || "")
     }
   }, [selectedUser]);
 
@@ -69,13 +75,14 @@ export const Settings = () => {
     setEmail(e.target.value);
   };
 
+  const handleDateOfBirthChange = (e) => {
+    setDateOfBirth(e.target.value)
+  }
+
   return (
     <div className="px-2 sm:px-4">
-      <div className="border-b mb-2 pb-4 border-gray-200 col-span-12">
-        <h1 className="font-semibold block text-2xl sm:text-3xl">Settings</h1>
-      </div>
       <Tabs defaultValue="profile" className="w-full mt-4">
-        <TabsList className="flex flex-wrap">
+        <TabsList className="flex flex-wrap mx-2 bg-inherit">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
@@ -83,8 +90,8 @@ export const Settings = () => {
 
         {/* Profile Section */}
         <TabsContent value="profile">
-          <div className="w-full px-0 sm:px-2">
-            <Card className="mb-3">
+          <div className="w-full px-0 sm:px-2 grid grid-cols-12 gap-3">
+            <Card className="col-span-12">
               <CardContent className="p-4 sm:p-6 space-y-4">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4">
@@ -111,7 +118,7 @@ export const Settings = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="col-span-12">
               <CardContent className="p-4 sm:p-6 space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -145,6 +152,23 @@ export const Settings = () => {
                       defaultValue={phone}
                       className="h-10"
                     />
+                  </div>
+                  <div>
+                    <Label>Date Of Birth</Label>
+                    <input 
+                      type="date" 
+                      name="dateOfBirth" 
+                      value={dateOfBirth} 
+                      onChange={handleDateOfBirthChange}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+                  <div>
+                  <Label>Gender</Label>
+                    <select className="w-full p-2 border rounded-md h-10 text-sm shadow-sm">
+                      <option>Female</option>
+                      <option>Male</option>
+                    </select>
                   </div>
                   <div>
                     <Label>Status</Label>
@@ -191,6 +215,59 @@ export const Settings = () => {
                 </div>
               </CardContent>
             </Card>
+            <div className="col-span-12 sm:col-span-4">
+            <Label>Consultation Type</Label>
+            <Card >
+              <CardContent className="p-4 sm:p-6">
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="inperson" 
+                        value="inperson" 
+                        className="accent-[#37568d] w-4 h-4"
+                      />
+                      <label
+                        htmlFor="inperson"
+                        className="text-sm text-gray-700"
+                      >
+                        In person
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="online" 
+                        value="online" 
+                        className="accent-[#37568d] w-4 h-4"
+                      />
+                      <label
+                        htmlFor="online"
+                        className="text-sm text-gray-700"
+                      >
+                        Online
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="emergency" 
+                        value="emergency" 
+                        className="accent-[#37568d] w-4 h-4"
+                      />
+                      <label
+                        htmlFor="emergency"
+                        className="text-sm text-gray-700"
+                      >
+                        Emergency
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            </div>
           </div>
           <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 px-2">
             <button className="w-full sm:w-auto bg-[#37568d] text-white px-4 py-2 rounded-lg">
@@ -268,10 +345,20 @@ export const Settings = () => {
               </div>
               <div>
                 <Label>Dashboard Charts</Label>
-                <ToggleGroup type="single" defaultValue="default" className="flex flex-wrap gap-2">
-                  <ToggleGroupItem value="default" className="flex-1">Default</ToggleGroupItem>
-                  <ToggleGroupItem value="simplified" className="flex-1">Simplified</ToggleGroupItem>
-                  <ToggleGroupItem value="custom" className="flex-1">Custom CSS</ToggleGroupItem>
+                <ToggleGroup
+                  type="single"
+                  defaultValue="default"
+                  className="flex flex-wrap gap-2"
+                >
+                  <ToggleGroupItem value="default" className="flex-1">
+                    Default
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="simplified" className="flex-1">
+                    Simplified
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="custom" className="flex-1">
+                    Custom CSS
+                  </ToggleGroupItem>
                 </ToggleGroup>
               </div>
             </CardContent>
