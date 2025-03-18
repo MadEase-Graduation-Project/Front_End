@@ -16,7 +16,7 @@ const Register = () => {
                 className='absolute top-0 left-0 w-full h-[100vh] object-cover'
             />
             <div className='hidden md:block absolute bottom-[110px] left-[20px] md:left-[50px] text-left '>
-                <p className='font-gabri font-semibold text-4xl lg:text-5xl text-white'>Care with ease,
+                <p className='font-jost font-semibold text-4xl lg:text-5xl text-white'>Care with ease,
                     <br />
                     Health with peace.
                 </p>
