@@ -5,15 +5,15 @@ import Body from '../../components/nosaComps/register/Body';
 import React, { useState } from 'react';
 import BottomBtns from '../../components/nosaComps/register/BottomBtns';
 import DividerText from '../../components/nosaComps/register/DividerText';
-
+// import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const Register = () => {
     const [action, setAction] = useState("Log In");
     return (
-        <div className="w-full h-screen relative flex items-center justify-center md:justify-end">
+        <div className="w-full min-h-screen relative flex items-center justify-center md:justify-end">
             <img
                 src={reg}
-                className='absolute top-0 left-0 w-full h-full object-cover'
+                className='absolute top-0 left-0 w-full h-[100vh] object-cover'
             />
             <div className='hidden md:block absolute bottom-[110px] left-[20px] md:left-[50px] text-left '>
                 <p className='font-gabri font-semibold text-4xl lg:text-5xl text-white'>Care with ease,
