@@ -1,6 +1,7 @@
-import { ChartBar } from "@/components/AdminComps/ChartBar";
+import AppointmentChart from "@/components/AdminComps/AppointmentChart";
+import ChartBar from "@/components/AdminComps/ChartBar";
 import TotalCards from "@/components/AdminComps/TotalCards";
-import { TotalUsersChart } from "@/components/AdminComps/TotalUsersChart";
+import TotalUsersChart from "@/components/AdminComps/TotalUsersChart";
 import { fetchAppointments } from "@/store/Slices/Appointments";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,10 +20,18 @@ export default function Overview() {
 
   return (
     <div className=" flex flex-col gap-2">
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-2 auto-rows-fr">
-        <TotalCards />
-        <TotalUsersChart />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 auto-rows-fr">
+        <div className="lg:col-span-2">
+          <TotalCards />
+        </div>
+        <div className="lg:col-span-1">
+          <TotalUsersChart />
+        </div>
       </div>
+      <div className="">
+        <AppointmentChart />
+      </div>
+
       <ChartBar appointments={appointments} />
     </div>
   );

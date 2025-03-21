@@ -33,7 +33,7 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function ChartBar({ appointments }) {
+export default function ChartBar({ appointments }) {
   const [chartType, setChartType] = useState("day");
   // Process days data
   const daysData = useMemo(() => {
@@ -109,7 +109,7 @@ export function ChartBar({ appointments }) {
   };
 
   return (
-    <div className="w-full md:w-2/3">
+    <div className="w-full">
       {appointments && (
         <Card>
           <CardHeader>
