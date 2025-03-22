@@ -31,7 +31,7 @@ export const Settings = () => {
       fetchUserById({
         id: "67ca34e0f2d6e1f39d3e1759",
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JmMDI1YTMyNWIzYWFhYzlkZDYzZDMiLCJuYW1lIjoia2FoIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTc0MTY0OTkyNCwiZXhwIjoxNzQxNjY0MzI0fQ.nyMbDcYdIrdlM8gFioplJF7vb0sFbmmTSI4yD5UPbjI",
+        localStorage.getItem("doctorToken"),
       })
     );
   }, [dispatch]);
