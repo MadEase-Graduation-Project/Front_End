@@ -11,6 +11,7 @@ export const fetchAllNurses = createAsyncThunk(
 const nursesSlice = createSlice({
   name: "nurses",
   initialState: {
+    items: [],
     loading: false,
     error: null,
   },

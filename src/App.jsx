@@ -16,9 +16,6 @@ import { Settings } from "./pages/doctor/Settings";
 import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
 import { Advice } from "./pages/doctor/Advice";
-import HomePage from "./pages/general/HomePage";
-import Register from "./pages/general/Register";
-
 
 function App() {
   return (
@@ -35,10 +32,7 @@ function App() {
         <Route path="diseases" element={<Diseases_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
-
       </Route>
-      <Route path="/home" element={<HomePage />} />
-      <Route path="/register" element={<Register />} />
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
 

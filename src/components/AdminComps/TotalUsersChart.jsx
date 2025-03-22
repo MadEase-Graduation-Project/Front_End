@@ -23,6 +23,7 @@ export default function TotalUsersChart() {
       value: 4.65,
     },
   ];
+
   return (
     <div className="flex h-full flex-col items-center justify-center bg-white rounded-lg p-2">
       <PieChart

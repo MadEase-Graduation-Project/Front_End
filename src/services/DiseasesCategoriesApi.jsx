@@ -1,5 +1,5 @@
 import api from "./axios";
-const baseEndpoint = "/diseasescategory";
+const baseEndpoint = "/diseasescategories";
 
 // all endpoints for the Disease Categories API
 

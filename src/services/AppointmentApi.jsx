@@ -1,12 +1,11 @@
 import api from "./axios";
-const baseEndpoint = "/appointment";
-//! not ready
+const baseEndpoint = "/appointments";
 // all endpoints for the Appointments API
 
 //* authorized endpoints
 export async function getAllAppointments(token) {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
+    const response = await api.get(`${baseEndpoint}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
