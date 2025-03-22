@@ -32,7 +32,6 @@ function App() {
         <Route path="diseases" element={<Diseases_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
-
       </Route>
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
