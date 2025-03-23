@@ -10,10 +10,13 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)',
+				sm: 'calc(var(--radius) - 4px)'
+			},
+			screens: {
+				xs: '500px'
 			},
 			colors: {
-				// Nosa
+				//Nosa
 				'mepale': '#36568D',
 				'menavy': '#031638',
 				'megreen': '#65DBC0',
@@ -21,11 +24,9 @@ export default {
 				'meyellow': '#FFEF85',
 				'meoff': '#F2F2F2',
 				'menavyoff': 'rgba(3, 22, 56, 0.20)',
-				'menavy-lighten': '#1a3b5d',
 				'whitetransp': 'rgba(255, 255, 255, 0.00)',
 				'mewhite': '#FFFFFF',
-				// 
-
+				//
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {
@@ -75,29 +76,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
-			},
-			//Nosa
-			screens: {
-				xs: '500px'
-			},
-			fontFamily: {
-				jost: ["Jost", "sans-serif"],
-				meri: ["Merienda", "cursive"],
-				gabri: ["Gabriela", "serif"],
-			},
-			fontWeight: {
-				light: '300',
-				normal: '450',
-				semibold: '600',
-			},
-			textDecorationThickness: {
-				auto: "auto",
-			},
-			textUnderlineOffset: {
-				auto: "auto",
-			},
-			//
+				},
+				fontFamily: {
+					jost: ["Jost", "sans-serif"],
+				},
+				fontWeight: {
+					light: '300',
+					normal: '450',
+					semibold: '600',
+				},
+			}
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

@@ -1,42 +1,12 @@
 import Card from "@/components/AdminComps/Card";
-import { fetchAllDoctors } from "@/store/Slices/Doctors";
-import { fetchAllPatients } from "@/store/Slices/Patients";
-import { fetchAppointments } from "@/store/Slices/Appointments";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllNurses } from "@/store/Slices/Nurses";
 import ProgressBar from "@/components/ProgressBar";
 
-export default function TotalCards() {
-  const dispatch = useDispatch();
-  const {
-    items: patients,
-    loading: patientsLoading,
-    error: patientsError,
-  } = useSelector((state) => state.patients);
-  const {
-    items: doctors,
-    loading: doctorsLoading,
-    error: doctorsError,
-  } = useSelector((state) => state.doctors);
-  const {
-    items: appointments,
-    loading: appointmentsLoading,
-    error: appointmentsError,
-  } = useSelector((state) => state.appointments);
-  const {
-    items: nurses,
-    loading: nursesLoading,
-    error: nursesError,
-  } = useSelector((state) => state.nurses);
-
-  useEffect(() => {
-    dispatch(fetchAllPatients(localStorage.getItem("token")));
-    dispatch(fetchAllDoctors(localStorage.getItem("token")));
-    dispatch(fetchAppointments(localStorage.getItem("token")));
-    dispatch(fetchAllNurses(localStorage.getItem("token")));
-  }, [dispatch]);
-
+export default function TotalCards({
+  PatientsData,
+  DoctorsData,
+  AppointmentsData,
+  NursesData,
+}) {
   const loading = () => {
     return <ProgressBar />;
   };
@@ -46,21 +16,33 @@ export default function TotalCards() {
       <div className="grid grid-cols-1 sm:grid-cols-2  gap-2 auto-rows-fr">
         <Card
           title="Total Patients"
-          value={patientsLoading ? loading() : patients && patients.length}
+          value={
+            PatientsData.loading
+              ? loading()
+              : PatientsData.items && PatientsData.items.length
+          }
           pillText="+20"
           trend="up"
           period="to 1/5"
         />
         <Card
           title="Total Doctors"
-          value={doctorsLoading ? loading() : doctors && doctors.length}
+          value={
+            DoctorsData.loading
+              ? loading()
+              : DoctorsData.items && DoctorsData.items.length
+          }
           pillText="+5"
           trend="up"
           period="to 1/5"
         />
         <Card
           title="Total Nurses"
-          value={nursesLoading ? loading() : nurses && nurses.length}
+          value={
+            NursesData.loading
+              ? loading()
+              : NursesData.items && NursesData.items.length
+          }
           pillText="-10%"
           trend="down"
           period="vs last month"
@@ -68,9 +50,9 @@ export default function TotalCards() {
         <Card
           title="Total Appointments"
           value={
-            appointmentsLoading
+            AppointmentsData.loading
               ? loading()
-              : appointments && appointments.length
+              : AppointmentsData.items && AppointmentsData.items.length
           }
           pillText="-10%"
           trend="down"

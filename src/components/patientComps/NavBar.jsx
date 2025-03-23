@@ -16,7 +16,7 @@ const NavBar = ({ scrolled, state }) => (
 
             {state === 'register' ?
 
-                <Link to='/register'
+                <Link to='/signup'
                     className='self-center col-span-2 xs:col-span-1 col-start-11 xs:col-start-12 w-full h-3/4 rounded-[10px] inline-flex justify-center items-center 
                        bg-menavy hover:bg-menavy/90 hover:brightness-110 transition-all duration-250'
                 >

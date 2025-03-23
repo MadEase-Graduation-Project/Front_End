@@ -11,6 +11,7 @@ export const fetchAllDoctors = createAsyncThunk(
 const doctorsSlice = createSlice({
   name: "doctors",
   initialState: {
+    items: [],
     loading: false,
     error: null,
   },

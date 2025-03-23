@@ -6,7 +6,7 @@ export default function Card({ title, value, pillText, trend, period }) {
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-gray-500 mb-2 text-sm font-medium">{title}</h3>
-          <p className="text-3xl font-semibold text-gray-900">{value}</p>
+          <div className="text-3xl font-semibold text-gray-900">{value}</div>
         </div>
         <span
           className={`text-xs flex items-center gap-1 font-medium px-2.5 py-1.5 rounded-full ${

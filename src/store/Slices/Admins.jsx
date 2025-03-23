@@ -11,6 +11,7 @@ export const fetchAllAdmins = createAsyncThunk(
 const AdminsSlice = createSlice({
   name: "admins",
   initialState: {
+    items: [],
     loading: false,
     error: null,
   },

@@ -1,5 +1,5 @@
 import api from "./axios";
-const baseEndpoint = "/user";
+const baseEndpoint = "/users";
 
 // all endpoints for the Users API
 
@@ -18,6 +18,21 @@ export async function getAllUsers(token) {
   }
 }
 
+export async function getOneUser(token, id) {
+  try {
+    const response = await api.get(`${baseEndpoint}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const user = response.data?.data.filter((users) => users._id === id);
+    return user || [];
+  } catch (error) {
+    console.error("Error fetching user", error);
+    return [];
+  }
+}
+
 export async function getAllPatients(token) {
   try {
     const response = await api.get(`${baseEndpoint}/`, {
@@ -26,11 +41,11 @@ export async function getAllPatients(token) {
       },
     });
     const patients = response.data?.data.filter(
-      (users) => users.role === "patient"
+      (users) => users.role === "Patient"
     );
     return patients || [];
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error fetching patients", error);
     return [];
   }
 }
@@ -43,11 +58,11 @@ export async function getAllDoctors(token) {
       },
     });
     const doctors = response.data?.data.filter(
-      (users) => users.role === "doctor"
+      (users) => users.role === "Doctor"
     );
     return doctors || [];
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error fetching doctors", error);
     return [];
   }
 }
@@ -60,11 +75,11 @@ export async function getAllNurses(token) {
       },
     });
     const nurses = response.data?.data.filter(
-      (users) => users.role === "nurse"
+      (users) => users.role === "Nurse"
     );
     return nurses || [];
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error fetching nurses", error);
     return [];
   }
 }
@@ -77,18 +92,18 @@ export async function getAllAdmins(token) {
       },
     });
     const admins = response.data?.data.filter(
-      (users) => users.role === "admin"
+      (users) => users.role === "Admin"
     );
     return admins || [];
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error fetching admins", error);
     return [];
   }
 }
 
-export async function getUser(id, token) {
+export async function getUserData(token) {
   try {
-    const response = await api.get(`${baseEndpoint}/${id}`, {
+    const response = await api.get(`${baseEndpoint}/one`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

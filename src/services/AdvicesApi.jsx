@@ -1,7 +1,7 @@
 import api from "./axios";
 
 // Constants
-const BASE_ENDPOINT = "/advice";
+const BASE_ENDPOINT = "/advices";
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // IndexedDB Cache Service

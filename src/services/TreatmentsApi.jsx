@@ -1,5 +1,5 @@
 import api from "./axios";
-const baseEndpoint = "/treatment";
+const baseEndpoint = "/treatments";
 
 // all endpoints for the Advices API
 
