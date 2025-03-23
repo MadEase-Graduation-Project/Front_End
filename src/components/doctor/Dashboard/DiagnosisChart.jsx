@@ -3,11 +3,11 @@ import { useCallback, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
-  { name: "Hypertension", value: 456 },
-  { name: "Coronary Artery Disease (CAD)", value: 326 },
-  { name: "Other", value: 195 },
-  { name: "Heart Failure", value: 195 },
-  { name: "Atrial Fibrillation (AFib)", value: 130 }
+  { name: "Hypertension", value: 1 },
+  { name: "Coronary Artery Disease (CAD)", value: 1 },
+  // { name: "Other", value: 0 },
+  { name: "Heart Failure", value: 2 },
+  { name: "Atrial Fibrillation (AFib)", value: 1 }
 ];
 
 const COLORS = ["#37568d", "#007eb1", "#00a5ba", "#00c8a6","#8be585"];
