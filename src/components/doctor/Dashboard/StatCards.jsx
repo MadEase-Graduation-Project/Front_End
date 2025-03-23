@@ -1,9 +1,18 @@
 import React from 'react'
 import { FiTrendingDown, FiTrendingUp } from 'react-icons/fi'
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllPatients } from '@/store/Slices/Patients';
 
 
 export const StatCards = () => {
+  const dispatch = useDispatch();
+  const PatientsData = useSelector((state) => state.patients);
+
+  useEffect(() => {
+    dispatch(fetchAllPatients(localStorage.getItem("doctorToken")));
+  }, [dispatch]);
+
     const today = new Date();
     const todaydate = `to ${today.toLocaleDateString()}`
     const weekAgo = new Date();
@@ -13,10 +22,10 @@ export const StatCards = () => {
   
   return (
     <>
-        <Card title="Patients" value="1302" pilltext="+33%" trend="up" period={todaydate}/>
-        <Card title="New this Week" value="55" pilltext="+10%" trend="up" period={weekperiod}/>
-        <Card title="Appointments" value="1111" pilltext="+22%" trend="up" period={todaydate}/>
-        <Card title="New this week" value="44" pilltext="+4%" trend="up" period={weekperiod}/>
+        <Card title="Patients" value={PatientsData.items.length} pilltext="+100%" trend="up" period={todaydate}/>
+        <Card title="New this Week" value={PatientsData.items.length} pilltext="+0%" trend="up" period={weekperiod}/>
+        <Card title="Appointments" value="10" pilltext="+0%" trend="up" period={todaydate}/>
+        <Card title="New this week" value="5" pilltext="+100%" trend="up" period={weekperiod}/>
 
     </>
   )

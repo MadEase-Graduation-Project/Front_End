@@ -10,13 +10,14 @@ import { IoCallOutline, IoLocationOutline, IoMailOutline, IoPersonOutline } from
 
 export const Patients_Main = ({ selectedPatientId }) => {
   const dispatch = useDispatch();
-  const { selectedUser } = useSelector((state) => state.users);
+  const { details } = useSelector((state) => state.users);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
+
 
   useEffect(() => {
     if (selectedPatientId) {
@@ -30,14 +31,16 @@ export const Patients_Main = ({ selectedPatientId }) => {
   }, [dispatch, selectedPatientId]);
 
   useEffect(() => {
-    if (selectedUser) {
-      setName(selectedUser.name || "");
-      setEmail(selectedUser.email || "");
-      setPhone(selectedUser.phone || "");
-      setCity(selectedUser.city || "");
-      setGender(selectedUser.gender || "");
+    if (details[0]) {
+      setName(details[0].name || "");
+      setEmail(details[0].email || "");
+      setPhone(details[0].phone || "");
+      setCity(details[0].city || "");
+      setGender(details[0].gender || "");
     }
-  }, [selectedUser]);
+  }, [details[0]]);
+
+  console.log(details);
 
   if (!selectedPatientId) {
     return (

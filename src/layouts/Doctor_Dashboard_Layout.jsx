@@ -10,7 +10,7 @@ export default function Doctor_Dashboard_Layout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex gap-2 w-full min-h-screen bg-gray-200">
+    <div className="flex gap-2 w-screen min-h-screen bg-gray-200">
       {/* sidebar */}
       <div className="text-white z-10">
         <Sidebar isCollapsed={isCollapsed} currentPath={currentPath}/>
