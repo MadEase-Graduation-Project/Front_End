@@ -17,7 +17,9 @@ import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
 import { Advice } from "./pages/doctor/Advice";
 import HomePage from "./pages/general/HomePage";
-import Register from "./pages/general/Register";
+import LogInPage from "./pages/general/LogInPage";
+import SignUpPage from "./pages/general/SignUpPage";
+import ResetPassPage from "./pages/general/ResetPassPage";
 
 
 function App() {
@@ -38,7 +40,10 @@ function App() {
 
       </Route>
       <Route path="/home" element={<HomePage />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/resetpass" element={<ResetPassPage />} />
+
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
 

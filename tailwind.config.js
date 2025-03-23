@@ -21,7 +21,7 @@ export default {
 				'meyellow': '#FFEF85',
 				'meoff': '#F2F2F2',
 				'menavyoff': 'rgba(3, 22, 56, 0.20)',
-				'menavy-lighten': '#1a3b5d' ,
+				'menavy-lighten': '#1a3b5d',
 				'whitetransp': 'rgba(255, 255, 255, 0.00)',
 				'mewhite': '#FFFFFF',
 				// 
@@ -78,14 +78,13 @@ export default {
 				}
 			},
 			//Nosa
+			screens: {
+				xs: '500px'
+			},
 			fontFamily: {
 				jost: ["Jost", "sans-serif"],
 				meri: ["Merienda", "cursive"],
 				gabri: ["Gabriela", "serif"],
-			},
-			fontSize: {
-				// '20': "20px",
-				// '40': '40px',
 			},
 			fontWeight: {
 				light: '300',

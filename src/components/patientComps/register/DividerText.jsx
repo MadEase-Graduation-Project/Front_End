@@ -1,10 +1,10 @@
 import Divider from "./divider";
 import TextTitle from "../TextTitle";
 
-const DividerText = ({state}) => (
+const DividerText = ({reg}) => (
     <div className="hidden md:flex gap-[8px]">
         <Divider />
-        <TextTitle text={state === "Sign Up"?"or register with":"or sign up with"}/>
+        <TextTitle text={reg}/>
         <Divider />
     </div>
 );

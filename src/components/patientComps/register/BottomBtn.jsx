@@ -9,7 +9,7 @@ const BottomBtn = ({ source, btn }) => (
         <div className="flex items-center justify-center gap-[10px] sm:gap-[5px]">
             <img
                 src={source}
-                className='w-[30px] h-[30px] sm:w-[25px] sm:h-[25px]'
+                className='w-[20px] sm:w-[25px] h-auto'
             />
              <TextTitle text={btn} className="hidden sm:block md:text-base " />
         </div>

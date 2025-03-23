@@ -1,14 +1,14 @@
 import reg from '../../assets/images/reg.png';
 import final_logo from '../../assets/images/final_logo.svg'
-import TopReg from '../../components/nosaComps/register/TopReg';
-import Body from '../../components/nosaComps/register/Body';
-import React, { useState } from 'react';
-import BottomBtns from '../../components/nosaComps/register/BottomBtns';
-import DividerText from '../../components/nosaComps/register/DividerText';
+import logo_M from '../../assets/images/logoMin.svg'
+import TopReg from '../../components/patientComps/register/TopReg';
+import Body from '../../components/patientComps/register/Body';
+import BottomBtns from '../../components/patientComps/register/BottomBtns';
+import DividerText from '../../components/patientComps/register/DividerText';
+import HalfBodyLogin from '../../components/patientComps/register/HalfBodyLogin';
 // import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-const Register = () => {
-    const [action, setAction] = useState("Log In");
+const LogInPage = () => {
     return (
         <div className="w-full min-h-screen relative flex items-center justify-center md:justify-end">
             <img
@@ -22,20 +22,27 @@ const Register = () => {
                 </p>
             </div>
             <div className="absolute  w-[90%] sm:w-3/4 md:w-1/2 h-auto md:h-full flex justify-center items-center p-5">
-                <div className='w-full h-full bg-white/60 rounded-[40px] flex flex-col justify-start items-center gap-[15px] 
+                <div className='w-full h-full bg-white/60 rounded-[40px] flex flex-col justify-center items-center gap-[15px] 
                 shadow-[6px_6px_12px_6px_rgba(0,0,0,0.25)] p-5'
                 >
                     <img
                         src={final_logo}
-                        className='w-[160px] md:w-[186px] h-auto'
+                        className='hidden sm:block sm:w-[140px] md:w-[150px] lg:w-[180px] h-auto'
+                    />
+                    <img
+                        src={logo_M}
+                        className='block sm:hidden w-[50px] h-auto'
                     />
                     <div className='w-3/4 h-auto flex flex-col justify-start gap-[5px]'>
                         <TopReg
-                            state={action}
-                            setState={setAction}
+                            regtitle={"Welcome Back!!"}
+                            regnote={"don't have an account?"}
+                            reg={"Sign up"}
+                            dest={"/signup"}
                         />
-                        <Body state={action} />
-                        <DividerText state={action} />
+                        <Body />
+                        <HalfBodyLogin />
+                        <DividerText reg={"or signup with"} />
                         <BottomBtns />
 
                     </div>
@@ -45,7 +52,6 @@ const Register = () => {
     );
 }
 
-
-export default Register
+export default LogInPage
 //justify>>with the axis of the flex
 //items>>with the normal to the flex
