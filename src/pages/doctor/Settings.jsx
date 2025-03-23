@@ -24,8 +24,8 @@ export const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const dispatch = useDispatch();
-  const { selectedUser } = useSelector((state) => state.users);
-  console.log(selectedUser);
+  const { details } = useSelector((state) => state.users);
+  console.log(details);
   useEffect(() => {
     dispatch(
       fetchUserById({
@@ -36,7 +36,7 @@ export const Settings = () => {
     );
   }, [dispatch]);
 
-  console.log(selectedUser);
+  console.log(details);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,13 +45,13 @@ export const Settings = () => {
 
 
   useEffect(() => {
-    if (selectedUser) {
-      setName(selectedUser.name || "");
-      setEmail(selectedUser.email || "");
-      setPhone(selectedUser.phone || "");
-      setDateOfBirth(selectedUser.dateOfBirth || "")
+    if (details[0]) {
+      setName(details[0].name || "");
+      setEmail(details[0].email || "");
+      setPhone(details[0].phone || "");
+      setDateOfBirth(details[0].dateOfBirth || "")
     }
-  }, [selectedUser]);
+  }, [details[0]]);
 
   const handleChangePassword = () => {
     if (newPassword !== confirmPassword) {
@@ -125,7 +125,7 @@ export const Settings = () => {
                     <Label>First Name</Label>
                     <Input
                       onChange={handleNamechange}
-                      defaultValue={selectedUser.name}
+                      defaultValue={name}
                       className="h-10"
                     />
                   </div>
@@ -287,7 +287,7 @@ export const Settings = () => {
               <input
                 type="email"
                 className="w-full p-2 border rounded bg-gray-200"
-                value="tasneemfahmimadkour@gmail.com"
+                value={email}
                 disabled
               />
             </div>
@@ -330,7 +330,7 @@ export const Settings = () => {
           </Card>
         </TabsContent>
 
-        {/* Appearance Section */}
+        {/* Appearance Section
         <TabsContent value="appearance">
           <Card>
             <CardContent className="space-y-4 p-4 sm:p-6">
@@ -363,7 +363,7 @@ export const Settings = () => {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
