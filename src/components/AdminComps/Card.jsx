@@ -1,25 +1,20 @@
-import { FiTrendingDown, FiTrendingUp } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
-export default function Card({ title, value, pillText, trend, period }) {
+export default function Card({ title, value, period, children, to }) {
   return (
-    <div className="h-full flex flex-col justify-between gap-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-gray-500 mb-2 text-sm font-medium">{title}</h3>
-          <div className="text-3xl font-semibold text-gray-900">{value}</div>
+    <div className="h-full flex flex-col justify-between gap-2 p-4 bg-white rounded-lg border border-gray-200 shadow-sm transition-all duration-300  hover:shadow-md hover:translate-y-[-1px] ">
+      <Link to={to} className="flex items-center px-2 gap-4 w-fit group ">
+        <div className="flex items-center gap-3">
+          {children}
+          <h3 className="text-gray-500 group-hover:text-gray-950">{title}</h3>
         </div>
-        <span
-          className={`text-xs flex items-center gap-1 font-medium px-2.5 py-1.5 rounded-full ${
-            trend === "up"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {trend === "up" ? <FiTrendingUp /> : <FiTrendingDown />}
-          {pillText}
-        </span>
+        <span className="text-gray-500 group-hover:text-gray-950">{">"}</span>
+      </Link>
+      <hr className="border-gray-200" />
+      <div className="flex justify-between items-center px-2">
+        <div className="text-3xl font-semibold text-gray-900">{value}</div>
+        <p className="text-xs text-gray-500">{period}</p>
       </div>
-      <p className="text-xs text-gray-500">{period}</p>
     </div>
   );
 }

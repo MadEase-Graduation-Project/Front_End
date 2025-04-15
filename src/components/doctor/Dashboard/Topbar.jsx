@@ -42,8 +42,12 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
             />
           </button>
           <div>
-            <span className="text-xl md:text-3xl font-semibold block">{getPageTitle()}</span>
-            <span className="text-xs md:text-sm block text-gray-500"><TodayDate /></span>
+            <span className="text-xl md:text-3xl font-semibold block">
+              {getPageTitle()}
+            </span>
+            <span className="text-xs md:text-sm block text-gray-500">
+              <TodayDate />
+            </span>
           </div>
         </div>
 
