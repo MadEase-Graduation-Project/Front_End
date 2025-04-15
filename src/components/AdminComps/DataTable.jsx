@@ -1,20 +1,6 @@
-import { useState } from "react";
-
-export default function DataTable({ columns, data, propertyMap }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 6;
-
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
-
-  const pageCount = Math.ceil(data.length / rowsPerPage);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page + 1);
-  };
+export default function DataTable({ columns, data }) {
   return (
-    <div className="flex flex-col items-center border bg-gray-50 rounded-lg truncate">
+    <div>
       <table className="min-w-full divide-y divide-gray-200">
         {/* header */}
         <thead>
@@ -40,7 +26,7 @@ export default function DataTable({ columns, data, propertyMap }) {
         {/* ------------------------------------------------------ */}
         {/* body */}
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentRows.map((item) => (
+          {data.map((item) => (
             <tr key={item._id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
@@ -50,31 +36,23 @@ export default function DataTable({ columns, data, propertyMap }) {
                   />
                 </div>
               </td>
-              {columns.map((column) => (
-                <td key={column} className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {item[propertyMap[column]]}
-                  </div>
-                </td>
-              ))}
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-gray-900"> {item.name}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  {item.description}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  {item.rank}
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <div className="flex justify-center items-center my-2">
-        {Array.from({ length: pageCount }, (_, index) => (
-          <button
-            key={index}
-            className={`p-1 mx-1 text-sm rounded ${
-              currentPage === index + 1 ? "bg-blue-500 text-white" : ""
-            }`}
-            onClick={() => handlePageChange(index)}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
