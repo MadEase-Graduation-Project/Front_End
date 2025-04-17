@@ -1,79 +1,108 @@
 import api from "./axios";
-const baseEndpoint = "/diseasescategories";
+import {
+  createAuthHeader,
+  handleApiResponse,
+  handleApiError,
+} from "./apiUtils";
 
-// all endpoints for the Disease Categories API
+/**
+ * Disease Categories API Service
+ * Handles all API calls related to disease categories
+ */
 
-//* authorized endpoints
-export async function getAllDiseaseCategories(token) {
+// Constants
+const BASE_ENDPOINT = "/diseasescategories";
+
+/**
+ * Gets all disease categories
+ * @returns {Promise<Array>} List of disease categories
+ */
+export async function getAllDiseaseCategories() {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    return handleApiResponse(response, "No disease categories found");
   } catch (error) {
-    console.error("Error fetching disease categories", error);
-    return [];
+    return handleApiError(error, "fetching disease categories");
   }
 }
 
-export async function showDiseaseCategory(id, token) {
+/**
+ * Gets a specific disease category by ID
+ * @param {string} id - Disease category ID
+ * @returns {Promise<Object>} Disease category details
+ */
+export async function showDiseaseCategory(id) {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Filter the diseasesCategories array to find the one matching the id
-    const diseaseCategory = response.data?.data.find(
-      (diseasesCategory) => diseasesCategory._id === id
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const data = handleApiResponse(response, "No disease categories found");
+
+    const category = data.find((category) => category._id === id);
+    if (!category) {
+      throw new Error(`Disease category with id ${id} not found`);
+    }
+
+    return category;
+  } catch (error) {
+    return handleApiError(error, `fetching disease category ${id}`);
+  }
+}
+
+/**
+ * Adds a new disease category
+ * @param {Object} categoryData - New disease category data
+ * @returns {Promise<Object>} Created disease category
+ */
+export async function addDiseaseCategory(categoryData) {
+  try {
+    const response = await api.post(
+      BASE_ENDPOINT,
+      categoryData,
+      createAuthHeader()
     );
-    return diseaseCategory || null;
+    return handleApiResponse(response, "Failed to create disease category");
   } catch (error) {
-    console.error("Error fetching disease category", error);
-    return [];
+    return handleApiError(error, "adding disease category");
   }
 }
 
-export async function addDiseaseCategory(addedCategory, token) {
+/**
+ * Updates an existing disease category
+ * @param {string} id - Disease category ID
+ * @param {Object} categoryData - Updated disease category data
+ * @returns {Promise<Object>} Updated disease category
+ */
+export async function editDiseaseCategory(id, categoryData) {
   try {
-    const response = await api.post(`${baseEndpoint}`, addedCategory, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.put(
+      `${BASE_ENDPOINT}/${id}`,
+      categoryData,
+      createAuthHeader()
+    );
+    return handleApiResponse(
+      response,
+      `Failed to update disease category ${id}`
+    );
   } catch (error) {
-    console.error("Error adding disease category", error);
-    return [];
+    return handleApiError(error, `editing disease category ${id}`);
   }
 }
 
-export async function editDiseaseCategory(id, editedCategory, token) {
+/**
+ * Deletes a disease category
+ * @param {string} id - Disease category ID
+ * @returns {Promise<Object>} Deletion result
+ */
+export async function deleteDiseaseCategory(id) {
   try {
-    const response = await api.put(`${baseEndpoint}/${id}`, editedCategory, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.delete(
+      `${BASE_ENDPOINT}/${id}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(
+      response,
+      `Failed to delete disease category ${id}`
+    );
   } catch (error) {
-    console.error("Error editing disease category", error);
-    return [];
-  }
-}
-
-export async function deleteDiseaseCategory(id, token) {
-  try {
-    const response = await api.delete(`${baseEndpoint}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
-  } catch (error) {
-    console.error("Error deleting disease category", error);
-    return [];
+    return handleApiError(error, `deleting disease category ${id}`);
   }
 }

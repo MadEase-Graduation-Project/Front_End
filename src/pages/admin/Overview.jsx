@@ -26,12 +26,12 @@ export default function Overview() {
   const AdvicesData = useSelector((state) => state.advices);
 
   useEffect(() => {
-    dispatch(fetchAllPatients(localStorage.getItem("token")));
-    dispatch(fetchAllDoctors(localStorage.getItem("token")));
-    dispatch(fetchAppointments(localStorage.getItem("token")));
-    dispatch(fetchAllNurses(localStorage.getItem("token")));
-    dispatch(fetchAllAdmins(localStorage.getItem("token")));
-    dispatch(fetchAllDiseases(localStorage.getItem("token")));
+    dispatch(fetchAllPatients());
+    dispatch(fetchAllDoctors());
+    dispatch(fetchAppointments());
+    dispatch(fetchAllNurses());
+    dispatch(fetchAllAdmins());
+    dispatch(fetchAllDiseases());
     dispatch(fetchAllAdvices());
   }, [dispatch]);
 

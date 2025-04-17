@@ -10,7 +10,7 @@ export default function LastDiseases() {
   const [maxItems, setMaxItems] = useState(5);
 
   useEffect(() => {
-    dispatch(fetchAllDiseases(localStorage.getItem("token")));
+    dispatch(fetchAllDiseases());
   }, [dispatch]);
 
   const handleShowMore = () => {

@@ -3,22 +3,22 @@ import { getAllUsers, getOneUser, getUserData } from "../../services/UsersApi";
 
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
-  async (token) => {
-    return await getAllUsers(token);
+  async () => {
+    return await getAllUsers();
   }
 );
 
 export const fetchUserData = createAsyncThunk(
   "users/fetchUserData",
-  async (token) => {
-    return await getUserData(token);
+  async () => {
+    return await getUserData();
   }
 );
 
 export const fetchUserById = createAsyncThunk(
   "users/fetchUserById",
-  async ({ token, id }) => {
-    return await getOneUser(token, id);
+  async ({ id }) => {
+    return await getOneUser(id);
   }
 );
 

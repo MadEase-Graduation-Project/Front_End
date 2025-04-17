@@ -3,8 +3,8 @@ import { getAllDoctors } from "../../services/UsersApi";
 
 export const fetchAllDoctors = createAsyncThunk(
   "doctors/fetchDoctors",
-  async (token) => {
-    return await getAllDoctors(token);
+  async () => {
+    return await getAllDoctors();
   }
 );
 

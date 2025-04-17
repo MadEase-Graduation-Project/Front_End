@@ -1,74 +1,99 @@
 import api from "./axios";
-const baseEndpoint = "/appointments";
-// all endpoints for the Appointments API
+import {
+  createAuthHeader,
+  handleApiResponse,
+  handleApiError,
+} from "./apiUtils";
 
-//* authorized endpoints
-export async function getAllAppointments(token) {
+/**
+ * Appointments API Service
+ * Handles all API calls related to appointments
+ */
+
+// Constants
+const BASE_ENDPOINT = "/appointments";
+
+/**
+ * Gets all appointments
+ * @returns {Promise<Array>} List of appointments
+ */
+export async function getAllAppointments() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    return handleApiResponse(response, "No appointments found");
   } catch (error) {
-    console.error("Error fetching appointments", error);
-    return [];
+    return handleApiError(error, "fetching appointments");
   }
 }
 
-export async function showAppointment(id, token) {
+/**
+ * Gets a specific appointment by ID
+ * @param {string} id - Appointment ID
+ * @returns {Promise<Object>} Appointment details
+ */
+export async function showAppointment(id) {
   try {
-    const response = await api.get(`${baseEndpoint}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(
+      `${BASE_ENDPOINT}/${id}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Appointment with id ${id} not found`);
   } catch (error) {
-    console.error("Error fetching appointment", error);
-    return [];
+    return handleApiError(error, `fetching appointment ${id}`);
   }
 }
 
-export async function addAppointment(addedAppointment, token) {
+// TODO: look create endpoint and edit that
+/**
+ * Adds a new appointment
+ * @param {Object} appointmentData - New appointment data
+ * @returns {Promise<Object>} Created appointment
+ */
+export async function addAppointment(appointmentData) {
   try {
-    const response = await api.post(`${baseEndpoint}`, addedAppointment, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.post(
+      BASE_ENDPOINT,
+      appointmentData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, "Failed to create appointment");
   } catch (error) {
-    console.error("Error adding appointment", error);
-    return [];
+    return handleApiError(error, "adding appointment");
   }
 }
 
-export async function editAppointment(id, editedAppointment, token) {
+/**
+ * Updates an existing appointment
+ * @param {string} id - Appointment ID
+ * @param {Object} appointmentData - Updated appointment data
+ * @returns {Promise<Object>} Updated appointment
+ */
+export async function editAppointment(id, appointmentData) {
   try {
-    const response = await api.put(`${baseEndpoint}/${id}`, editedAppointment, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.put(
+      `${BASE_ENDPOINT}/${id}`,
+      appointmentData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to update appointment ${id}`);
   } catch (error) {
-    console.error("Error editing appointment", error);
-    return [];
+    return handleApiError(error, `editing appointment ${id}`);
   }
 }
 
-export async function deleteAppointment(id, token) {
+/**
+ * Deletes an appointment
+ * @param {string} id - Appointment ID
+ * @returns {Promise<Object>} Deletion result
+ */
+export async function deleteAppointment(id) {
   try {
-    const response = await api.delete(`${baseEndpoint}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.delete(
+      `${BASE_ENDPOINT}/user/${id}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to delete appointment ${id}`);
   } catch (error) {
-    console.error("Error deleting appointment", error);
-    return [];
+    return handleApiError(error, `deleting appointment ${id}`);
   }
 }

@@ -1,79 +1,102 @@
 import api from "./axios";
-const baseEndpoint = "/treatments";
+import {
+  createAuthHeader,
+  handleApiResponse,
+  handleApiError,
+} from "./apiUtils";
 
-// all endpoints for the Advices API
+/**
+ * Treatments API Service
+ * Handles all API calls related to treatments
+ */
 
-//* authorized endpoints
-export async function getAllTreatments(token) {
+// Constants
+const BASE_ENDPOINT = "/treatments";
+
+/**
+ * Gets all treatments
+ * @returns {Promise<Array>} List of treatments
+ */
+export async function getAllTreatments() {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    return handleApiResponse(response, "No treatments found");
   } catch (error) {
-    console.error("Error fetching advices", error);
-    return [];
+    return handleApiError(error, "fetching treatments");
   }
 }
 
-export async function showTreatment(id, token) {
+/**
+ * Gets a specific treatment by ID
+ * @param {string} id - Treatment ID
+ * @returns {Promise<Object>} Treatment details
+ */
+export async function showTreatment(id) {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // filter the treatments array to find the one matching the id
-    const treatment = response.data?.data.find(
-      (treatment) => treatment._id === id
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const data = handleApiResponse(response, "No treatments found");
+
+    const treatment = data.find((treatment) => treatment._id === id);
+    if (!treatment) {
+      throw new Error(`Treatment with id ${id} not found`);
+    }
+
+    return treatment;
+  } catch (error) {
+    return handleApiError(error, `fetching treatment ${id}`);
+  }
+}
+
+/**
+ * Adds a new treatment
+ * @param {Object} treatmentData - New treatment data
+ * @returns {Promise<Object>} Created treatment
+ */
+export async function addTreatment(treatmentData) {
+  try {
+    const response = await api.post(
+      BASE_ENDPOINT,
+      treatmentData,
+      createAuthHeader()
     );
-    return treatment || null;
+    return handleApiResponse(response, "Failed to create treatment");
   } catch (error) {
-    console.error("Error fetching advices", error);
-    return [];
+    return handleApiError(error, "adding treatment");
   }
 }
 
-export async function addTreatment(addedTreatment, token) {
+/**
+ * Updates an existing treatment
+ * @param {string} id - Treatment ID
+ * @param {Object} treatmentData - Updated treatment data
+ * @returns {Promise<Object>} Updated treatment
+ */
+export async function editTreatment(id, treatmentData) {
   try {
-    const response = await api.post(`${baseEndpoint}`, addedTreatment, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.put(
+      `${BASE_ENDPOINT}/${id}`,
+      treatmentData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to update treatment ${id}`);
   } catch (error) {
-    console.error("Error adding advice", error);
-    return [];
-  }
-}
-export async function editTreatment(id, editedTreatment, token) {
-  try {
-    const response = await api.put(`${baseEndpoint}/${id}`, editedTreatment, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
-  } catch (error) {
-    console.error("Error editing treatment", error);
-    return [];
+    return handleApiError(error, `editing treatment ${id}`);
   }
 }
 
-export async function deleteTreatment(id, token) {
+/**
+ * Deletes a treatment
+ * @param {string} id - Treatment ID
+ * @returns {Promise<Object>} Deletion result
+ */
+export async function deleteTreatment(id) {
   try {
-    const response = await api.delete(`${baseEndpoint}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.delete(
+      `${BASE_ENDPOINT}/${id}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to delete treatment ${id}`);
   } catch (error) {
-    console.error("Error deleting treatment", error);
-    return [];
+    return handleApiError(error, `deleting treatment ${id}`);
   }
 }
-//----------------------------------------------
