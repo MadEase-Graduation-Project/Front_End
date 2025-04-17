@@ -3,8 +3,8 @@ import { getAllAdmins } from "../../services/UsersApi";
 
 export const fetchAllAdmins = createAsyncThunk(
   "admins/fetchAdmins",
-  async (token) => {
-    return await getAllAdmins(token);
+  async () => {
+    return await getAllAdmins();
   }
 );
 

@@ -1,136 +1,159 @@
 import api from "./axios";
-const baseEndpoint = "/users";
+import {
+  createAuthHeader,
+  handleApiResponse,
+  handleApiError,
+} from "./apiUtils";
 
-// all endpoints for the Users API
+/**
+ * Users API Service
+ * Handles all API calls related to users
+ */
 
-//* authorized endpoints
-export async function getAllUsers(token) {
+// Constants
+const BASE_ENDPOINT = "/users";
+
+/**
+ * Gets all users
+ * @returns {Promise<Array>} List of users
+ */
+export async function getAllUsers() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    return handleApiResponse(response, "No users found");
   } catch (error) {
-    console.error("Error fetching user", error);
-    return [];
+    return handleApiError(error, "fetching users");
   }
 }
 
-export async function getOneUser(token, id) {
+/**
+ * Gets a specific user by ID
+ * @param {string} id - User ID
+ * @returns {Promise<Object>} User details
+ */
+export async function getOneUser(id) {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const user = response.data?.data.filter((users) => users._id === id);
-    return user || [];
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const data = handleApiResponse(response, "No users found");
+
+    const user = data.find((user) => user._id === id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+
+    return user;
   } catch (error) {
-    console.error("Error fetching user", error);
-    return [];
+    return handleApiError(error, `fetching user ${id}`);
   }
 }
 
-export async function getAllPatients(token) {
+/**
+ * Gets all patients
+ * @returns {Promise<Array>} List of patients
+ */
+export async function getAllPatients() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const patients = response.data?.data.filter(
-      (users) => users.role === "Patient"
-    );
-    return patients || [];
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const data = handleApiResponse(response, "No users found");
+
+    const patients = data.filter((user) => user.role === "Patient");
+    return patients;
   } catch (error) {
-    console.error("Error fetching patients", error);
-    return [];
+    return handleApiError(error, "fetching patients");
   }
 }
 
-export async function getAllDoctors(token) {
+/**
+ * Gets all doctors
+ * @returns {Promise<Array>} List of doctors
+ */
+export async function getAllDoctors() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const doctors = response.data?.data.filter(
-      (users) => users.role === "Doctor"
-    );
-    return doctors || [];
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const data = handleApiResponse(response, "No users found");
+
+    const doctors = data.filter((user) => user.role === "Doctor");
+    return doctors;
   } catch (error) {
-    console.error("Error fetching doctors", error);
-    return [];
+    return handleApiError(error, "fetching doctors");
   }
 }
 
-export async function getAllNurses(token) {
+/**
+ * Gets all nurses
+ * @returns {Promise<Array>} List of nurses
+ */
+export async function getAllNurses() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const nurses = response.data?.data.filter(
-      (users) => users.role === "Nurse"
-    );
-    return nurses || [];
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const data = handleApiResponse(response, "No users found");
+
+    const nurses = data.filter((user) => user.role === "Nurse");
+    return nurses;
   } catch (error) {
-    console.error("Error fetching nurses", error);
-    return [];
+    return handleApiError(error, "fetching nurses");
   }
 }
 
-export async function getAllAdmins(token) {
+/**
+ * Gets all admins
+ * @returns {Promise<Array>} List of admins
+ */
+export async function getAllAdmins() {
   try {
-    const response = await api.get(`${baseEndpoint}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const admins = response.data?.data.filter(
-      (users) => users.role === "Admin"
-    );
-    return admins || [];
+    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const data = handleApiResponse(response, "No users found");
+
+    const admins = data.filter((user) => user.role === "Admin");
+    return admins;
   } catch (error) {
-    console.error("Error fetching admins", error);
-    return [];
+    return handleApiError(error, "fetching admins");
   }
 }
 
-export async function getUserData(token) {
+/**
+ * Gets current user data
+ * @returns {Promise<Object>} Current user data
+ */
+export async function getUserData() {
   try {
-    const response = await api.get(`${baseEndpoint}/one`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(`${BASE_ENDPOINT}/one`, createAuthHeader());
+    return handleApiResponse(response, "Failed to get user data");
   } catch (error) {
-    console.error("Error fetching user", error);
-    return [];
+    return handleApiError(error, "fetching user data");
   }
 }
 
-export async function loginUser(user) {
+/**
+ * Logs in a user
+ * @param {Object} credentials - User credentials
+ * @returns {Promise<Object>} Login response with token
+ */
+export async function loginUser(credentials) {
   try {
-    const response = await api.post(`${baseEndpoint}/login`, user);
+    const response = await api.post(`${BASE_ENDPOINT}/login`, credentials);
+
+    if (!response.data) {
+      throw new Error("Invalid login response");
+    }
+
     return response.data;
   } catch (error) {
-    console.error("Error logging in user", error);
+    console.error("Error logging in user:", error);
     return { token: null };
   }
 }
 
-export async function registerUser(newUser) {
+/**
+ * Registers a new user
+ * @param {Object} userData - New user data
+ * @returns {Promise<Object>} Registration response
+ */
+export async function registerUser(userData) {
   try {
-    const response = await api.post(`${baseEndpoint}/register`, newUser);
-    return response.data?.data;
+    const response = await api.post(`${BASE_ENDPOINT}/register`, userData);
+    return handleApiResponse(response, "Failed to register user");
   } catch (error) {
-    console.error("Error registering user", error);
-    return [];
+    return handleApiError(error, "registering user");
   }
 }

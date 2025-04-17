@@ -1,77 +1,102 @@
 import api from "./axios";
-const baseEndpoint = "/diseases";
+import {
+  createAuthHeader,
+  handleApiResponse,
+  handleApiError,
+} from "./apiUtils";
 
-// all endpoints for the Diseases API
+/**
+ * Diseases API Service
+ * Handles all API calls related to diseases
+ */
 
-//* authorized endpoints
-export async function getAllDiseases(token) {
+// Constants
+const BASE_ENDPOINT = "/diseases";
+
+/**
+ * Gets all diseases
+ * @returns {Promise<Array>} List of diseases
+ */
+export async function getAllDiseases() {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    return handleApiResponse(response, "No diseases found");
   } catch (error) {
-    console.error("Error fetching diseases is ...........", error);
-    return [];
+    return handleApiError(error, "fetching diseases");
   }
 }
 
-export async function showDisease(id, token) {
+/**
+ * Gets a specific disease by ID
+ * @param {string} id - Disease ID
+ * @returns {Promise<Object>} Disease details
+ */
+export async function showDisease(id) {
   try {
-    const response = await api.get(`${baseEndpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Filter the diseases array to find the one matching the id
-    const disease = response.data?.data.find((disease) => disease._id === id);
-    return disease || null;
+    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const data = handleApiResponse(response, "No diseases found");
+
+    const disease = data.find((disease) => disease._id === id);
+    if (!disease) {
+      throw new Error(`Disease with id ${id} not found`);
+    }
+
+    return disease;
   } catch (error) {
-    console.error("Error fetching disease", error.response?.data);
-    return null; // Changed from [] to null to be consistent with the success case
+    return handleApiError(error, `fetching disease ${id}`);
   }
 }
 
-export async function addDisease(addedDisease, token) {
+/**
+ * Adds a new disease
+ * @param {Object} diseaseData - New disease data
+ * @returns {Promise<Object>} Created disease
+ */
+export async function addDisease(diseaseData) {
   try {
-    const response = await api.post(`${baseEndpoint}`, addedDisease, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.post(
+      BASE_ENDPOINT,
+      diseaseData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, "Failed to create disease");
   } catch (error) {
-    console.error("Error adding disease", error.response?.data);
-    return null; // Changed from [] to null to be consistent with error handling
+    return handleApiError(error, "adding disease");
   }
 }
 
-export async function editDisease(id, editedDisease, token) {
+/**
+ * Updates an existing disease
+ * @param {string} id - Disease ID
+ * @param {Object} diseaseData - Updated disease data
+ * @returns {Promise<Object>} Updated disease
+ */
+export async function editDisease(id, diseaseData) {
   try {
-    const response = await api.put(`${baseEndpoint}/${id}`, editedDisease, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.put(
+      `${BASE_ENDPOINT}/${id}`,
+      diseaseData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to update disease ${id}`);
   } catch (error) {
-    console.error("Error editing disease", error);
-    return [];
+    return handleApiError(error, `editing disease ${id}`);
   }
 }
 
-export async function deleteDisease(id, token) {
+/**
+ * Deletes a disease
+ * @param {string} id - Disease ID
+ * @returns {Promise<Object>} Deletion result
+ */
+export async function deleteDisease(id) {
   try {
-    const response = await api.delete(`${baseEndpoint}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data?.data;
+    const response = await api.delete(
+      `${BASE_ENDPOINT}/${id}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, `Failed to delete disease ${id}`);
   } catch (error) {
-    console.error("Error deleting disease", error);
-    return [];
+    return handleApiError(error, `deleting disease ${id}`);
   }
 }
