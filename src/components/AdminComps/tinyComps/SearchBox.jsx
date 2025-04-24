@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { GoSearch, GoX } from "react-icons/go";
 
-export default function SearchBox() {
+export default function SearchBox({ allData }) {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
@@ -37,9 +37,9 @@ export default function SearchBox() {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`searchbox flex gap-1 items-center border rounded-3xl bg-white p-1 transition-all duration-200 ${
+      className={`searchbox flex gap-1 items-center border rounded-3xl bg-white transition-all duration-200 ${
         isFocused ? "ring-2 ring-blue-200 border-blue-300" : "border-gray-300"
-      }`}
+      } truncate`}
     >
       <button
         type="submit"

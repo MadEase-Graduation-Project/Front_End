@@ -1,5 +1,5 @@
 import { fetchAllDiseases } from "@/store/Slices/Diseases";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaVirus } from "react-icons/fa";
@@ -7,15 +7,10 @@ import { FaVirus } from "react-icons/fa";
 export default function LastDiseases() {
   const dispatch = useDispatch();
   const { items: diseases, loading } = useSelector((state) => state.diseases);
-  const [maxItems, setMaxItems] = useState(5);
 
   useEffect(() => {
     dispatch(fetchAllDiseases());
   }, [dispatch]);
-
-  const handleShowMore = () => {
-    setMaxItems((prev) => (prev === 5 ? diseases.length : 5));
-  };
 
   if (loading) {
     return (
@@ -38,7 +33,7 @@ export default function LastDiseases() {
         <p className="text-gray-500 italic">No diseases found</p>
       ) : (
         <>
-          {diseases.slice(0, maxItems).map((disease) => (
+          {diseases.slice(0, 5).map((disease) => (
             <div
               key={disease._id}
               className="flex gap-3 p-2 hover:bg-gray-50 rounded-md transition-colors"
@@ -54,15 +49,6 @@ export default function LastDiseases() {
               </div>
             </div>
           ))}
-
-          {diseases.length > 5 && (
-            <button
-              onClick={handleShowMore}
-              className="self-center mt-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:underline transition-colors"
-            >
-              {maxItems === 5 ? "Show All" : "Show Less"}
-            </button>
-          )}
         </>
       )}
     </div>

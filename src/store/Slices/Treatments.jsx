@@ -16,14 +16,14 @@ export const fetchAllTreatments = createAsyncThunk(
 
 export const fetchTreatmentById = createAsyncThunk(
   "treatments/fetchTreatmentById",
-  async ({ id }) => {
+  async (id) => {
     return await showTreatment(id);
   }
 );
 
 export const createTreatment = createAsyncThunk(
   "treatments/createTreatment",
-  async ({ treatmentData }, { dispatch }) => {
+  async (treatmentData, { dispatch }) => {
     const response = await addTreatment(treatmentData);
     // Refresh the treatments list after adding
     if (response) {
@@ -47,7 +47,7 @@ export const updateTreatment = createAsyncThunk(
 
 export const removeTreatment = createAsyncThunk(
   "treatments/removeTreatment",
-  async ({ id }, { dispatch }) => {
+  async (id, { dispatch }) => {
     const response = await deleteTreatment(id);
     // Refresh the treatments list after deleting
     if (response) {

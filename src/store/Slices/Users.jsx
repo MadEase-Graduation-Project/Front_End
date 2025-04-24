@@ -17,7 +17,7 @@ export const fetchUserData = createAsyncThunk(
 
 export const fetchUserById = createAsyncThunk(
   "users/fetchUserById",
-  async ({ id }) => {
+  async (id) => {
     return await getOneUser(id);
   }
 );

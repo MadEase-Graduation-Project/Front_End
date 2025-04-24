@@ -3,10 +3,9 @@ import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { FiLogOut } from "react-icons/fi";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserData } from "@/store/Slices/Users";
-import SearchBox from "./tinyComps/SearchBox";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -15,31 +14,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function Header({ currentPath, isCollapsed, setIsCollapsed }) {
+export default function Header({ isCollapsed, setIsCollapsed }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { details: userData } = useSelector((state) => state.users);
-  const [notificationCount, setNotificationCount] = useState(0);
 
   // Remove console.log in production
-
-  // Route mapping object for better maintainability
-  const routeTitleMap = {
-    "/admin": "Dashboard",
-    "/admin/appointments": "Appointments",
-    "/admin/patients": "Patients",
-    "/admin/doctors": "Doctors",
-    "/admin/admins": "Admins",
-    "/admin/diseases": "Diseases",
-    "/admin/advices": "Advices",
-    "/admin/chat": "Chat",
-    "/admin/setting": "Setting",
-  };
-
-  // Memoized title to prevent unnecessary re-renders
-  const title = useMemo(() => {
-    return routeTitleMap[currentPath] || "Dashboard";
-  }, [currentPath]);
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -50,17 +30,9 @@ export default function Header({ currentPath, isCollapsed, setIsCollapsed }) {
       // Redirect to login if no token
       navigate("/");
     }
-
-    // Simulate fetching notifications
-    const fetchNotifications = async () => {
-      // This would be an API call in a real app
-      setNotificationCount(3); // Example count
-    };
-
-    fetchNotifications();
   }, [dispatch, navigate]);
   return (
-    <header className="flex items-center gap-2 h-12 lg:h-14">
+    <header className="flex items-center gap-2 h-12 lg:h-14 px-2">
       <button
         className="z-10 h-fit"
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -72,38 +44,27 @@ export default function Header({ currentPath, isCollapsed, setIsCollapsed }) {
         />
       </button>
 
-      <div className="flex justify-between gap-2 items-center w-full">
-        <h1 className="text-lg sm:text-xl font-medium">{title}</h1>
-        <SearchBox />
+      <div className="flex justify-between items-center w-full">
+        <h1 className="text-xl font-semibold">MadEase</h1>
         <div className="btns flex justify-between items-center gap-4">
-          <div className="relative">
-            <button
-              className="px-2 text-gray-600 hover:text-[#954827] transition duration-200 ease-in"
-              aria-label="Notifications"
-            >
-              <GoBellFill size={20} />
-              {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                  {notificationCount}
-                </span>
-              )}
-            </button>
-          </div>
+          <button
+            className="px-2 w-8 h-8 text-gray-600 hover:text-[#954827] transition duration-200 ease-in  relative "
+            aria-label="Notifications"
+          >
+            <GoBellFill size={18} />
+          </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button
-                className="profile-btn flex items-center gap-2 hover:bg-gray-100 p-1 rounded-md transition-colors"
-                aria-label="User profile"
-              >
-                <Avatar>
+              <button className="profile-btn flex items-center gap-1">
+                <Avatar className="w-8 h-8">
                   <AvatarImage
                     src={userData?.avatar || "https://github.com/shadcn.png"}
                     alt="User avatar"
                   />
                   <AvatarFallback>{userData?.name?.[0] || "A"}</AvatarFallback>
                 </Avatar>
-                <span className="hidden sm:inline-block">
+                <span className="hidden sm:inline-block font-medium text-gray-900 text-sm">
                   {userData?.name || "Admin"}
                 </span>
               </button>

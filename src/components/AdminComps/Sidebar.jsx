@@ -41,9 +41,9 @@ export default function Sidebar({ currentPath, isCollapsed }) {
           alt="logo"
           className="w-10 h-10 object-contain self-center"
         />
-        {isCollapsed && (
+        {/* {isCollapsed && (
           <span className="text-xl font-semibold tracking-wide">MadEase</span>
-        )}
+        )} */}
       </div>
 
       {/* Navigation links */}

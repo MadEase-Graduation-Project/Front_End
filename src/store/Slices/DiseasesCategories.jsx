@@ -16,14 +16,14 @@ export const fetchAllDiseasesCategories = createAsyncThunk(
 
 export const fetchDiseaseCategoryById = createAsyncThunk(
   "diseasesCategories/fetchDiseaseCategoryById",
-  async ({ id }) => {
+  async (id) => {
     return await showDiseaseCategory(id);
   }
 );
 
 export const createDiseaseCategory = createAsyncThunk(
   "diseasesCategories/createDiseaseCategory",
-  async ({ categoryData }, { dispatch }) => {
+  async (categoryData, { dispatch }) => {
     const response = await addDiseaseCategory(categoryData);
     // Refresh the disease categories list after adding
     if (response) {
@@ -47,7 +47,7 @@ export const updateDiseaseCategory = createAsyncThunk(
 
 export const removeDiseaseCategory = createAsyncThunk(
   "diseasesCategories/removeDiseaseCategory",
-  async ({ id }, { dispatch }) => {
+  async (id, { dispatch }) => {
     const response = await deleteDiseaseCategory(id);
     // Refresh the disease categories list after deleting
     if (response) {

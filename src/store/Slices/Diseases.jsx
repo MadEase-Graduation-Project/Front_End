@@ -16,7 +16,7 @@ export const fetchAllDiseases = createAsyncThunk(
 
 export const fetchDiseaseById = createAsyncThunk(
   "diseases/fetchDiseaseById",
-  async ({ id }) => {
+  async (id) => {
     return await showDisease(id);
   }
 );
@@ -47,7 +47,7 @@ export const updateDisease = createAsyncThunk(
 
 export const removeDisease = createAsyncThunk(
   "diseases/removeDisease",
-  async ({ id }, { dispatch }) => {
+  async (id, { dispatch }) => {
     const response = await deleteDisease(id);
     // Refresh the diseases list after deleting
     if (response) {

@@ -5,32 +5,48 @@ import { fetchAllAdmins } from "@/store/Slices/Admins";
 
 export default function Admins() {
   const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.admins);
-
-  console.log(items);
+  const { items: data, loading } = useSelector((state) => state.admins);
 
   useEffect(() => {
-    console.log("fetching admins data...");
-    dispatch(fetchAllAdmins(localStorage.getItem("token")));
+    dispatch(fetchAllAdmins());
   }, [dispatch]);
 
+  const handleRowClick = (item) => {
+    console.log("Row clicked:", item);
+  };
+
+  const handleEdit = (item) => {
+    console.log("Edit item:", item);
+  };
+
+  const handleDelete = (item) => {
+    console.log("Delete item:", item);
+  };
+
+  const columns = [
+    { key: "name", label: "Name", sortable: true },
+    { key: "email", label: "Email", sortable: true },
+    { key: "city", label: "City", sortable: true },
+    { key: "phone", label: "Phone", sortable: true },
+  ];
+
   return (
-    <div>
-      <div>Admins Management</div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {items && (
-        <DataTable
-          columns={["name", "email", "city", "phone"]}
-          data={items}
-          propertyMap={{
-            name: "name",
-            email: "email",
-            city: "city",
-            phone: "phone",
-          }}
-        />
-      )}
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Admins</h1>
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        selectable={true}
+        showActions={true}
+        onRowClick={handleRowClick}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        pageSize={5}
+      />
     </div>
   );
 }
