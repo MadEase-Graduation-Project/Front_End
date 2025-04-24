@@ -23,7 +23,7 @@ export const fetchAdviceById = createAsyncThunk(
 
 export const createAdvice = createAsyncThunk(
   "advices/createAdvice",
-  async ({ adviceData }, { dispatch }) => {
+  async (adviceData, { dispatch }) => {
     const response = await addAdvice(adviceData);
     // Refresh the advices list after adding
     if (response) {
@@ -47,7 +47,7 @@ export const updateAdvice = createAsyncThunk(
 
 export const removeAdvice = createAsyncThunk(
   "advices/removeAdvice",
-  async ({ id }, { dispatch }) => {
+  async (id, { dispatch }) => {
     const response = await deleteAdvice(id);
     // Refresh the advices list after deleting
     if (response) {

@@ -16,6 +16,8 @@ import { Settings } from "./pages/doctor/Settings";
 import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
 import { Advice } from "./pages/doctor/Advice";
+import Chat from "./pages/admin/Chat";
+import Setting from "./pages/admin/Setting";
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
         <Route path="admins" element={<Admins />} />
         <Route path="diseases" element={<Diseases />} />
         <Route path="advices" element={<Advices />} />
+        <Route path="setting" element={<Setting />} />
+        <Route path="chat" element={<Chat />} />
       </Route>
     </Routes>
   );

@@ -40,18 +40,18 @@ const Main_Layout = () => {
       <div>ana el main layout ya wald</div>
       <Outlet />
       <div className="flex gap-4">
-      <button
-        className="bg-blue-500 text-white p-2 rounded-md"
-        onClick={handleClickLogin}
-      >
-        Login for admin
-      </button>
-      <button
-        className="bg-blue-500 text-white p-2 rounded-md"
-        onClick={handleDoctorClickLogin}
-      >
-        Login for doctor
-      </button>
+        <button
+          className="bg-blue-500 text-white p-2 rounded-md"
+          onClick={handleClickLogin}
+        >
+          Login for admin
+        </button>
+        <button
+          className="bg-blue-500 text-white p-2 rounded-md"
+          onClick={handleDoctorClickLogin}
+        >
+          Login for doctor
+        </button>
       </div>
     </div>
   );

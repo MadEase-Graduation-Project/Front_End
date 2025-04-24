@@ -5,8 +5,10 @@ import {
   fetchAppointments,
   removeAppointment,
 } from "@/store/Slices/Appointments";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Settings } from "lucide-react";
+import FilterColumns from "@/components/AdminComps/FilterColumns";
 
 export default function Appointments() {
   const dispatch = useDispatch();
@@ -19,12 +21,12 @@ export default function Appointments() {
   const [appointmentToDelete, setAppointmentToDelete] = useState(null);
   const [appointmentToEdit, setAppointmentToEdit] = useState(null);
 
-  // Open create appointment dialog
-  const handleCreateAppointment = () => {
-    setIsCreateMode(true);
-    setAppointmentToEdit(null);
-    setAppointmentDialogOpen(true);
-  };
+  // // Open create appointment dialog
+  // const handleCreateAppointment = () => {
+  //   setIsCreateMode(true);
+  //   setAppointmentToEdit(null);
+  //   setAppointmentDialogOpen(true);
+  // };
 
   useEffect(() => {
     dispatch(fetchAppointments());
@@ -57,29 +59,69 @@ export default function Appointments() {
     }
   };
 
-  const columns = [
-    { key: "patientName", label: "Patient Name", sortable: true },
-    { key: "doctorName", label: "Doctor Name", sortable: true },
-    {
-      key: "appointmentDate",
-      label: "Appointment Date",
-      sortable: true,
-      type: "date",
-    },
-    { key: "priority", label: "Priority", sortable: true },
-  ];
+  //* Column definitions
+  // All available columns
+  const allColumns = useMemo(
+    () => [
+      { key: "patientName", label: "Patient Name", sortable: true },
+      { key: "doctorName", label: "Doctor Name", sortable: true },
+      {
+        key: "appointmentDate",
+        label: "Appointment Date",
+        sortable: true,
+        type: "date",
+      },
+      { key: "priority", label: "Priority", sortable: true },
+      { key: "createdAt", label: "Created At", sortable: true, type: "date" },
+      { key: "updatedAt", label: "Updated At", sortable: true, type: "date" },
+    ],
+    []
+  );
+
+  // State for selected columns
+  const [selectedColumnKeys, setSelectedColumnKeys] = useState([
+    "patientName",
+    "doctorName",
+    "appointmentDate",
+  ]);
+
+  // Column selector options for react-select
+  const columnOptions = allColumns.map((col) => ({
+    value: col.key,
+    label: col.label,
+  }));
+
+  // State for column selector dialog
+  const [showColumnSelector, setShowColumnSelector] = useState(false);
+
+  // Filtered columns based on selection
+  const columns = useMemo(() => {
+    return allColumns.filter((col) => selectedColumnKeys.includes(col.key));
+  }, [selectedColumnKeys, allColumns]);
+  //* End of column definitions
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Appointments</h1>
         <button
-          onClick={handleCreateAppointment}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
+          onClick={() => setShowColumnSelector(true)}
+          className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors"
         >
-          <span>+ New Appointment</span>
+          <Settings size={18} />
+          <span>Customize Columns</span>
         </button>
       </div>
+
+      {/* Column selector dialog */}
+      <FilterColumns
+        allColumns={allColumns}
+        options={columnOptions}
+        selected={selectedColumnKeys}
+        onSelectedChange={setSelectedColumnKeys}
+        isOpen={showColumnSelector}
+        onClose={() => setShowColumnSelector(false)}
+      />
 
       <DataTable
         columns={columns}

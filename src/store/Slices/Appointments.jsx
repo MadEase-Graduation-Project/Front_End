@@ -16,14 +16,14 @@ export const fetchAppointments = createAsyncThunk(
 
 export const fetchAppointmentById = createAsyncThunk(
   "appointments/fetchAppointmentById",
-  async ({ id }) => {
+  async (id) => {
     return await showAppointment(id);
   }
 );
 
 export const createAppointment = createAsyncThunk(
   "appointments/createAppointment",
-  async ({ appointmentData }, { dispatch }) => {
+  async (appointmentData, { dispatch }) => {
     const response = await addAppointment(appointmentData);
     // Refresh the appointments list after adding
     if (response) {
