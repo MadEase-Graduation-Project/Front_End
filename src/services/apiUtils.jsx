@@ -24,6 +24,7 @@ export const handleApiResponse = (response, errorMessage) => {
   if (!response.data?.data) {
     throw new Error(errorMessage || "Invalid response from server");
   }
+
   return response.data.data;
 };
 

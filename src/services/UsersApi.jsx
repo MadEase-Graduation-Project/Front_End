@@ -157,3 +157,38 @@ export async function registerUser(userData) {
     return handleApiError(error, "registering user");
   }
 }
+
+/**
+ * Updates user data
+ * @param {Object} userData - Updated user data
+ * @returns {Promise<Object>} Updated user data
+ */
+export async function updateUserData(userData) {
+  try {
+    const response = await api.patch(
+      `${BASE_ENDPOINT}`,
+      userData,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, "Failed to update user data");
+  } catch (error) {
+    return handleApiError(error, "updating user data");
+  }
+}
+
+/**
+ * Deletes a user
+ * @param {string} userId - User ID
+ * @returns {Promise<Object>} Delete response
+ */
+export async function deleteUser(userId) {
+  try {
+    const response = await api.delete(
+      `${BASE_ENDPOINT}/${userId}`,
+      createAuthHeader()
+    );
+    return handleApiResponse(response, "Failed to delete user");
+  } catch (error) {
+    return handleApiError(error, "deleting user");
+  }
+}
