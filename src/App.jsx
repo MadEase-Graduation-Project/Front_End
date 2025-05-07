@@ -8,7 +8,6 @@ import Patients from "./pages/admin/Patients";
 import Doctors from "./pages/admin/Doctors";
 import Admins from "./pages/admin/Admins";
 import Advices from "./pages/admin/Advices";
-import Blabal from "./layouts/blabal";
 import Doctor_Dashboard_Layout from "./layouts/Doctor_Dashboard_Layout";
 import { Main_Grid } from "./pages/doctor/Main_Grid";
 import { Messages } from "./pages/doctor/Messages";
@@ -18,15 +17,25 @@ import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
 import { Advice } from "./pages/doctor/Advice";
 import Chat from "./pages/admin/Chat";
 import Setting from "./pages/admin/Setting";
+import HomePage from "./pages/Main/HomePage";
+import Community from "./pages/Main/Community";
+import About from "./pages/Main/About";
+import SignUp from "./pages/Main/SignUp";
+import SignIn from "./pages/Main/SignIn";
 
 function App() {
   return (
     <Routes>
-      {/* layouts and inside them their children  */}
+      {/* Main layout */}
+      <Route path="/" element={<Main_Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="community" element={<Community />} />
+        <Route path="about" element={<About />} />
+      </Route>
 
-      {/* layout like down */}
-      <Route path="/" element={<Main_Layout />}></Route>
-      <Route path="/blabal" element={<Blabal />}></Route>
+      {/* doctor layout */}
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
@@ -35,9 +44,8 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
-      {/* children (pages that use this layout) like down */}
-      {/* <Route index element={<Home/>}/> */}
 
+      {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route index element={<Overview />} />
         <Route path="appointments" element={<Appointments />} />

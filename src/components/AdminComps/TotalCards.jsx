@@ -1,5 +1,4 @@
 import Card from "@/components/AdminComps/Card";
-import ProgressBar from "@/components/ProgressBar";
 import { FaUsers, FaUserNurse, FaVirus, FaLightbulb } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { RiCalendarScheduleFill } from "react-icons/ri";
@@ -13,7 +12,11 @@ export default function TotalCards({
   AdvicesData,
 }) {
   const loading = () => {
-    return <ProgressBar />;
+    return (
+      <div className="flex items-center justify-center h-9">
+        <div className="animate-pulse bg-gray-300 rounded h-2 w-20"></div>
+      </div>
+    );
   };
 
   return (

@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { GoSearch, GoX } from "react-icons/go";
 
-export default function SearchBox({ allData }) {
+export default function SearchBox(allData) {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
-  // Handle keyboard shortcut (Ctrl+K) to focus search
+  // Handle keyboard shortcut (Ctrl+K) to focus search+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {

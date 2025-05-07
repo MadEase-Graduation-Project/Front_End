@@ -59,7 +59,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
               <button className="profile-btn flex items-center gap-1">
                 <Avatar className="w-8 h-8">
                   <AvatarImage
-                    src={userData?.avatar || "https://github.com/shadcn.png"}
+                    src={userData?.ImgUrl || "https://github.com/shadcn.png"}
                     alt="User avatar"
                   />
                   <AvatarFallback>{userData?.name?.[0] || "A"}</AvatarFallback>

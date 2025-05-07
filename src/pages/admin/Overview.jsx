@@ -26,17 +26,35 @@ export default function Overview() {
   const DiseasesData = useSelector((state) => state.diseases);
   const AdvicesData = useSelector((state) => state.advices);
 
+  // todo: add all data in one object to use it at search box.
   const allData = [
-    PatientsData.items,
-    // DoctorsData.items,
-    // AppointmentsData.items,
-    // NursesData.items,
-    // AdminsData.items,
-    // DiseasesData.items,
-    // AdvicesData.items,
+    PatientsData.items.map((item) => ({
+      Name: item.name,
+      Email: item.email,
+      Phone: item.phone,
+      type: "Patient",
+    })),
+    DoctorsData.items.map((item) => ({
+      Name: item.name,
+      Email: item.email,
+      Phone: item.phone,
+      type: "Doctor",
+    })),
+    NursesData.items.map((item) => ({
+      Name: item.name,
+      Email: item.email,
+      Phone: item.phone,
+      type: "Nurse",
+    })),
+    AdminsData.items.map((item) => ({
+      Name: item.name,
+      Email: item.email,
+      Phone: item.phone,
+      type: "Admin",
+    })),
+    // DiseasesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Disease" })),
+    // AdvicesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Advice" })),
   ];
-
-  console.log(allData);
 
   useEffect(() => {
     dispatch(fetchAllPatients());
@@ -50,7 +68,7 @@ export default function Overview() {
 
   return (
     <div className=" flex flex-col gap-3 p-4">
-      <div className="flex justify-between items-center gap-4 mb-1 ">
+      <div className="flex justify-between items-center gap-4 mb-1">
         <h1 className="text-2xl font-bold">Overview</h1>
         <SearchBox allData={allData} />
       </div>
@@ -68,7 +86,7 @@ export default function Overview() {
             />
           </div>
 
-          <div className="md:col-span-1 lg:col-span-1 h-auto md:h-full">
+          <div className="md:col-span-1 lg:col-span-1 h-auto md:h-full shadow-sm">
             <TotalUsersChart
               PatientsData={PatientsData}
               DoctorsData={DoctorsData}
