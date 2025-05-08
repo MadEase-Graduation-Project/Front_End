@@ -10,7 +10,7 @@ import {
 import { DollarSign, LogOut, PoundSterlingIcon, Settings, User } from "lucide-react";
 import femaleDoctorAvatar from "@/assets/doctor-F.png";
 
-export function UserAvatar() {
+export function UserAvatar({name , email}) {
   const navigate = useNavigate(); // Initialize navigate function
 
   return (
@@ -27,8 +27,8 @@ export function UserAvatar() {
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuItem className="flex items-center gap-2">
           <div className="text-start">
-            <span className="block font-semibold">Tasneem Fahmi</span>
-            <span className="text-xs block text-gray-500">tasneemfahmimadkour@gmail.com</span>
+            <span className="block font-semibold">{name}</span>
+            <span className="text-xs block text-gray-500">{email}</span>
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
