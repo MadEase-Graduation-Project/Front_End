@@ -13,7 +13,7 @@ import { Main_Grid } from "./pages/doctor/Main_Grid";
 import { Messages } from "./pages/doctor/Messages";
 import { Settings } from "./pages/doctor/Settings";
 import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
-import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
+import { Patients_doctor } from "./pages/doctor/Patients_doctor";
 import { Advice } from "./pages/doctor/Advice";
 import Chat from "./pages/admin/Chat";
 import Setting from "./pages/admin/Setting";
