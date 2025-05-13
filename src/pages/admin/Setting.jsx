@@ -1,7 +1,7 @@
-import ProfileInfo from "@/components/AdminComps/ProfileInfo";
-import Security from "@/components/AdminComps/Security";
-import Navigate from "@/components/AdminComps/tinyComps/Navigate";
-import { fetchUserData } from "@/store/Slices/Users";
+import ProfileInfo from "@/components/adminComps/ProfileInfo";
+import Security from "@/components/adminComps/Security";
+import Navigate from "@/components/adminComps/tinyComps/Navigate";
+import { fetchUserData } from "@/store/slices/userSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

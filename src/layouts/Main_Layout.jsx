@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/MainComps/Header";
 import Footer from "@/components/MainComps/Footer";
-import { loginUser } from "@/services/UsersApi";
+import { loginUser } from "@/services/usersApi";
 
 const Main_Layout = () => {
   // Quick access buttons for development - can be removed in production
@@ -19,7 +19,7 @@ const Main_Layout = () => {
     localStorage.setItem("token", token);
 
     if (token) {
-      navigate(`/admin`);
+      navigate(`/admin/overview`);
     } else {
       console.error("Login failed: No token received");
     }

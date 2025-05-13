@@ -1,19 +1,19 @@
-import ChartBar from "@/components/AdminComps/ChartBar";
-import TotalCards from "@/components/AdminComps/TotalCards";
-import TotalUsersChart from "@/components/AdminComps/TotalUsersChart";
-import { fetchAppointments } from "@/store/Slices/Appointments";
+import ChartBar from "@/components/adminComps/ChartBar";
+import TotalCards from "@/components/adminComps/TotalCards";
+import TotalUsersChart from "@/components/adminComps/TotalUsersChart";
+import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDoctors } from "@/store/Slices/Doctors";
-import { fetchAllPatients } from "@/store/Slices/Patients";
-import { fetchAllNurses } from "@/store/Slices/Nurses";
-import { fetchAllAdmins } from "@/store/Slices/Admins";
-import { fetchAllDiseases } from "@/store/Slices/Diseases";
-import { fetchAllAdvices } from "@/store/Slices/Advices";
-import NextAppointments from "@/components/AdminComps/NextAppointment";
-import LastDiseases from "@/components/AdminComps/LastDiseases";
-import LastAdvices from "@/components/AdminComps/LastAdvices";
-import SearchBox from "@/components/AdminComps/tinyComps/SearchBox";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { fetchAllDoctors } from "@/store/slices/doctorSlice";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
+import { fetchAllNurses } from "@/store/slices/nurseSlice";
+import { fetchAllAdmins } from "@/store/slices/adminSlice";
+import { fetchAllDiseases } from "@/store/slices/diseaseSlice";
+import { fetchAllAdvices } from "@/store/slices/adviceSlice";
+import NextAppointments from "@/components/adminComps/NextAppointment";
+import LastDiseases from "@/components/adminComps/LastDiseases";
+import LastAdvices from "@/components/adminComps/LastAdvices";
+import SearchBox from "@/components/adminComps/tinyComps/SearchBox";
 
 export default function Overview() {
   const dispatch = useDispatch();
@@ -28,29 +28,33 @@ export default function Overview() {
 
   // todo: add all data in one object to use it at search box.
   const allData = [
-    PatientsData.items.map((item) => ({
-      Name: item.name,
-      Email: item.email,
-      Phone: item.phone,
-      type: "Patient",
+    ...PatientsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Patient",
+      type: "user",
     })),
-    DoctorsData.items.map((item) => ({
-      Name: item.name,
-      Email: item.email,
-      Phone: item.phone,
-      type: "Doctor",
+    ...DoctorsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Doctor",
+      type: "user",
     })),
-    NursesData.items.map((item) => ({
-      Name: item.name,
-      Email: item.email,
-      Phone: item.phone,
-      type: "Nurse",
+    ...NursesData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Nurse",
+      type: "user",
     })),
-    AdminsData.items.map((item) => ({
-      Name: item.name,
-      Email: item.email,
-      Phone: item.phone,
-      type: "Admin",
+    ...AdminsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Admin",
+      type: "user",
     })),
     // DiseasesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Disease" })),
     // AdvicesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Advice" })),

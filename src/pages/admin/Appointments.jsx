@@ -1,14 +1,14 @@
-import DataTable from "@/components/AdminComps/DataTable";
+import DataTable from "@/components/adminComps/DataTable";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import AppointmentDialog from "@/components/ui/AppointmentDialog";
 import {
   fetchAppointments,
   removeAppointment,
-} from "@/store/Slices/Appointments";
+} from "@/store/slices/appointmentSlice";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Settings } from "lucide-react";
-import FilterColumns from "@/components/AdminComps/FilterColumns";
+import FilterColumns from "@/components/adminComps/FilterColumns";
 
 export default function Appointments() {
   const dispatch = useDispatch();

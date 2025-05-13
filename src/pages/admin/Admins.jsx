@@ -1,7 +1,7 @@
-import DataTable from "@/components/AdminComps/DataTable";
+import DataTable from "@/components/adminComps/DataTable";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllAdmins } from "@/store/Slices/Admins";
+import { fetchAllAdmins } from "@/store/slices/adminSlice";
 
 export default function Admins() {
   const dispatch = useDispatch();

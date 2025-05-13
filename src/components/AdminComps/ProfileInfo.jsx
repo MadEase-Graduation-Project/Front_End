@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { updateData } from "@/store/Slices/Users";
+import { updateData } from "@/store/slices/userSlice";
 import { useState, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";

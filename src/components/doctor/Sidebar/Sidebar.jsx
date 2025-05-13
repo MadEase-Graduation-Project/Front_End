@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import { GoHomeFill } from "react-icons/go";
-import { MdDateRange, MdArticle, MdSettingsSuggest, MdChat } from "react-icons/md";
+import {
+  MdDateRange,
+  MdArticle,
+  MdSettingsSuggest,
+  MdChat,
+} from "react-icons/md";
 import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
 import { FaUserDoctor, FaUserShield, FaDisease } from "react-icons/fa6";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cnUtils";
 
 //* links classes
 const linkStyles = cn(
@@ -47,7 +52,7 @@ export default function Sidebar({ currentPath, isCollapsed }) {
           <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
         </NavItem>
         {/*  */}
-        
+
         <NavItem
           to={"/doctor/diseases"}
           isActive={currentPath === "/doctor/diseases"}

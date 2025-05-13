@@ -1,10 +1,10 @@
-import DataTable from "@/components/AdminComps/DataTable";
+import DataTable from "@/components/adminComps/DataTable";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllPatients } from "@/store/Slices/Patients";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { Settings } from "lucide-react";
-import FilterColumns from "@/components/AdminComps/FilterColumns";
+import FilterColumns from "@/components/adminComps/FilterColumns";
 
 export default function Patients() {
   const dispatch = useDispatch();
