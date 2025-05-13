@@ -1,8 +1,8 @@
-import DataTable from "@/components/AdminComps/DataTable";
+import DataTable from "@/components/adminComps/DataTable";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDoctors } from "@/store/Slices/Doctors";
-import FilterColumns from "@/components/AdminComps/FilterColumns";
+import { fetchAllDoctors } from "@/store/slices/doctorSlice";
+import FilterColumns from "@/components/adminComps/FilterColumns";
 import { Settings } from "lucide-react";
 
 export default function Doctors() {

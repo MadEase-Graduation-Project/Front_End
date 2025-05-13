@@ -1,9 +1,9 @@
-import api from "./axios";
+import api from "../lib/axios";
 import {
   createAuthHeader,
   handleApiResponse,
   handleApiError,
-} from "./apiUtils";
+} from "../lib/apiUtils";
 
 /**
  * Users API Service

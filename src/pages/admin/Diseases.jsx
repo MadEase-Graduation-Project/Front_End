@@ -1,10 +1,10 @@
-import DataTable from "@/components/AdminComps/DataTable";
+import DataTable from "@/components/adminComps/DataTable";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import { fetchAllDiseases, removeDisease } from "@/store/Slices/Diseases";
+import { fetchAllDiseases, removeDisease } from "@/store/slices/diseaseSlice";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Settings } from "lucide-react";
-import FilterColumns from "@/components/AdminComps/FilterColumns";
+import FilterColumns from "@/components/adminComps/FilterColumns";
 
 export default function Diseases() {
   const dispatch = useDispatch();

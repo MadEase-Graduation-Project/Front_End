@@ -5,7 +5,7 @@ import { MdDateRange, MdArticle, MdSettingsSuggest } from "react-icons/md";
 import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
 import { FaUserDoctor, FaUserShield } from "react-icons/fa6";
 import { FaVirus } from "react-icons/fa";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cnUtils";
 import {
   Tooltip,
   TooltipContent,
@@ -48,7 +48,10 @@ export default function Sidebar({ currentPath, isCollapsed }) {
 
       {/* Navigation links */}
       <nav className="flex flex-col items-start justify-center gap-3 w-full py-2">
-        <NavItem to={"/admin"} isActive={currentPath === "/admin"}>
+        <NavItem
+          to={"/admin/overview"}
+          isActive={currentPath === "/admin/overview"}
+        >
           <GoHomeFill className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Overview</span>
         </NavItem>

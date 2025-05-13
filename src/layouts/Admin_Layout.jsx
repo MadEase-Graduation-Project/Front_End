@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Sidebar from "../components/AdminComps/Sidebar";
-import Header from "../components/AdminComps/Header";
+import Sidebar from "../components/adminComps/Sidebar";
+import Header from "../components/adminComps/Header";
 import { useState, useEffect } from "react";
 
 export default function Admin_Layout() {

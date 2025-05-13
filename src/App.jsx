@@ -17,11 +17,12 @@ import { Patients_doctor } from "./pages/doctor/Patients_doctor";
 import { Advice } from "./pages/doctor/Advice";
 import Chat from "./pages/admin/Chat";
 import Setting from "./pages/admin/Setting";
-import HomePage from "./pages/Main/HomePage";
-import Community from "./pages/Main/Community";
-import About from "./pages/Main/About";
-import SignUp from "./pages/Main/SignUp";
-import SignIn from "./pages/Main/SignIn";
+import HomePage from "./pages/main/HomePage";
+import Community from "./pages/main/Community";
+import About from "./pages/main/About";
+import SignUp from "./pages/main/SignUp";
+import SignIn from "./pages/main/SignIn";
+import ProtectedRoute from "./routes/protectedRoute";
 
 function App() {
   return (
@@ -46,8 +47,15 @@ function App() {
       </Route>
 
       {/* admin layout */}
-      <Route path="/admin" element={<Admin_Layout />}>
-        <Route index element={<Overview />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <Admin_Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="overview" element={<Overview />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="patients" element={<Patients />} />
         <Route path="doctors" element={<Doctors />} />

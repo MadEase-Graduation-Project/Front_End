@@ -1,4 +1,4 @@
-import Card from "@/components/AdminComps/Card";
+import Card from "@/components/adminComps/Card";
 import { FaUsers, FaUserNurse, FaVirus, FaLightbulb } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { RiCalendarScheduleFill } from "react-icons/ri";

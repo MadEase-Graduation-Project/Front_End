@@ -1,4 +1,4 @@
-import { fetchAllDiseases } from "@/store/Slices/Diseases";
+import { fetchAllDiseases } from "@/store/slices/diseaseSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";

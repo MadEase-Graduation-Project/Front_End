@@ -5,7 +5,7 @@ import { FiLogOut } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserData } from "@/store/Slices/Users";
+import { fetchUserData } from "@/store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,

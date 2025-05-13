@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import {
   updateAppointment,
   createAppointment,
-} from "@/store/Slices/Appointments";
+} from "@/store/slices/appointmentSlice";
 import { useDispatch } from "react-redux";
 
 /**
