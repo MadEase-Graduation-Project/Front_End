@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/userSlice";
 import treatmentReducer from "./slices/treatmentSlice";
+import userReducer from "./slices/userSlice";
 import diseaseReducer from "./slices/diseaseSlice";
 import diseaseCategoryReducer from "./slices/diseasesCategorySlice";
 import appointmentReducer from "./slices/appointmentSlice";
