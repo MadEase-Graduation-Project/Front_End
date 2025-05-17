@@ -6,12 +6,12 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react({ jsx: "react-jsx" })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
+    extensions: [".js", ".jsx"],
   },
   build: {
     outDir: "dist",
