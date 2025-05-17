@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/userSlice";
-import treatmentReducer from "./slices/treatmentSlice";
-import diseaseReducer from "./slices/diseaseSlice";
-import diseaseCategoryReducer from "./slices/diseasesCategorySlice";
-import appointmentReducer from "./slices/appointmentSlice";
-import adviceReducer from "./slices/adviceSlice";
-import patientReducer from "./slices/patientSlice";
-import doctorReducer from "./slices/doctorSlice";
-import nurseReducer from "./slices/nurseSlice";
-import adminReducer from "./slices/adminSlice";
+import userReducer from "@/store/slices/userSlice";
+import treatmentReducer from "@/store/slices/treatmentSlice";
+import diseaseReducer from "@/store/slices/diseaseSlice";
+import diseaseCategoryReducer from "@/store/slices/diseasesCategorySlice";
+import appointmentReducer from "@/store/slices/appointmentSlice";
+import adviceReducer from "@/store/slices/adviceSlice";
+import patientReducer from "@/store/slices/patientSlice";
+import doctorReducer from "@/store/slices/doctorSlice";
+import nurseReducer from "@/store/slices/nurseSlice";
+import adminReducer from "@/store/slices/adminSlice";
 
 export const store = configureStore({
   reducer: {

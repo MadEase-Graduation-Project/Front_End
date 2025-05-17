@@ -5,7 +5,7 @@ import {
   getOneUser,
   getUserData,
   updateUserData,
-} from "../../services/usersApi";
+} from "@/services/usersApi";
 
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",

@@ -5,7 +5,7 @@ import {
   addDiseaseCategory,
   editDiseaseCategory,
   deleteDiseaseCategory,
-} from "../../services/DiseasesCategoriesApi";
+} from "@/services/diseasesCategoriesApi";
 
 export const fetchAllDiseasesCategories = createAsyncThunk(
   "diseasesCategories/fetchAllDiseasesCategories",
@@ -57,7 +57,7 @@ export const removeDiseaseCategory = createAsyncThunk(
   }
 );
 
-const diseasesCategoriesSlice = createSlice({
+const diseaseCategorySlice = createSlice({
   name: "diseasesCategories",
   initialState: {
     items: [],
@@ -150,5 +150,5 @@ const diseasesCategoriesSlice = createSlice({
   },
 });
 
-export const { clearSelectedDiseaseCategory } = diseasesCategoriesSlice.actions;
-export default diseasesCategoriesSlice.reducer;
+export const { clearSelectedDiseaseCategory } = diseaseCategorySlice.actions;
+export default diseaseCategorySlice.reducer;

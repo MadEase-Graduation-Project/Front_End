@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllNurses } from "../../services/usersApi";
+import { getAllAdmins } from "@/services/usersApi";
 
-export const fetchAllNurses = createAsyncThunk(
-  "nurses/fetchNurses",
+export const fetchAllAdmins = createAsyncThunk(
+  "admins/fetchAdmins",
   async () => {
-    return await getAllNurses();
+    return await getAllAdmins();
   }
 );
 
-const nurseSlice = createSlice({
-  name: "nurses",
+const adminSlice = createSlice({
+  name: "admins",
   initialState: {
     items: [],
     loading: false,
@@ -18,19 +18,19 @@ const nurseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllNurses.pending, (state) => {
+      .addCase(fetchAllAdmins.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllNurses.fulfilled, (state, action) => {
+      .addCase(fetchAllAdmins.fulfilled, (state, action) => {
         state.items = action.payload;
         state.loading = false;
       })
-      .addCase(fetchAllNurses.rejected, (state, action) => {
+      .addCase(fetchAllAdmins.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
   },
 });
 
-export default nurseSlice.reducer;
+export default adminSlice.reducer;
