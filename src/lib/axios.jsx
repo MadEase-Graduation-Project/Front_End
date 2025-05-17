@@ -6,7 +6,9 @@ import axios from "axios";
  */
 
 // API base URL
-const API_BASE_URL = "https://medease-server.up.railway.app/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://medease-server.up.railway.app/api";
 
 // Default timeout in milliseconds
 const DEFAULT_TIMEOUT = 10000;
