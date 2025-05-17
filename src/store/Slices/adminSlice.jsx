@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllAdmins } from "../../services/usersApi";
+import { getAllAdmins } from "@/services/usersApi";
 
 export const fetchAllAdmins = createAsyncThunk(
   "admins/fetchAdmins",

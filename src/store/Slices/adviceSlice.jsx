@@ -5,7 +5,7 @@ import {
   addAdvice,
   editAdvice,
   deleteAdvice,
-} from "../../services/adviceApi";
+} from "@/services/adviceApi";
 
 export const fetchAllAdvices = createAsyncThunk(
   "advices/fetchAllAdvices",

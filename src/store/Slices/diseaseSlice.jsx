@@ -5,7 +5,7 @@ import {
   addDisease,
   editDisease,
   deleteDisease,
-} from "../../services/diseasesApi";
+} from "@/services/diseasesApi";
 
 export const fetchAllDiseases = createAsyncThunk(
   "diseases/fetchAllDiseases",

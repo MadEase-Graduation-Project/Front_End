@@ -5,7 +5,7 @@ import {
   addAppointment,
   editAppointment,
   deleteAppointment,
-} from "../../services/appointmentApi";
+} from "@/services/appointmentApi";
 
 export const fetchAppointments = createAsyncThunk(
   "appointments/fetchAppointments",

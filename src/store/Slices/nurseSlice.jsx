@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllNurses } from "../../services/usersApi";
+import { getAllNurses } from "@/services/usersApi";
 
 export const fetchAllNurses = createAsyncThunk(
   "nurses/fetchNurses",
