@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addDisease } from "../../../services/DiseasesApi";
+import { addDisease } from "../../../services/diseasesApi";
 
 const ranks = ["critical", "severe", "moderate", "mild"];
 
@@ -14,15 +14,20 @@ export const AddDiseaseForm = ({ token }) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-  
+
     try {
       const response = await addDisease(
-        { name: diseaseName, rank: rank, description: description, diseasecategoryId: "67649b440f6377e11ffdf909" },
+        {
+          name: diseaseName,
+          rank: rank,
+          description: description,
+          diseasecategoryId: "67649b440f6377e11ffdf909",
+        },
         token
       );
-  
+
       console.log("API Response:", response);
-  
+
       if (response) {
         setMessage("Disease added successfully!");
         setDiseaseName("");
@@ -33,20 +38,25 @@ export const AddDiseaseForm = ({ token }) => {
       }
     } catch (error) {
       console.error("API Error:", error);
-      setMessage("Error: " + (error.response?.data?.message || "Something went wrong"));
+      setMessage(
+        "Error: " + (error.response?.data?.message || "Something went wrong")
+      );
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="w-full mx-auto p-6 bg-white shadow-lg rounded-lg col-span-12">
       <h2 className="text-2xl font-semibold mb-4">Add a New Disease</h2>
-      {message && <p className="text-center text-sm mb-2 text-gray-700">{message}</p>}
+      {message && (
+        <p className="text-center text-sm mb-2 text-gray-700">{message}</p>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium text-gray-700">Disease Name</label>
+          <label className="block font-medium text-gray-700">
+            Disease Name
+          </label>
           <input
             type="text"
             value={diseaseName}

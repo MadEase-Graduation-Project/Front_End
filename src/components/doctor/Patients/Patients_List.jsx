@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent } from '@/components/ui/card';
-import { Avatar } from '@/components/ui/avatar';
-import { fetchAllPatients } from '@/store/Slices/Patients';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
 
 export const Patients_List = ({ onPatientSelect, sortBy }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const dispatch = useDispatch();
-  const { items: patients, loading, error } = useSelector((state) => state.patients);
+  const {
+    items: patients,
+    loading,
+    error,
+  } = useSelector((state) => state.patients);
 
   useEffect(() => {
     dispatch(fetchAllPatients(localStorage.getItem("doctorToken")));
@@ -37,7 +41,7 @@ export const Patients_List = ({ onPatientSelect, sortBy }) => {
         <Card
           key={patient._id}
           className={`p-2 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 ${
-            selectedPatientId === patient._id ? 'bg-gray-200' : ''
+            selectedPatientId === patient._id ? "bg-gray-200" : ""
           }`}
           onClick={() => handlePatientClick(patient._id)}
         >

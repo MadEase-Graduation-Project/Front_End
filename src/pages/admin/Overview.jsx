@@ -1,13 +1,19 @@
-import AppointmentChart from "@/components/AdminComps/AppointmentChart";
-import ChartBar from "@/components/AdminComps/ChartBar";
-import TotalCards from "@/components/AdminComps/TotalCards";
-import TotalUsersChart from "@/components/AdminComps/TotalUsersChart";
-import { fetchAppointments } from "@/store/Slices/Appointments";
+import ChartBar from "@/components/adminComps/ChartBar";
+import TotalCards from "@/components/adminComps/TotalCards";
+import TotalUsersChart from "@/components/adminComps/TotalUsersChart";
+import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDoctors } from "@/store/Slices/Doctors";
-import { fetchAllPatients } from "@/store/Slices/Patients";
-import { fetchAllNurses } from "@/store/Slices/Nurses";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { fetchAllDoctors } from "@/store/slices/doctorSlice";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
+import { fetchAllNurses } from "@/store/slices/nurseSlice";
+import { fetchAllAdmins } from "@/store/slices/adminSlice";
+import { fetchAllDiseases } from "@/store/slices/diseaseSlice";
+import { fetchAllAdvices } from "@/store/slices/adviceSlice";
+import NextAppointments from "@/components/adminComps/NextAppointment";
+import LastDiseases from "@/components/adminComps/LastDiseases";
+import LastAdvices from "@/components/adminComps/LastAdvices";
+import SearchBox from "@/components/adminComps/tinyComps/SearchBox";
 
 export default function Overview() {
   const dispatch = useDispatch();
@@ -16,34 +22,101 @@ export default function Overview() {
   const DoctorsData = useSelector((state) => state.doctors);
   const AppointmentsData = useSelector((state) => state.appointments);
   const NursesData = useSelector((state) => state.nurses);
+  const AdminsData = useSelector((state) => state.admins);
+  const DiseasesData = useSelector((state) => state.diseases);
+  const AdvicesData = useSelector((state) => state.advices);
+
+  // todo: add all data in one object to use it at search box.
+  const allData = [
+    ...PatientsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Patient",
+      type: "user",
+    })),
+    ...DoctorsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Doctor",
+      type: "user",
+    })),
+    ...NursesData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Nurse",
+      type: "user",
+    })),
+    ...AdminsData.items.map((item) => ({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      role: "Admin",
+      type: "user",
+    })),
+    // DiseasesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Disease" })),
+    // AdvicesData.items.map((item) => ({ Name: item.name , Description: item.description, type: "Advice" })),
+  ];
 
   useEffect(() => {
-    dispatch(fetchAllPatients(localStorage.getItem("token")));
-    dispatch(fetchAllDoctors(localStorage.getItem("token")));
-    dispatch(fetchAppointments(localStorage.getItem("token")));
-    dispatch(fetchAllNurses(localStorage.getItem("token")));
+    dispatch(fetchAllPatients());
+    dispatch(fetchAllDoctors());
+    dispatch(fetchAppointments());
+    dispatch(fetchAllNurses());
+    dispatch(fetchAllAdmins());
+    dispatch(fetchAllDiseases());
+    dispatch(fetchAllAdvices());
   }, [dispatch]);
 
   return (
-    <div className=" flex flex-col gap-2">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 auto-rows-fr">
-        <div className="lg:col-span-2">
-          <TotalCards
-            PatientsData={PatientsData}
-            DoctorsData={DoctorsData}
-            AppointmentsData={AppointmentsData}
-            NursesData={NursesData}
-          />
-        </div>
-        <div className="lg:col-span-1">
-          <TotalUsersChart />
-        </div>
-      </div>
-      <div className="">
-        <AppointmentChart />
+    <div className=" flex flex-col gap-3 p-4">
+      <div className="flex justify-between items-center gap-4 mb-1">
+        <h1 className="text-2xl font-bold">Overview</h1>
+        <SearchBox allData={allData} />
       </div>
 
-      <ChartBar appointments={AppointmentsData.items} />
+      <div className="users">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="md:col-span-2 lg:col-span-3 flex flex-col">
+            <TotalCards
+              PatientsData={PatientsData}
+              DoctorsData={DoctorsData}
+              AppointmentsData={AppointmentsData}
+              NursesData={NursesData}
+              DiseasesData={DiseasesData}
+              AdvicesData={AdvicesData}
+            />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 h-auto md:h-full shadow-sm">
+            <TotalUsersChart
+              PatientsData={PatientsData}
+              DoctorsData={DoctorsData}
+              NursesData={NursesData}
+              AdminsData={AdminsData}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="appointments grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="md:col-span-2 ">
+          <ChartBar appointments={AppointmentsData.items} />
+        </div>
+        <div className="md:col-span-1">
+          <NextAppointments appointments={AppointmentsData.items} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="">
+          <LastDiseases />
+        </div>
+        <div className="">
+          <LastAdvices />
+        </div>
+      </div>
     </div>
   );
 }

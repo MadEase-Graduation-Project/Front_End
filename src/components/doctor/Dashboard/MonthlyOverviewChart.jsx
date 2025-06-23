@@ -1,9 +1,9 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 const data = [
-  { name: 'Jan', Consultation: 500, MedicalCheckup: 1001 },
-  { name: 'Feb', Consultation: 434, MedicalCheckup: 868 },
-  { name: 'Mar', Consultation: 0, MedicalCheckup: 0 },
+  { name: 'Jan', Consultation: 2, MedicalCheckup: 3 },
+  { name: 'Feb', Consultation: 1, MedicalCheckup: 1 },
+  { name: 'Mar', Consultation: 1, MedicalCheckup: 2 },
   { name: 'Apr', Consultation: 0, MedicalCheckup: 0 },
   { name: 'May', Consultation: 0, MedicalCheckup: 0 },
   { name: 'Jun', Consultation: 0, MedicalCheckup: 0 },

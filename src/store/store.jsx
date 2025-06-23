@@ -1,28 +1,28 @@
 import { configureStore } from "@reduxjs/toolkit";
-import usersReducer from "./Slices/Users";
-import treatmentsReducer from "./Slices/Treatments";
-import diseasesReducer from "./Slices/Diseases";
-import diseasesCategoriesReducer from "./Slices/DiseasesCategories";
-import appointmentsReducer from "./Slices/Appointments";
-import advicesReducer from "./Slices/Advices";
-import patientsReducer from "./Slices/Patients";
-import doctorsReducer from "./Slices/Doctors";
-import nursesReducer from "./Slices/Nurses";
-import adminsReducer from "./Slices/Admins";
+import userReducer from "@/store/slices/userSlice";
+import treatmentReducer from "@/store/slices/treatmentSlice";
+import diseaseReducer from "@/store/slices/diseaseSlice";
+import diseaseCategoryReducer from "@/store/slices/diseasesCategorySlice";
+import appointmentReducer from "@/store/slices/appointmentSlice";
+import adviceReducer from "@/store/slices/adviceSlice";
+import patientReducer from "@/store/slices/patientSlice";
+import doctorReducer from "@/store/slices/doctorSlice";
+import nurseReducer from "@/store/slices/nurseSlice";
+import adminReducer from "@/store/slices/adminSlice";
 
 export const store = configureStore({
   reducer: {
     //* system users
-    users: usersReducer,
-    patients: patientsReducer,
-    doctors: doctorsReducer,
-    nurses: nursesReducer,
-    admins: adminsReducer,
+    users: userReducer,
+    patients: patientReducer,
+    doctors: doctorReducer,
+    nurses: nurseReducer,
+    admins: adminReducer,
     // --------------------------------
-    diseases: diseasesReducer,
-    diseasesCategories: diseasesCategoriesReducer,
-    advices: advicesReducer,
-    treatments: treatmentsReducer,
-    appointments: appointmentsReducer,
+    diseases: diseaseReducer,
+    diseasesCategories: diseaseCategoryReducer,
+    advices: adviceReducer,
+    treatments: treatmentReducer,
+    appointments: appointmentReducer,
   },
 });

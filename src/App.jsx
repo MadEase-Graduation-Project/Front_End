@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+
 import Main_Layout from "./layouts/Main_Layout";
 import Admin_Layout from "./layouts/Admin_Layout";
 import Overview from "./pages/admin/Overview";
@@ -22,22 +23,29 @@ import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
 
 
+
 function App() {
   return (
     <Routes>
-      {/* layouts and inside them their children  */}
+      {/* Main layout */}
+      <Route path="/" element={<Main_Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="community" element={<Community />} />
+        <Route path="about" element={<About />} />
+      </Route>
 
-      {/* layout like down */}
-      <Route path="/" element={<Main_Layout />}></Route>
-      <Route path="/blabal" element={<Blabal />}></Route>
+      {/* doctor layout */}
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Setting />} />
         <Route path="diseases" element={<Diseases_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
+
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
@@ -46,14 +54,25 @@ function App() {
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
 
-      <Route path="/admin" element={<Admin_Layout />}>
-        <Route index element={<Overview />} />
+
+      {/* admin layout */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <Admin_Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="overview" element={<Overview />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="patients" element={<Patients />} />
         <Route path="doctors" element={<Doctors />} />
         <Route path="admins" element={<Admins />} />
         <Route path="diseases" element={<Diseases />} />
         <Route path="advices" element={<Advices />} />
+        <Route path="setting" element={<Setting />} />
+        <Route path="chat" element={<Chat />} />
       </Route>
     </Routes>
   );
