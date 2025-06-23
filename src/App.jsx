@@ -1,15 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-
-import Main_Layout from "./layouts/Main_Layout";
-import Admin_Layout from "./layouts/Admin_Layout";
-import Overview from "./pages/admin/Overview";
-import Appointments from "./pages/admin/Appointments";
-import Diseases from "./pages/admin/Diseases";
-import Patients from "./pages/admin/Patients";
-import Doctors from "./pages/admin/Doctors";
-import Admins from "./pages/admin/Admins";
-import Advices from "./pages/admin/Advices";
-import Blabal from "./layouts/blabal";
+import Main_Layout from "@/layouts/Main_Layout";
+import Admin_Layout from "@/layouts/Admin_Layout";
+import Overview from "@/pages/admin/Overview";
+import Appointments from "@/pages/admin/Appointments";
+import Diseases from "@/pages/admin/Diseases";
+import Patients from "@/pages/admin/Patients";
+import Doctors from "@/pages/admin/Doctors";
+import Admins from "@/pages/admin/Admins";
+import Advices from "@/pages/admin/Advices";
 import Doctor_Dashboard_Layout from "./layouts/Doctor_Dashboard_Layout";
 import { Main_Grid } from "./pages/doctor/Main_Grid";
 import { Messages } from "./pages/doctor/Messages";
@@ -22,6 +20,16 @@ import LogInPage from "./pages/general/LogInPage";
 import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
 
+
+import Register from "./pages/general/Register";
+import Chat from "@/pages/admin/Chat";
+import Setting from "@/pages/admin/Setting";
+import HomePage from "@/pages/main/HomePage";
+import Community from "@/pages/main/Community";
+import About from "@/pages/main/About";
+import SignUp from "@/pages/main/SignUp";
+import SignIn from "@/pages/main/SignIn";
+import ProtectedRoute from "@/routes/protectedRoute";
 
 
 function App() {
@@ -46,6 +54,7 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
+
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
@@ -55,6 +64,7 @@ function App() {
       {/* <Route index element={<Home/>}/> */}
 
 
+      <Route path="/register" element={<Register />} />
       {/* admin layout */}
       <Route
         path="/admin"
