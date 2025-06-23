@@ -40,7 +40,7 @@ function App() {
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Setting />} />
         <Route path="diseases" element={<Diseases_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
