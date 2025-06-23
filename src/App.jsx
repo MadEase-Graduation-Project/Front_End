@@ -20,7 +20,6 @@ import LogInPage from "./pages/general/LogInPage";
 import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
 
-
 import Register from "./pages/general/Register";
 import Chat from "@/pages/admin/Chat";
 import Setting from "@/pages/admin/Setting";
@@ -31,14 +30,13 @@ import SignUp from "@/pages/main/SignUp";
 import SignIn from "@/pages/main/SignIn";
 import ProtectedRoute from "@/routes/protectedRoute";
 
-
 function App() {
   return (
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route path="signup_" element={<SignUp />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="community" element={<Community />} />
         <Route path="about" element={<About />} />
@@ -54,7 +52,6 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
-
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
@@ -62,7 +59,6 @@ function App() {
 
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
-
 
       <Route path="/register" element={<Register />} />
       {/* admin layout */}

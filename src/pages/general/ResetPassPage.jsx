@@ -84,7 +84,6 @@ const ResetPasswordPage = () => {
         </button>
         <UnderLined text={"Back to Login"} link={"/login"} />
       </div>
-      <h1>a33333333333333</h1>
     </form>
   );
 };
