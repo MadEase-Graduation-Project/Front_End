@@ -8,11 +8,24 @@ import apple from "../../assets/images/apple.svg";
 import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
-// import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-
+import { useForm, Controller } from "react-hook-form";
+import api from "../../services/axios";
 const LogInPage = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
-    <div className="w-full bg-mewhite min-h-screen flex items-center justify-center relative">
+    <form
+      className="w-full bg-mewhite min-h-screen flex items-center justify-center relative"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="absolute w-4/5 h-auto lg:h-[90vh] flex flex-col lg:flex-row items-stretch p-5">
         {/* Left side — only visible on large screens */}
         <div className="hidden lg:flex flex-col w-1/2 bg-menavy rounded-tl-[40px] rounded-bl-[40px] h-full items-center justify-center gap-10">
@@ -38,10 +51,14 @@ const LogInPage = () => {
         flex flex-col justify-center items-center gap-[15px] p-5 h-full"
         >
           {/* Logo shown only on small screens */}
-          <img
-            src={Logo_navy}
-            className="block lg:hidden w-2/3 sm:w-[250px] h-auto p-5"
-          />
+          <Link to="/home">
+            <img
+              src={Logo_navy}
+              alt="Logo"
+              className="block lg:hidden w-2/3 sm:w-[200px] h-auto mb-2 cursor-pointer mx-auto"
+            />
+          </Link>
+
           <div className="w-3/4 flex flex-col justify-start gap-[5px]">
             <TopReg
               regtitle={"Welcome Back!!"}
@@ -49,13 +66,62 @@ const LogInPage = () => {
               reg={"Sign up"}
               dest={"/signup"}
             />
-            <FloatingInput label="E-mail" type="email" id="email" />
-            <FloatingInput label="Password" type="password" id="password" />
+
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Invalid email address",
+                },
+              }}
+              render={({ field }) => (
+                <FloatingInput
+                  {...field}
+                  label="E-mail"
+                  type="email"
+                  id="email"
+                />
+              )}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
+
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              }}
+              render={({ field }) => (
+                <FloatingInput
+                  {...field}
+                  label="Password"
+                  type="password"
+                  id="password"
+                />
+              )}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
+
             <UnderLined text={"Forgot your password?"} link={"/resetpass"} />
             <button
-              className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[48px] rounded-[5px]
+              className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px]
               hover:bg-menavy/90 hover:brightness-110 duration-250"
-              onClick={() => alert("btn clicked")}
+              type="submit"
             >
               Login
             </button>
@@ -67,10 +133,11 @@ const LogInPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
 export default LogInPage;
+
 //justify>>with the axis of the flex
 //items>>with the normal to the flex
