@@ -26,13 +26,13 @@ const Main_Layout = () => {
   };
   const handleDoctorClickLogin = async () => {
     const doctor = {
-      email: "tasneem@gmail.com",
+      email: "tasneemfahmimadkour@gmail.com",
       password: "123456789",
     };
-    const response = await loginUser(doctor);
+    const response = await loginUser(user);
     console.log(response);
     const token = response.token;
-    localStorage.setItem("token", token);
+    localStorage.setItem("doctorToken", token);
 
     if (token) {
       navigate(`/doctor`);
