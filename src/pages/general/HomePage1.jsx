@@ -14,7 +14,7 @@ import DocCard from '../../components/patientComps/landingPage/DocCard';
 import ServicesLine from '../../components/patientComps/landingPage/ServicesLine';
 import ServicesCard from '../../components/patientComps/landingPage/ServicesCard';
 
-const HomePage = () => {
+const HomePage1 = () => {
     const [scrolled, setScrolled] = useState(false);
     const [state, setState] = useState('register');
     useEffect(() => {
@@ -135,4 +135,4 @@ const HomePage = () => {
     );
 }
 
-export default HomePage
+export default HomePage1
