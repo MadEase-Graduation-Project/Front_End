@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import { CheckboxItem } from "@radix-ui/react-dropdown-menu";
 
-// Settings
+// Settingssss
 
 export const Settings = () => {
   const [brandColor, setBrandColor] = useState("#37568d");
@@ -327,7 +327,8 @@ export const Settings = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
+        <div>
+        </div>
         {/* Appearance Section
         <TabsContent value="appearance">
           <Card>
