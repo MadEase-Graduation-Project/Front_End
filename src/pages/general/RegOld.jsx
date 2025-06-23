@@ -1,10 +1,11 @@
 import reg from '../../assets/images/reg.png';
 import final_logo from '../../assets/images/final_logo.svg'
-import TopReg from '../../components/nosaComps/register/TopReg';
-import Body from '../../components/nosaComps/register/Body';
+import logo_M from '../../assets/images/logoMin.svg'
+import TopReg from '../../components/patientComps/register/TopReg';
+import Body from '../../components/patientComps/register/Body';
 import React, { useState } from 'react';
-import BottomBtns from '../../components/nosaComps/register/BottomBtns';
-import DividerText from '../../components/nosaComps/register/DividerText';
+import BottomBtns from '../../components/patientComps/register/BottomBtns';
+import DividerText from '../../components/patientComps/register/DividerText';
 // import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const Register = () => {
@@ -27,7 +28,11 @@ const Register = () => {
                 >
                     <img
                         src={final_logo}
-                        className='w-[160px] md:w-[186px] h-auto'
+                        className='hidden sm:block sm:w-[140px] md:w-[150px] lg:w-[180px] h-auto'
+                    />
+                     <img
+                        src={logo_M}
+                        className='block sm:hidden w-[50px] h-auto'
                     />
                     <div className='w-3/4 h-auto flex flex-col justify-start gap-[5px]'>
                         <TopReg

@@ -16,6 +16,10 @@ import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
 import { Advice } from "./pages/doctor/Advice";
 import HomePage from "./pages/general/HomePage";
+import LogInPage from "./pages/general/LogInPage";
+import SignUpPage from "./pages/general/SignUpPage";
+import ResetPassPage from "./pages/general/ResetPassPage";
+
 import Register from "./pages/general/Register";
 import Chat from "@/pages/admin/Chat";
 import Setting from "@/pages/admin/Setting";
@@ -25,7 +29,6 @@ import About from "@/pages/main/About";
 import SignUp from "@/pages/main/SignUp";
 import SignIn from "@/pages/main/SignIn";
 import ProtectedRoute from "@/routes/protectedRoute";
-
 
 function App() {
   return (
@@ -50,6 +53,13 @@ function App() {
       </Route>
 
       <Route path="/home" element={<HomePage />} />
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/resetpass" element={<ResetPassPage />} />
+
+      {/* children (pages that use this layout) like down */}
+      {/* <Route index element={<Home/>}/> */}
+
       <Route path="/register" element={<Register />} />
       {/* admin layout */}
       <Route

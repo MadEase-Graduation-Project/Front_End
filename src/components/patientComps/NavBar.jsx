@@ -6,33 +6,33 @@ import vector from '../../assets/images/Vector.svg'
 
 const NavBar = ({ scrolled, state }) => (
 
-    <nav className={`w-full h-[45px] md:h-[60px] bg-mewhite p-2 fixed top-0 left-0 z-50
-        transition-all duration-200 shadow-md ${scrolled ? 'shadow-2xl' : ''}`}>
-        <div className='flex items-center h-full w-full gap-[300px]'>
+    <nav className={` w-full max-w-[100vw] h-[45px] md:h-[60px] bg-mewhite px-8 py-2 fixed top-0 left-0 z-50 
+        transition-all duration-200 shadow-md overflow-hidden ${scrolled ? 'shadow-2xl' : ''}`}>
+        <div className={`grid grid-cols-12 h-full w-full overflow-hidden ${state === 'login' ? 'gap-[300px]' : ''}`}>
             <img
                 src={final_logo}
-                className='w-[60px] md:w-[80px] h-auto ml-5'
+                className='col-start-1 col-span-4 xs:col-span-2 h-full'
             />
 
             {state === 'register' ?
-                <div className='ml-auto flex items-center mr-1'>
-                    <Link to='/register'
-                        className='w-[70px] md:w-[100px] h-[25px] md:h-[35px] rounded-[10px] inline-flex justify-center items-center 
-                      gap-2 mr-5 bg-menavy hover:bg-menavy/90 hover:brightness-110 transition-all duration-250'
-                    >
-                        <div className='text-center flex flex-col justify-center text-white text-[12px] md:text-[18px] font-normal font-jost'>
-                            Register
-                        </div>
-                    </Link>
-                </div>
+
+                <Link to='/signup'
+                    className='self-center col-span-2 xs:col-span-1 col-start-11 xs:col-start-12 w-full h-3/4 rounded-[10px] inline-flex justify-center items-center 
+                       bg-menavy hover:bg-menavy/90 hover:brightness-110 transition-all duration-250'
+                >
+                    <p className=' text-white text-[8px] sm:text-[10px] md:text-[16px] lg:text-[18px] font-light font-jost'>
+                        Register
+                    </p>
+                </Link>
+
                 :
-                <div className='flex gap-[150px] items-center'>
+                <div className='flex justify-between items-center'>
                     <p className='font-jost text-base text-mepale font-normal'>Home</p>
                     <p className='font-jost text-base text-menavy font-light'>Location</p>
                     <div className='flex gap-[5px] items-center'>
                         <p className='font-jost text-base text-menavy font-light'>Services</p>
                         <img
-                        src={vector}
+                            src={vector}
                         />
                     </div>
                     <p className='font-jost text-base text-menavy font-light'>Inbox</p>
