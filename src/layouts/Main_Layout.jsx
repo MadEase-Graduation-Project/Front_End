@@ -29,7 +29,7 @@ const Main_Layout = () => {
       email: "tasneemfahmimadkour@gmail.com",
       password: "123456789",
     };
-    const response = await loginUser(user);
+    const response = await loginUser(doctor);
     console.log(response);
     const token = response.token;
     localStorage.setItem("doctorToken", token);

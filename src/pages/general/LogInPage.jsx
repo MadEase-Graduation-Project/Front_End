@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import Logo_white from "../../assets/images/LogoNew_white.svg";
 import TopReg from "../../components/patientComps/register/TopReg";
@@ -9,16 +9,31 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { useForm, Controller } from "react-hook-form";
-import api from "../../services/axios";
+import { loginUser } from "@/services/usersApi";
+import { useState } from "react";
 const LogInPage = () => {
+  const navigate = useNavigate();
+  const [isActivePopup, setActivePopup] = useState(false);
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    //! toDo: fix login slice -------------------------------------------------
+    const response = await loginUser(data);
+    console.log(response);
+    const token = response.token;
+    localStorage.setItem("token", token);
+
+    if (token) {
+      //! toDo: fix navigation -------------------------------------------------
+      navigate(`/admin/overview`);
+    } else {
+      setActivePopup(true);
+    }
   };
 
   return (
@@ -47,9 +62,16 @@ const LogInPage = () => {
 
         {/* Right side — form */}
         <div
-          className="w-full lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none
+          className="w-full relative lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none
         flex flex-col justify-center items-center gap-[15px] p-5 h-full"
         >
+          {/* //toDo: popup for wrong pass and email */}
+          {isActivePopup && (
+            <div className="absolute top-5 left-1/2 translate-x-[-50%] rounded px-4 py-2 bg-red-300">
+              <p>invalid email or password</p>
+            </div>
+          )}
+
           {/* Logo shown only on small screens */}
           <Link to="/home">
             <img

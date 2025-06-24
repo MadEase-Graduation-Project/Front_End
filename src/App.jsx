@@ -1,11 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import Main_Layout from "@/layouts/Main_Layout";
 
+import Main_Layout from "@/layouts/Main_Layout";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
 import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
-
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
@@ -20,14 +19,9 @@ import { Messages } from "@/pages/doctor/Messages";
 import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
-
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
-import HomePage from "@/pages/main/HomePage";
 import Community from "@/pages/main/Community";
-import About from "@/pages/main/About";
-import SignUp from "@/pages/main/SignUp";
-import SignIn from "@/pages/main/SignIn";
 import ProtectedRoute from "@/routes/protectedRoute";
 
 function App() {
@@ -35,12 +29,13 @@ function App() {
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="signin" element={<SignIn />} />
+        <Route index element={<HomePage1 />} />
         <Route path="community" element={<Community />} />
-        <Route path="about" element={<About />} />
       </Route>
+
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/resetpass" element={<ResetPassPage />} />
 
       {/* doctor layout */}
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
@@ -50,11 +45,6 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
-
-      <Route path="/home" element={<HomePage1 />} />
-      <Route path="/login" element={<LogInPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/resetpass" element={<ResetPassPage />} />
 
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
