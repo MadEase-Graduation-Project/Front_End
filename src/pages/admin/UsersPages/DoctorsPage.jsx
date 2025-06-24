@@ -1,11 +1,11 @@
-import DataTable from "@/components/adminComps/DataTable";
+import DataTable from "@/components/role/admin/DataTable";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllDoctors } from "@/store/slices/doctorSlice";
-import FilterColumns from "@/components/adminComps/FilterColumns";
+import FilterColumns from "@/components/role/admin/FilterColumns";
 import { Settings } from "lucide-react";
 
-export default function Doctors() {
+export default function DoctorsPage() {
   const dispatch = useDispatch();
   const { items: data, loading } = useSelector((state) => state.doctors);
 

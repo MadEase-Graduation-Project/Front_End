@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DataTable from "@/components/adminComps/DataTable";
+import DataTable from "@/components/role/admin/DataTable";
 
 export default function DataTableExample() {
   const [loading, setLoading] = useState(false);

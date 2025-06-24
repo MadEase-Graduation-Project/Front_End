@@ -141,7 +141,7 @@ export default function TotalUsersChart({
           series={[
             {
               data: userData,
-              innerRadius: 50,
+              innerRadius: 45,
               outerRadius: 80,
               paddingAngle: 2,
               cornerRadius: 4,
@@ -150,7 +150,6 @@ export default function TotalUsersChart({
                 item.value > 0 && totalUsers > 0
                   ? `${Math.round((item.value / totalUsers) * 100)}%`
                   : "",
-              arcLabelMinAngle: 20,
             },
           ]}
           slotProps={{

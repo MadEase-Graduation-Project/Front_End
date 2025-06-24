@@ -1,21 +1,24 @@
-import DataTable from "@/components/adminComps/DataTable";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import { fetchAllDiseases, removeDisease } from "@/store/slices/diseaseSlice";
-import { useEffect, useState, useMemo } from "react";
+import DataTable from "@/components/role/admin/DataTable";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { Settings } from "lucide-react";
-import FilterColumns from "@/components/adminComps/FilterColumns";
+import FilterColumns from "@/components/role/admin/FilterColumns";
 
-export default function Diseases() {
+export default function PatientsPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.diseases);
+  const { items: data, loading } = useSelector((state) => state.patients);
 
   // State for dialogs
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [diseaseToDelete, setDiseaseToDelete] = useState(null);
+  // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  //  const [patientDialogOpen, setPatientDialogOpen] = useState(false);
+  // const [isCreateMode, setIsCreateMode] = useState(false);
+  // const [patientToDelete, setPatientToDelete] = useState(null);
+  // const [patientToEdit, setPatientToEdit] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchAllDiseases());
+    dispatch(fetchAllPatients());
   }, [dispatch]);
 
   const handleRowClick = (item) => {
@@ -26,30 +29,31 @@ export default function Diseases() {
     console.log("Edit item:", item);
   };
 
-  // Open confirmation dialog when delete is clicked
   const handleDelete = (item) => {
-    setDiseaseToDelete(item);
-    setDeleteDialogOpen(true);
+    // setPatientToDelete(item);
+    // setDeleteDialogOpen(true);
+    console.log("Delete item:", item);
   };
 
-  // Actual delete function when confirmed
-  const confirmDelete = () => {
-    if (diseaseToDelete) {
-      dispatch(removeDisease(diseaseToDelete._id));
-      console.log("Deleting Disease:", diseaseToDelete);
-      // Close the dialog after deletion
-      setDeleteDialogOpen(false);
-    }
-  };
+  // const confirmDelete = () => {
+  //   if (patientToDelete) {
+  //     console.log("Deleting patient:", patientToDelete);
+  //     // Close the dialog after deletion
+  //     setDeleteDialogOpen(false);
+  //   }
+  // };
 
   //* Column definitions
   // All available columns
   const allColumns = useMemo(
     () => [
       { key: "name", label: "Name", sortable: true },
-      { key: "diseaseCategoryName", label: "Category", sortable: true },
-      { key: "description", label: "Description", sortable: true },
-      { key: "rank", label: "Rank", sortable: true },
+      { key: "email", label: "Email", sortable: true },
+      { key: "city", label: "City", sortable: true },
+      { key: "country", label: "Country", sortable: true },
+      { key: "phone", label: "Phone", sortable: true },
+      { key: "gender", label: "Gender", sortable: true },
+      { key: "isVerified", label: "Verified", sortable: true, type: "boolean" },
       { key: "createdAt", label: "Created At", sortable: true, type: "date" },
       { key: "updatedAt", label: "Updated At", sortable: true, type: "date" },
     ],
@@ -59,8 +63,9 @@ export default function Diseases() {
   // State for selected columns
   const [selectedColumnKeys, setSelectedColumnKeys] = useState([
     "name",
-    "diseaseCategoryName",
-    "rank",
+    "email",
+    "city",
+    "phone",
   ]);
 
   // Column selector options for react-select
@@ -81,7 +86,7 @@ export default function Diseases() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Diseases</h1>
+        <h1 className="text-2xl font-bold">Patients</h1>
         <button
           onClick={() => setShowColumnSelector(true)}
           className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors"
@@ -114,19 +119,18 @@ export default function Diseases() {
         pageSize={5}
       />
 
-      {/* Confirmation dialog */}
-      <ConfirmationDialog
+      {/* <ConfirmationDialog
         isOpen={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={confirmDelete}
-        title="Delete Disease"
-        message={`Are you sure you want to delete the disease " ${
-          diseaseToDelete?.name || "this disease"
+        title="Delete Patient"
+        message={`Are you sure you want to delete the data of patient ${
+          patientToDelete?.name || "this patient"
         }?`}
         confirmText="Delete"
         cancelText="Cancel"
         confirmButtonClass="bg-red-600 hover:bg-red-700"
-      />
+      /> */}
     </div>
   );
 }

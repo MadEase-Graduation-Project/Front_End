@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaLightbulb } from "react-icons/fa";
+import { description } from "@/utils/stringUtils";
 
 export default function LastAdvices() {
   const dispatch = useDispatch();
@@ -51,20 +52,11 @@ export default function LastAdvices() {
                   {advice.title || "Medical Advice"}
                 </h3>
                 <p className="text-sm text-gray-500 line-clamp-2">
-                  {advice.description}
+                  {advice.description ? description(advice.description) : ""}
                 </p>
               </div>
             </div>
           ))}
-
-          {advices.length > 5 && (
-            <button
-              onClick={handleShowMore}
-              className="self-center mt-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:underline transition-colors"
-            >
-              {maxItems === 5 ? "Show All" : "Show Less"}
-            </button>
-          )}
         </>
       )}
     </div>

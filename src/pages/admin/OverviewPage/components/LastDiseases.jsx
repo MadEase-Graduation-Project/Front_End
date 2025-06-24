@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaVirus } from "react-icons/fa";
+import { description } from "@/utils/stringUtils";
 
 export default function LastDiseases() {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ export default function LastDiseases() {
               <div className="flex flex-col flex-1">
                 <h3 className="text-lg font-medium">{disease.name}</h3>
                 <p className="text-sm text-gray-500 line-clamp-2">
-                  {disease.description}
+                  {disease.description ? description(disease.description) : ""}
                 </p>
               </div>
             </div>
