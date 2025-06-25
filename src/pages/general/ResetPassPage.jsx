@@ -2,17 +2,26 @@ import { Link } from "react-router-dom";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import { useForm, Controller } from "react-hook-form";
-import api from "../../services/axios"; // Your axios instance
+import api from "../../services/axios";
 import { useState } from "react";
 import UnderLined from "../../components/patientComps/register/UnderLined";
+
 const ResetPasswordPage = () => {
   const {
     control,
     handleSubmit,
+    trigger,
+    setError,
+    clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
+
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
 
   const onSubmit = async (data) => {
     try {
@@ -31,9 +40,9 @@ const ResetPasswordPage = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full min-h-screen bg-mewhite flex items-center justify-center p-5"
+      className="w-full bg-mewhite min-h-screen flex items-center justify-center p-5"
     >
-      <div className="bg-meblue rounded-[20px] w-full sm:w-[90%] md:w-[70%] lg:w-[40%] p-6 flex flex-col items-center gap-6">
+      <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-meblue rounded-[20px] flex flex-col justify-center items-center gap-[15px] p-5 h-auto">
         <Link to="/home">
           <img
             src={Logo_navy}
@@ -42,14 +51,11 @@ const ResetPasswordPage = () => {
           />
         </Link>
 
-        <h2 className="font-jost font-semibold text-xl sm:text-2xl text-center text-menavy">
-          Reset Your Password
-        </h2>
-        <p className="text-sm sm:text-base text-center text-menavyoff">
-          Enter your email and we’ll send you a code to reset your password.
-        </p>
+        <div className="w-3/4 flex flex-col justify-start gap-[5px]">
+          <h2 className="self-start font-jost font-semibold text-2xl md:text-3xl xl:text-4xl 2xl:text-5xl text-menavy mb-3">
+            Recover Password
+          </h2>
 
-        <div className="w-full flex flex-col gap-1">
           <Controller
             name="email"
             control={control}
@@ -61,28 +67,53 @@ const ResetPasswordPage = () => {
               },
             }}
             render={({ field }) => (
-              <FloatingInput {...field} label="Email" type="email" id="email" />
+              <FloatingInput
+                {...field}
+                label="Email"
+                type="email"
+                id="email"
+                onChange={(e) => {
+                  field.onChange(e);
+                  if (emailTouched) clearErrors("email");
+                }}
+                onBlur={() => {
+                  setEmailTouched(true);
+                  trigger("email");
+                }}
+                onKeyDown={async (e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    setEmailTouched(true);
+                    const valid = await trigger("email");
+                    if (valid) {
+                      document.querySelector("form").requestSubmit();
+                    }
+                  }
+                }}
+              />
             )}
           />
-          {errors.email && (
+          {errors.email && emailTouched && (
             <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
+
+          {message && (
+            <p className="text-green-600 text-sm text-center">{message}</p>
+          )}
+          {errorMsg && (
+            <p className="text-red-600 text-sm text-center">{errorMsg}</p>
+          )}
+
+          <button
+            type="submit"
+            className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px]
+            hover:bg-menavy/90 hover:brightness-110 duration-250"
+          >
+            Send Reset Code
+          </button>
+
+          <UnderLined text={"Back to Login"} link={"/login"} />
         </div>
-
-        {message && (
-          <p className="text-green-600 text-sm text-center">{message}</p>
-        )}
-        {errorMsg && (
-          <p className="text-red-600 text-sm text-center">{errorMsg}</p>
-        )}
-
-        <button
-          type="submit"
-          className="bg-mepale text-white w-full h-[44px] rounded-[5px] font-jost text-base hover:bg-menavy duration-300"
-        >
-          Send Reset Code
-        </button>
-        <UnderLined text={"Back to Login"} link={"/login"} />
       </div>
     </form>
   );
