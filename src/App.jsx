@@ -46,6 +46,11 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/resetpass" element={<ResetPassPage />} />
+
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
       {/* admin layout */}

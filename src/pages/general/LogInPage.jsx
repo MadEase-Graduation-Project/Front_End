@@ -1,4 +1,7 @@
+// ✅ Login Page — Smooth Field-by-Field Validation & Password Toggle
 import { Link, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import Logo_white from "../../assets/images/LogoNew_white.svg";
 import TopReg from "../../components/patientComps/register/TopReg";
@@ -8,6 +11,8 @@ import apple from "../../assets/images/apple.svg";
 import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import { useForm, Controller } from "react-hook-form";
 import { loginUser } from "@/services/usersApi";
 import { useState } from "react";
@@ -19,7 +24,30 @@ const LogInPage = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    trigger,
+    clearErrors,
+  } = useForm({ mode: "onTouched" });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const fieldOrder = ["email", "password"];
+  const handleKeyDown = async (e, name) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const isValid = await trigger(name);
+      const currentIndex = fieldOrder.indexOf(name);
+
+      if (isValid) {
+        if (currentIndex < fieldOrder.length - 1) {
+          const nextInput = document.getElementById(
+            fieldOrder[currentIndex + 1]
+          );
+          if (nextInput) nextInput.focus();
+        } else {
+          document.querySelector("form").requestSubmit();
+        }
+      }
+    }
+  };
 
   const onSubmit = async (data) => {
     //! toDo: fix login slice -------------------------------------------------
@@ -42,7 +70,7 @@ const LogInPage = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="absolute w-4/5 h-auto lg:h-[90vh] flex flex-col lg:flex-row items-stretch p-5">
-        {/* Left side — only visible on large screens */}
+        {/* Left side */}
         <div className="hidden lg:flex flex-col w-1/2 bg-menavy rounded-tl-[40px] rounded-bl-[40px] h-full items-center justify-center gap-10">
           <Link to="/home">
             <img
@@ -61,10 +89,7 @@ const LogInPage = () => {
         </div>
 
         {/* Right side — form */}
-        <div
-          className="w-full relative lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none
-        flex flex-col justify-center items-center gap-[15px] p-5 h-full"
-        >
+        <div className="w-full lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none flex flex-col justify-center items-center gap-[15px] p-5 h-full">
           {/* //toDo: popup for wrong pass and email */}
           {isActivePopup && (
             <div className="absolute top-5 left-1/2 translate-x-[-50%] rounded px-4 py-2 bg-red-300">
@@ -83,12 +108,13 @@ const LogInPage = () => {
 
           <div className="w-3/4 flex flex-col justify-start gap-[5px]">
             <TopReg
-              regtitle={"Welcome Back!!"}
-              regnote={"Don't have an account?"}
-              reg={"Sign up"}
-              dest={"/signup"}
+              regtitle="Welcome Back!!"
+              regnote="Don't have an account?"
+              reg="Sign up"
+              dest="/signup"
             />
 
+            {/* Email */}
             <Controller
               name="email"
               control={control}
@@ -103,8 +129,13 @@ const LogInPage = () => {
                 <FloatingInput
                   {...field}
                   label="E-mail"
-                  type="email"
                   id="email"
+                  type="email"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("email");
+                  }}
+                  onKeyDown={(e) => handleKeyDown(e, "email")}
                 />
               )}
             />
@@ -114,43 +145,59 @@ const LogInPage = () => {
               </p>
             )}
 
-            <Controller
-              name="password"
-              control={control}
-              rules={{
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              }}
-              render={({ field }) => (
-                <FloatingInput
-                  {...field}
-                  label="Password"
-                  type="password"
-                  id="password"
-                />
+            {/* Password */}
+            <div className="relative">
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                }}
+                render={({ field }) => (
+                  <FloatingInput
+                    {...field}
+                    label="Password"
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors("password");
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, "password")}
+                  />
+                )}
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
               )}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
+            </div>
 
-            <UnderLined text={"Forgot your password?"} link={"/resetpass"} />
+            <UnderLined text="Forgot your password?" link="/resetpass" />
+
             <button
-              className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px]
-              hover:bg-menavy/90 hover:brightness-110 duration-250"
+              className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
               type="submit"
             >
               Login
             </button>
-            <DividerText reg={"or login with"} />
+
+            <DividerText reg="or login with" />
             <div className="flex gap-[12px]">
-              <BottomBtn source={google} btn={"Google"} />
-              <BottomBtn source={apple} btn={"Apple"} />
+              <BottomBtn source={google} btn="Google" />
+              <BottomBtn source={apple} btn="Apple" />
             </div>
           </div>
         </div>
