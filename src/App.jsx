@@ -23,6 +23,7 @@ import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
 import ProtectedRoute from "@/routes/protectedRoute";
+import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Route path="/" element={<Main_Layout />}>
         <Route index element={<HomePage1 />} />
         <Route path="community" element={<Community />} />
+        <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
 
       <Route path="/login" element={<LogInPage />} />
@@ -46,7 +48,6 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
-      <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/resetpass" element={<ResetPassPage />} />

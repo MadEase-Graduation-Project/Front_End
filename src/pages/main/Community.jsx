@@ -11,11 +11,17 @@ import {
   selectAdvicesLoading,
   selectAllAdvices,
 } from "@/store/selectors/adviceSelectors";
+import { useNavigate } from "react-router-dom";
 
 export default function Community() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+
+  const navigate = useNavigate();
+  const handleAdviceClick = (adviceId) => {
+    navigate(`/community/${adviceId}`);
+  };
 
   // Use selectors to get data from Redux store
   const advices = useSelector(selectAllAdvices);
@@ -107,7 +113,6 @@ export default function Community() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Latest Articles
           </h2>
-
           {loading ? (
             // Loading skeleton
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -144,7 +149,8 @@ export default function Community() {
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredAdvices.map((advice) => (
-                <div
+                <button onClick={() => handleAdviceClick(advice._id)}>
+                  <div
                   key={advice._id}
                   className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition-transform hover:shadow-lg hover:-translate-y-1"
                 >
@@ -214,6 +220,7 @@ export default function Community() {
                     </div> */}
                   </div>
                 </div>
+                </button>
               ))}
             </div>
           )}
