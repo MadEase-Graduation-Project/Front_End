@@ -12,10 +12,7 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-import { useForm, Controller } from "react-hook-form";
 import { loginUser } from "@/services/usersApi";
-import { useState } from "react";
 const LogInPage = () => {
   const navigate = useNavigate();
   const [isActivePopup, setActivePopup] = useState(false);
