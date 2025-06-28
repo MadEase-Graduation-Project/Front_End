@@ -1,15 +1,24 @@
-import { Link, Outlet } from "react-router-dom";
 import TopReg from "../../components/patientComps/register/TopReg";
-import DividerText from "../../components/patientComps/register/DividerText";
 import BottomBtn from "@/components/patientComps/register/BottomBtn";
 import google from "../../assets/images/google.svg";
 import apple from "../../assets/images/apple.svg";
-import FloatingInput from "../../components/patientComps/register/FloatingInput";
+import DividerText from "../../components/patientComps/register/DividerText";
+import FloatingInput from "@/components/patientComps/register/FloatingInput";
+import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { loginUser } from "@/services/usersApi";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 
-export default function SignUp() {
+import { usePopup } from "@/contexts/PopupContext";
+
+export default function LogIn() {
+  const navigate = useNavigate();
+  const { isActivePopup, setActivePopup } = usePopup();
+  const [hasLoginError, setHasLoginError] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -19,9 +28,16 @@ export default function SignUp() {
   } = useForm({ mode: "onTouched" });
 
   const [showPassword, setShowPassword] = useState(false);
+  const fieldOrder = ["email", "password"];
 
-  const fieldOrder = ["firstName", "phone", "email", "password"];
-
+  useEffect(() => {
+    if (isActivePopup) {
+      const timer = setTimeout(() => {
+        setActivePopup(false);
+      }, 8000); // Auto-close after 3 seconds
+      return () => clearTimeout(timer); // Cleanup
+    }
+  }, [isActivePopup]);
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -35,15 +51,26 @@ export default function SignUp() {
           );
           if (nextInput) nextInput.focus();
         } else {
-          // If it's the last field and valid, submit the form
           document.querySelector("form").requestSubmit();
         }
       }
     }
   };
 
-  const onSubmit = (data) => {
-    console.log("Signup data:", data);
+  const onSubmit = async (data) => {
+    //! toDo: fix login slice -------------------------------------------------
+    const response = await loginUser(data);
+    console.log(response);
+    const token = response.token;
+    localStorage.setItem("token", token);
+
+    if (token) {
+      //! toDo: fix navigation -------------------------------------------------
+      navigate(`/admin/overview`);
+    } else {
+      setActivePopup(true);
+      setHasLoginError(true);
+    }
   };
   return (
     <form
@@ -52,93 +79,11 @@ export default function SignUp() {
     >
       <div className="w-3/4 flex flex-col justify-start gap-[5px]">
         <TopReg
-          regtitle="Create an account"
-          regnote="Already have one?"
-          reg="Log in"
-          dest="/register/login"
+          regtitle="Welcome Back!!"
+          regnote="Don't have an account?"
+          reg="Sign up"
+          dest="/register"
         />
-
-        {/* First Name */}
-        <Controller
-          name="firstName"
-          control={control}
-          rules={{ required: "First name is required" }}
-          render={({ field }) => (
-            <FloatingInput
-              {...field}
-              label="First name"
-              id="firstName"
-              onChange={(e) => {
-                field.onChange(e);
-                clearErrors("firstName");
-              }}
-              onKeyDown={(e) => handleKeyDown(e, "firstName")}
-            />
-          )}
-        />
-        {errors.firstName && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.firstName.message}
-          </p>
-        )}
-
-        {/* Phone Number */}
-        <Controller
-          name="phone"
-          control={control}
-          rules={{
-            required: "Phone number is required",
-            validate: (value) => {
-              const raw = value || "";
-              const afterPrefix = raw.replace("+20", "");
-              const digitsOnly = afterPrefix.replace(/\D/g, "");
-              if (!raw.startsWith("+20"))
-                return "Phone number must start with +20";
-              if (/[^\d]/.test(afterPrefix)) return "Only numbers are allowed";
-              if (digitsOnly.length > 10)
-                return "Phone number can't exceed 10 digits";
-              if (digitsOnly.length < 10)
-                return "Phone number must be exactly 10 digits after +20";
-              return true;
-            },
-          }}
-          render={({ field }) => (
-            <FloatingInput
-              {...field}
-              label="Phone Number"
-              id="phone"
-              type="tel"
-              value={field.value || ""}
-              onFocus={() => {
-                if (!field.value?.startsWith("+20")) {
-                  field.onChange("+20");
-                }
-              }}
-              onChange={(e) => {
-                let input = e.target.value;
-                if (!input.startsWith("+20")) {
-                  input = "+20" + input.replace(/^\+?2?0?/, "");
-                }
-                field.onChange(input);
-                trigger("phone");
-              }}
-              onBlur={() => trigger("phone")}
-              onKeyDown={(e) => {
-                const cursorPos = e.target.selectionStart;
-                if (
-                  (e.key === "Backspace" && cursorPos <= 3) ||
-                  (e.key === "Delete" && cursorPos < 4)
-                ) {
-                  e.preventDefault();
-                }
-                handleKeyDown(e, "phone");
-              }}
-            />
-          )}
-        />
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-        )}
 
         {/* Email */}
         <Controller
@@ -157,9 +102,11 @@ export default function SignUp() {
               label="E-mail"
               id="email"
               type="email"
+              hasError={hasLoginError}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("email");
+                setHasLoginError(false);
               }}
               onKeyDown={(e) => handleKeyDown(e, "email")}
             />
@@ -187,9 +134,11 @@ export default function SignUp() {
                 label="Password"
                 id="password"
                 type={showPassword ? "text" : "password"}
+                hasError={hasLoginError}
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("password");
+                  setHasLoginError(false);
                 }}
                 onKeyDown={(e) => handleKeyDown(e, "password")}
               />
@@ -209,14 +158,16 @@ export default function SignUp() {
           )}
         </div>
 
+        <UnderLined text="Forgot your password?" link="/resetpass" />
+
         <button
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
           type="submit"
         >
-          Sign up
+          Login
         </button>
 
-        <DividerText reg="or signup with" />
+        <DividerText reg="or login with" />
         <div className="flex gap-[12px]">
           <BottomBtn source={google} btn="Google" />
           <BottomBtn source={apple} btn="Apple" />

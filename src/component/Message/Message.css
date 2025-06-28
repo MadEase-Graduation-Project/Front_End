@@ -1,0 +1,46 @@
+/* Message.css */
+.message {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    padding: 10px; /* Add padding around the message */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #fff; /* White background for the message */
+    margin: 10px 0; /* Space between messages */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 70%; /* Limit the width of the message */
+}
+
+.message.own {
+    background-color: #dcf8c6; /* Light green background for own messages */
+    align-self: flex-end; /* Align own messages to the right */
+}
+
+.message:not(.own) {
+    background-color: #f1f1f1; /* Light gray background for received messages */
+    align-self: flex-start; /* Align received messages to the left */
+}
+
+.messageTop {
+    display: flex; /* Align items in a row */
+    align-items: flex-start; /* Align items to the start */
+}
+
+.messageImg {
+    width: 40px; /* Set width of the image */
+    height: 40px; /* Set height of the image */
+    border-radius: 50%; /* Make the image circular */
+    object-fit: cover; /* Ensure the image covers the area */
+    margin-right: 10px; /* Space between image and text */
+}
+
+.messageText {
+    font-size: 16px; /* Font size for the message text */
+    color: #333; /* Dark color for the text */
+    line-height: 1.4; /* Line height for better readability */
+}
+
+.messageBottom {
+    font-size: 12px; /* Smaller font size for the timestamp */
+    color: #888; /* Lighter color for the timestamp */
+    margin-top: 5px; /* Space above the timestamp */
+}

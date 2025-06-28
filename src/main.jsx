@@ -5,12 +5,15 @@ import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import App from "@/App";
 import React from "react";
+import { PopupProvider } from "@/contexts/PopupContext"; // ✅
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <BrowserRouter>
       <React.StrictMode>
-        <App />
+        <PopupProvider>
+          <App />
+        </PopupProvider>
       </React.StrictMode>
     </BrowserRouter>
   </Provider>

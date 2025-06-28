@@ -1,9 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
 import Main_Layout from "@/layouts/Main_Layout";
+import HomePage from "@/pages/main/HomePage";
 import HomePage1 from "./pages/general/HomePage1";
-import LogInPage from "./pages/general/LogInPage";
-import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
@@ -19,17 +18,35 @@ import { Messages } from "@/pages/doctor/Messages";
 import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
+
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
+
+import About from "@/pages/main/About";
+import SignUp from "@/pages/main/SignUp";
+import LogIn from "@/pages/main/LogIn";
+
 import ProtectedRoute from "@/routes/protectedRoute";
+import Test from "@/pages/general/test";
+import RegisterLayout from "./layouts/Registerlayout";
 
 function App() {
   return (
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
+
+        <Route index element={<HomePage />} />
+
         <Route path="community" element={<Community />} />
+      </Route>
+
+      {/* Register layout */}
+
+      <Route path="/register" element={<RegisterLayout />}>
+        <Route index element={<SignUp />} />
+        <Route path="login" element={<LogIn />} />
       </Route>
 
       {/* doctor layout */}
@@ -42,12 +59,13 @@ function App() {
       </Route>
 
       <Route path="/home" element={<HomePage1 />} />
-      <Route path="/login" element={<LogInPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/resetpass" element={<ResetPassPage />} />
 
+
+      <Route path="/resetpass" element={<ResetPassPage />} />
+      <Route path="/test" element={<Test />} />
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
+
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />

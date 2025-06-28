@@ -27,7 +27,7 @@ const ResetPasswordPage = () => {
       onSubmit={handleSubmit()}
       className="w-full bg-mewhite min-h-screen flex items-center justify-center p-5"
     >
-      <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-meblue rounded-[20px] flex flex-col justify-center items-center gap-[15px] p-5 h-auto">
+      <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-meblue rounded-[20px] flex flex-col justify-center items-center gap-[15px]  p-10 lg:p-20 h-auto">
         <Link to="/home">
           <img
             src={Logo_navy}
@@ -97,7 +97,7 @@ const ResetPasswordPage = () => {
             Send Reset Code
           </button>
 
-          <UnderLined text={"Back to Login"} link={"/login"} />
+          <UnderLined text={"Back to Login"} link={"/resgister/login"} />
         </div>
       </div>
     </form>
