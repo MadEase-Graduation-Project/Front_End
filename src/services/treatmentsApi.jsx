@@ -1,9 +1,5 @@
 import api from "../lib/axios";
-import {
-  createAuthHeader,
-  handleApiResponse,
-  handleApiError,
-} from "../lib/apiUtils";
+import { handleApiResponse, handleApiError } from "../lib/apiUtils";
 
 /**
  * Treatments API Service

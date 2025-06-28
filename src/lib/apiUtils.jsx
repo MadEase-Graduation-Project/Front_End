@@ -3,8 +3,6 @@
  * Common utilities for API services
  */
 
-export const createAuthHeader = () => ({});
-
 /**
  ** Handles API response and extracts data
  * @param {Object} response - Axios response object

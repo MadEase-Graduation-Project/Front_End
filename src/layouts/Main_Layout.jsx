@@ -15,8 +15,8 @@ const Main_Layout = () => {
 
   const handleClickLogin = async () => {
     const user = {
-      email: "admin@gmail.com",
-      password: "123456",
+      email: "abdo33awd@gmail.com",
+      password: "123456789",
     };
     try {
       const data = await loginUser(user);
@@ -25,7 +25,6 @@ const Main_Layout = () => {
       // setTokenCookie(data.accessToken);
 
       navigate("/admin/setting");
-      console.log("annnnnnnnna");
     } catch (err) {
       console.error(err.response?.data?.message || "Login failed");
     }
