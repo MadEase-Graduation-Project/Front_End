@@ -19,7 +19,7 @@ const BASE_ENDPOINT = "/diseasescategories";
  */
 export async function getAllDiseaseCategories() {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     return handleApiResponse(response, "No disease categories found");
   } catch (error) {
     return handleApiError(error, "fetching disease categories");
@@ -33,7 +33,7 @@ export async function getAllDiseaseCategories() {
  */
 export async function showDiseaseCategory(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     const data = handleApiResponse(response, "No disease categories found");
 
     const category = data.find((category) => category._id === id);
@@ -54,11 +54,7 @@ export async function showDiseaseCategory(id) {
  */
 export async function addDiseaseCategory(categoryData) {
   try {
-    const response = await api.post(
-      BASE_ENDPOINT,
-      categoryData,
-      createAuthHeader()
-    );
+    const response = await api.post(BASE_ENDPOINT, categoryData);
     return handleApiResponse(response, "Failed to create disease category");
   } catch (error) {
     return handleApiError(error, "adding disease category");
@@ -73,11 +69,7 @@ export async function addDiseaseCategory(categoryData) {
  */
 export async function editDiseaseCategory(id, categoryData) {
   try {
-    const response = await api.put(
-      `${BASE_ENDPOINT}/${id}`,
-      categoryData,
-      createAuthHeader()
-    );
+    const response = await api.put(`${BASE_ENDPOINT}/${id}`, categoryData);
     return handleApiResponse(
       response,
       `Failed to update disease category ${id}`
@@ -94,10 +86,7 @@ export async function editDiseaseCategory(id, categoryData) {
  */
 export async function deleteDiseaseCategory(id) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
     return handleApiResponse(
       response,
       `Failed to delete disease category ${id}`

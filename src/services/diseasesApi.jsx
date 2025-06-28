@@ -19,7 +19,7 @@ const BASE_ENDPOINT = "/diseases";
  */
 export async function getAllDiseases() {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     return handleApiResponse(response, "No diseases found");
   } catch (error) {
     return handleApiError(error, "fetching diseases");
@@ -33,7 +33,7 @@ export async function getAllDiseases() {
  */
 export async function showDisease(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     const data = handleApiResponse(response, "No diseases found");
 
     const disease = data.find((disease) => disease._id === id);
@@ -54,11 +54,7 @@ export async function showDisease(id) {
  */
 export async function addDisease(diseaseData) {
   try {
-    const response = await api.post(
-      BASE_ENDPOINT,
-      diseaseData,
-      createAuthHeader()
-    );
+    const response = await api.post(BASE_ENDPOINT, diseaseData);
     return handleApiResponse(response, "Failed to create disease");
   } catch (error) {
     return handleApiError(error, "adding disease");
@@ -73,11 +69,7 @@ export async function addDisease(diseaseData) {
  */
 export async function editDisease(id, diseaseData) {
   try {
-    const response = await api.put(
-      `${BASE_ENDPOINT}/${id}`,
-      diseaseData,
-      createAuthHeader()
-    );
+    const response = await api.put(`${BASE_ENDPOINT}/${id}`, diseaseData);
     return handleApiResponse(response, `Failed to update disease ${id}`);
   } catch (error) {
     return handleApiError(error, `editing disease ${id}`);
@@ -91,10 +83,7 @@ export async function editDisease(id, diseaseData) {
  */
 export async function deleteDisease(id) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
     return handleApiResponse(response, `Failed to delete disease ${id}`);
   } catch (error) {
     return handleApiError(error, `deleting disease ${id}`);

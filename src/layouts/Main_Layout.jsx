@@ -8,38 +8,30 @@ const Main_Layout = () => {
   // Quick access buttons for development - can be removed in production
   const navigate = useNavigate();
 
+  // function setTokenCookie(token) {
+  //   const maxAge = 60 * 15; // 15 minutes
+  //   document.cookie = `accessToken=${token}; path=/; max-age=${maxAge}; secure; samesite=strict`;
+  // }
+
   const handleClickLogin = async () => {
     const user = {
-      email: "abdo33awd@gmail.com",
-      password: "123456789",
+      email: "admin@gmail.com",
+      password: "123456",
     };
-    const response = await loginUser(user);
-    console.log(response);
-    const token = response.token;
-    localStorage.setItem("token", token);
+    try {
+      const data = await loginUser(user);
+      console.log(data);
 
-    if (token) {
-      navigate(`/admin/overview`);
-    } else {
-      console.error("Login failed: No token received");
+      // setTokenCookie(data.accessToken);
+
+      navigate("/admin/setting");
+      console.log("annnnnnnnna");
+    } catch (err) {
+      console.error(err.response?.data?.message || "Login failed");
     }
   };
-  const handleDoctorClickLogin = async () => {
-    const doctor = {
-      email: "tasneemfahmimadkour@gmail.com",
-      password: "123456789",
-    };
-    const response = await loginUser(doctor);
-    console.log(response);
-    const token = response.token;
-    localStorage.setItem("doctorToken", token);
 
-    if (token) {
-      navigate(`/doctor`);
-    } else {
-      console.error("Login failed: No token received");
-    }
-  };
+  const handleDoctorClickLogin = async () => {};
 
   return (
     <div className="flex flex-col min-h-screen">

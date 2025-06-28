@@ -1,9 +1,5 @@
 import api from "../lib/axios";
-import {
-  createAuthHeader,
-  handleApiResponse,
-  handleApiError,
-} from "../lib/apiUtils";
+import { handleApiResponse, handleApiError } from "../lib/apiUtils";
 
 /**
  * Users API Service
@@ -19,7 +15,7 @@ const BASE_ENDPOINT = "/users";
  */
 export async function getAllUsers() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     return handleApiResponse(response, "No users found");
   } catch (error) {
     return handleApiError(error, "fetching users");
@@ -33,7 +29,7 @@ export async function getAllUsers() {
  */
 export async function getOneUser(id) {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     const data = handleApiResponse(response, "No users found");
 
     const user = data.find((user) => user._id === id);
@@ -53,7 +49,7 @@ export async function getOneUser(id) {
  */
 export async function getAllPatients() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     const data = handleApiResponse(response, "No users found");
 
     const patients = data.filter((user) => user.role === "Patient");
@@ -69,7 +65,7 @@ export async function getAllPatients() {
  */
 export async function getAllDoctors() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     const data = handleApiResponse(response, "No users found");
 
     const doctors = data.filter((user) => user.role === "Doctor");
@@ -85,7 +81,7 @@ export async function getAllDoctors() {
  */
 export async function getAllNurses() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     const data = handleApiResponse(response, "No users found");
 
     const nurses = data.filter((user) => user.role === "Nurse");
@@ -101,7 +97,7 @@ export async function getAllNurses() {
  */
 export async function getAllAdmins() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     const data = handleApiResponse(response, "No users found");
 
     const admins = data.filter((user) => user.role === "Admin");
@@ -117,7 +113,7 @@ export async function getAllAdmins() {
  */
 export async function getUserData() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/one`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/one`);
     return handleApiResponse(response, "Failed to get user data");
   } catch (error) {
     return handleApiError(error, "fetching user data");
@@ -165,11 +161,7 @@ export async function registerUser(userData) {
  */
 export async function updateUserData(userData) {
   try {
-    const response = await api.patch(
-      `${BASE_ENDPOINT}`,
-      userData,
-      createAuthHeader()
-    );
+    const response = await api.patch(`${BASE_ENDPOINT}`, userData);
     return handleApiResponse(response, "Failed to update user data");
   } catch (error) {
     return handleApiError(error, "updating user data");
@@ -183,10 +175,7 @@ export async function updateUserData(userData) {
  */
 export async function deleteUser(userId) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/${userId}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/${userId}`);
     return handleApiResponse(response, "Failed to delete user");
   } catch (error) {
     return handleApiError(error, "deleting user");

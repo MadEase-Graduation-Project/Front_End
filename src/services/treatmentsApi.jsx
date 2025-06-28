@@ -19,7 +19,7 @@ const BASE_ENDPOINT = "/treatments";
  */
 export async function getAllTreatments() {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     return handleApiResponse(response, "No treatments found");
   } catch (error) {
     return handleApiError(error, "fetching treatments");
@@ -33,7 +33,7 @@ export async function getAllTreatments() {
  */
 export async function showTreatment(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT, createAuthHeader());
+    const response = await api.get(BASE_ENDPOINT);
     const data = handleApiResponse(response, "No treatments found");
 
     const treatment = data.find((treatment) => treatment._id === id);
@@ -54,11 +54,7 @@ export async function showTreatment(id) {
  */
 export async function addTreatment(treatmentData) {
   try {
-    const response = await api.post(
-      BASE_ENDPOINT,
-      treatmentData,
-      createAuthHeader()
-    );
+    const response = await api.post(BASE_ENDPOINT, treatmentData);
     return handleApiResponse(response, "Failed to create treatment");
   } catch (error) {
     return handleApiError(error, "adding treatment");
@@ -73,11 +69,7 @@ export async function addTreatment(treatmentData) {
  */
 export async function editTreatment(id, treatmentData) {
   try {
-    const response = await api.put(
-      `${BASE_ENDPOINT}/${id}`,
-      treatmentData,
-      createAuthHeader()
-    );
+    const response = await api.put(`${BASE_ENDPOINT}/${id}`, treatmentData);
     return handleApiResponse(response, `Failed to update treatment ${id}`);
   } catch (error) {
     return handleApiError(error, `editing treatment ${id}`);
@@ -91,10 +83,7 @@ export async function editTreatment(id, treatmentData) {
  */
 export async function deleteTreatment(id) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
     return handleApiResponse(response, `Failed to delete treatment ${id}`);
   } catch (error) {
     return handleApiError(error, `deleting treatment ${id}`);

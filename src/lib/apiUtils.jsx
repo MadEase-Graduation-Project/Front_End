@@ -3,15 +3,7 @@
  * Common utilities for API services
  */
 
-/**
- ** Creates authorization header with token
- * @param {string} token - JWT token
- * @returns {Object} Headers object with authorization
- */
-// let token = localStorage.getItem("token");
-export const createAuthHeader = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-});
+export const createAuthHeader = () => ({});
 
 /**
  ** Handles API response and extracts data
