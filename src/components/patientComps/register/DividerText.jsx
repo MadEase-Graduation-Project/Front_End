@@ -1,4 +1,4 @@
-import Divider from "./divider";
+import Divider from "./Divider";
 import TextTitle from "../TextTitle";
 
 const DividerText = ({ reg }) => (

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import Header from "@/components/MainComps/Header";
-import Footer from "@/components/MainComps/Footer";
+import Header from "@/components/home/Header";
+import Footer from "@/components/home/Footer";
 import { loginUser } from "@/services/usersApi";
 
 const Main_Layout = () => {
@@ -29,7 +29,7 @@ const Main_Layout = () => {
       email: "tasneemfahmimadkour@gmail.com",
       password: "123456789",
     };
-    const response = await loginUser(user);
+    const response = await loginUser(doctor);
     console.log(response);
     const token = response.token;
     localStorage.setItem("doctorToken", token);

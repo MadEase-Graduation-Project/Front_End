@@ -1,0 +1,52 @@
+/** navigate component */
+.item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.item.active {
+  color: black;
+  font-weight: 600;
+}
+
+.item.disActive {
+  color: #999;
+}
+
+.item.disActive:hover {
+  color: gray;
+}
+
+.item.active::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 9999px;
+  background-color: blue;
+  position: absolute;
+  bottom: -6px;
+  transition: all 0.3s ease-out;
+  transform: scaleX(1);
+  transform-origin: center;
+}
+
+.item.disActive::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 9999px;
+  background-color: blue;
+  position: absolute;
+  bottom: -6px;
+  transition: all 0.2s ease-out;
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+/* end of navigate component */

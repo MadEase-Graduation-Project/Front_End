@@ -1,57 +1,55 @@
 import { Routes, Route } from "react-router-dom";
 import Main_Layout from "@/layouts/Main_Layout";
-import Admin_Layout from "@/layouts/Admin_Layout";
-import Overview from "@/pages/admin/Overview";
-import Appointments from "@/pages/admin/Appointments";
-import Diseases from "@/pages/admin/Diseases";
-import Patients from "@/pages/admin/Patients";
-import Doctors from "@/pages/admin/Doctors";
-import Admins from "@/pages/admin/Admins";
-import Advices from "@/pages/admin/Advices";
-import Doctor_Dashboard_Layout from "./layouts/Doctor_Dashboard_Layout";
-import { Main_Grid } from "./pages/doctor/Main_Grid";
-import { Messages } from "./pages/doctor/Messages";
-import { Settings } from "./pages/doctor/Settings";
-import { Diseases_doctor } from "./pages/doctor/Diseases_doctor";
-import { Patients_doctor } from "./pages/doctor/Patients_Doctor";
-import { Advice } from "./pages/doctor/Advice";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
 import SignUpPage from "./pages/general/SignUpPage";
 import ResetPassPage from "./pages/general/ResetPassPage";
-
+import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
+import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
+import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
+import DiseasesPage from "@/pages/admin/DiseasesPage/DiseasesPage";
+import PatientsPage from "@/pages/admin/UsersPages/PatientsPage";
+import DoctorsPage from "@/pages/admin/UsersPages/DoctorsPage";
+import AdminsPage from "@/pages/admin/UsersPages/AdminsPage";
+import AdvicesPage from "@/pages/admin/AdvicesPage/AdvicesPage";
+import Doctor_Dashboard_Layout from "@/layouts/Doctor_Dashboard_Layout";
+import { Main_Grid } from "@/pages/doctor/Main_Grid";
+import { Messages } from "@/pages/doctor/Messages";
+import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
+import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
+import { Advice } from "@/pages/doctor/Advice";
 import Chat from "@/pages/admin/Chat";
-import Setting from "@/pages/admin/Setting";
-import HomePage from "@/pages/main/HomePage";
+import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
-import About from "@/pages/main/About";
-import SignUp from "@/pages/main/SignUp";
-import SignIn from "@/pages/main/SignIn";
 import ProtectedRoute from "@/routes/protectedRoute";
+import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 
 function App() {
   return (
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="signin" element={<SignIn />} />
+        <Route index element={<HomePage1 />} />
         <Route path="community" element={<Community />} />
-        <Route path="about" element={<About />} />
+        <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
+
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/resetpass" element={<ResetPassPage />} />
 
       {/* doctor layout */}
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
-        <Route path="settings" element={<Setting />} />
         <Route path="diseases" element={<Diseases_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
 
+
       <Route path="/home" element={<HomePage1 />} />
+
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/resetpass" element={<ResetPassPage />} />
@@ -67,14 +65,14 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="overview" element={<Overview />} />
-        <Route path="appointments" element={<Appointments />} />
-        <Route path="patients" element={<Patients />} />
-        <Route path="doctors" element={<Doctors />} />
-        <Route path="admins" element={<Admins />} />
-        <Route path="diseases" element={<Diseases />} />
-        <Route path="advices" element={<Advices />} />
-        <Route path="setting" element={<Setting />} />
+        <Route path="overview" element={<OverviewPage />} />
+        <Route path="appointments" element={<AppointmentsPage />} />
+        <Route path="patients" element={<PatientsPage />} />
+        <Route path="doctors" element={<DoctorsPage />} />
+        <Route path="admins" element={<AdminsPage />} />
+        <Route path="diseases" element={<DiseasesPage />} />
+        <Route path="advices" element={<AdvicesPage />} />
+        <Route path="setting" element={<SettingPage />} />
         <Route path="chat" element={<Chat />} />
       </Route>
     </Routes>

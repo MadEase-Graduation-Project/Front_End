@@ -1,6 +1,6 @@
-import ChartBar from "@/components/adminComps/ChartBar";
-import TotalCards from "@/components/adminComps/TotalCards";
-import TotalUsersChart from "@/components/adminComps/TotalUsersChart";
+import ChartBar from "@/pages/admin/OverviewPage/components/ChartBar";
+import TotalCards from "@/pages/admin/OverviewPage/components/TotalCards";
+import TotalUsersChart from "@/pages/admin/OverviewPage/components/TotalUsersChart";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -10,12 +10,12 @@ import { fetchAllNurses } from "@/store/slices/nurseSlice";
 import { fetchAllAdmins } from "@/store/slices/adminSlice";
 import { fetchAllDiseases } from "@/store/slices/diseaseSlice";
 import { fetchAllAdvices } from "@/store/slices/adviceSlice";
-import NextAppointments from "@/components/adminComps/NextAppointment";
-import LastDiseases from "@/components/adminComps/LastDiseases";
-import LastAdvices from "@/components/adminComps/LastAdvices";
-import SearchBox from "@/components/adminComps/tinyComps/SearchBox";
+import NextAppointments from "@/pages/admin/OverviewPage/components/NextAppointment";
+import LastDiseases from "@/pages/admin/OverviewPage/components/LastDiseases";
+import LastAdvices from "@/pages/admin/OverviewPage/components/LastAdvices";
+import SearchBox from "@/components/ui/SearchBox";
 
-export default function Overview() {
+export default function OverviewPage() {
   const dispatch = useDispatch();
 
   const PatientsData = useSelector((state) => state.patients);

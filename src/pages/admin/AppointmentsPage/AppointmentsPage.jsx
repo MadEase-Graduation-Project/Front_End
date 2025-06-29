@@ -1,4 +1,4 @@
-import DataTable from "@/components/adminComps/DataTable";
+import DataTable from "@/components/role/admin/DataTable";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import AppointmentDialog from "@/components/ui/AppointmentDialog";
 import {
@@ -8,9 +8,9 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Settings } from "lucide-react";
-import FilterColumns from "@/components/adminComps/FilterColumns";
+import FilterColumns from "@/components/role/admin/FilterColumns";
 
-export default function Appointments() {
+export default function AppointmentsPage() {
   const dispatch = useDispatch();
   const { items: data, loading } = useSelector((state) => state.appointments);
 
