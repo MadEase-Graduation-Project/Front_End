@@ -23,13 +23,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
 
   // Fetch user data on component mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(fetchUserData(token));
-    } else {
-      // Redirect to login if no token
-      navigate("/");
-    }
+    dispatch(fetchUserData());
   }, [dispatch, navigate]);
   return (
     <header className="flex items-center gap-2 h-12 lg:h-14 px-2">
@@ -79,7 +73,6 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
               <DropdownMenuItem
                 className="cursor-pointer text-red-600 focus:text-red-600"
                 onClick={() => {
-                  localStorage.removeItem("token");
                   navigate("/");
                 }}
               >

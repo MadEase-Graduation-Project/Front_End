@@ -29,14 +29,9 @@ function App() {
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
-        <Route index element={<HomePage1 />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
-
-      <Route path="/login" element={<LogInPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/resetpass" element={<ResetPassPage />} />
 
       {/* doctor layout */}
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
@@ -49,7 +44,6 @@ function App() {
 
 
       <Route path="/home" element={<HomePage1 />} />
-
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/resetpass" element={<ResetPassPage />} />
@@ -57,14 +51,7 @@ function App() {
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
       {/* admin layout */}
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <Admin_Layout />
-          </ProtectedRoute>
-        }
-      >
+      <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />
         <Route path="appointments" element={<AppointmentsPage />} />
         <Route path="patients" element={<PatientsPage />} />

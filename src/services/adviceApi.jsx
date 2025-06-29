@@ -1,9 +1,5 @@
 import api from "../lib/axios";
-import {
-  createAuthHeader,
-  handleApiResponse,
-  handleApiError,
-} from "../lib/apiUtils";
+import { handleApiResponse, handleApiError } from "../lib/apiUtils";
 
 /**
  * Advices API Service
@@ -47,11 +43,7 @@ export async function showAdvice(id) {
  */
 export async function addAdvice(adviceData) {
   try {
-    const response = await api.post(
-      BASE_ENDPOINT,
-      adviceData,
-      createAuthHeader()
-    );
+    const response = await api.post(BASE_ENDPOINT, adviceData);
     return handleApiResponse(response, "Failed to create advice");
   } catch (error) {
     return handleApiError(error, "adding advice");
@@ -66,11 +58,7 @@ export async function addAdvice(adviceData) {
  */
 export async function editAdvice(id, adviceData) {
   try {
-    const response = await api.put(
-      `${BASE_ENDPOINT}/${id}`,
-      adviceData,
-      createAuthHeader()
-    );
+    const response = await api.put(`${BASE_ENDPOINT}/${id}`, adviceData);
     return handleApiResponse(response, `Failed to update advice ${id}`);
   } catch (error) {
     return handleApiError(error, `editing advice ${id}`);
@@ -84,10 +72,7 @@ export async function editAdvice(id, adviceData) {
  */
 export async function deleteAdvice(id) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
     return handleApiResponse(response, `Failed to delete advice ${id}`);
   } catch (error) {
     return handleApiError(error, `deleting advice ${id}`);
