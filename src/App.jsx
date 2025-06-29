@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
@@ -47,6 +46,9 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
+
+
+      <Route path="/home" element={<HomePage1 />} />
 
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
