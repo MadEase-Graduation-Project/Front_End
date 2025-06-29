@@ -13,9 +13,20 @@ import {
   IoPersonOutline,
 } from "react-icons/io5";
 
+
 export const Patients_Main = ({ selectedPatientId }) => {
   const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
+
+  const {
+    items: appointments,
+    loading,
+    error,
+  } = useSelector((state) => state.appointments);
+  const filteredAppointments = appointments?.filter(
+    (appointment) => appointment.patientId === selectedPatientId
+  );
+
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -107,6 +118,7 @@ export const Patients_Main = ({ selectedPatientId }) => {
         </Card>
 
         {/* Appointments */}
+
         <Card className="p-4 col-span-2">
           <CardContent>
             <h2 className="font-semibold mb-2">Appointment Schedule</h2>

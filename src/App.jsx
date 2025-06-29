@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
@@ -23,6 +22,7 @@ import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
 import ProtectedRoute from "@/routes/protectedRoute";
+import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
         <Route path="community" element={<Community />} />
+        <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
 
       {/* doctor layout */}
@@ -40,6 +41,7 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
+
 
       <Route path="/home" element={<HomePage1 />} />
       <Route path="/login" element={<LogInPage />} />
