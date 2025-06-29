@@ -13,7 +13,7 @@ export default function Doctor_Dashboard_Layout() {
     <div className="flex gap-2 w-screen min-h-screen bg-gray-200">
       {/* sidebar */}
       <div className="text-white z-10">
-        <Sidebar isCollapsed={isCollapsed} currentPath={currentPath}/>
+        <Sidebar isCollapsed={isCollapsed} currentPath={currentPath} />
       </div>
       <div
         className={`flex flex-col gap-2 pr-1 pb-1 w-full ${

@@ -9,12 +9,12 @@ import PasswordStrengthBar from "react-password-strength-bar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById } from "@/store/Slices/Users";
+import { fetchUserById } from "@/store/slices/userSlice";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import { CheckboxItem } from "@radix-ui/react-dropdown-menu";
 
-// Settings
+// Settingssss
 
 export const Settings = () => {
   const [brandColor, setBrandColor] = useState("#37568d");
@@ -30,8 +30,7 @@ export const Settings = () => {
     dispatch(
       fetchUserById({
         id: "67ca34e0f2d6e1f39d3e1759",
-        token:
-        localStorage.getItem("doctorToken"),
+        token: localStorage.getItem("doctorToken"),
       })
     );
   }, [dispatch]);
@@ -43,13 +42,12 @@ export const Settings = () => {
   const [phone, setPhone] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
 
-
   useEffect(() => {
     if (details[0]) {
       setName(details[0].name || "");
       setEmail(details[0].email || "");
       setPhone(details[0].phone || "");
-      setDateOfBirth(details[0].dateOfBirth || "")
+      setDateOfBirth(details[0].dateOfBirth || "");
     }
   }, [details[0]]);
 
@@ -76,8 +74,8 @@ export const Settings = () => {
   };
 
   const handleDateOfBirthChange = (e) => {
-    setDateOfBirth(e.target.value)
-  }
+    setDateOfBirth(e.target.value);
+  };
 
   return (
     <div className="px-2 sm:px-4">
@@ -155,16 +153,16 @@ export const Settings = () => {
                   </div>
                   <div>
                     <Label>Date Of Birth</Label>
-                    <input 
-                      type="date" 
-                      name="dateOfBirth" 
-                      value={dateOfBirth} 
+                    <input
+                      type="date"
+                      name="dateOfBirth"
+                      value={dateOfBirth}
                       onChange={handleDateOfBirthChange}
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
                   <div>
-                  <Label>Gender</Label>
+                    <Label>Gender</Label>
                     <select className="w-full p-2 border rounded-md h-10 text-sm shadow-sm">
                       <option>Female</option>
                       <option>Male</option>
@@ -216,57 +214,57 @@ export const Settings = () => {
               </CardContent>
             </Card>
             <div className="col-span-12 sm:col-span-4">
-            <Label>Consultation Type</Label>
-            <Card >
-              <CardContent className="p-4 sm:p-6">
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        id="inperson" 
-                        value="inperson" 
-                        className="accent-[#37568d] w-4 h-4"
-                      />
-                      <label
-                        htmlFor="inperson"
-                        className="text-sm text-gray-700"
-                      >
-                        In person
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        id="online" 
-                        value="online" 
-                        className="accent-[#37568d] w-4 h-4"
-                      />
-                      <label
-                        htmlFor="online"
-                        className="text-sm text-gray-700"
-                      >
-                        Online
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        id="emergency" 
-                        value="emergency" 
-                        className="accent-[#37568d] w-4 h-4"
-                      />
-                      <label
-                        htmlFor="emergency"
-                        className="text-sm text-gray-700"
-                      >
-                        Emergency
-                      </label>
+              <Label>Consultation Type</Label>
+              <Card>
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="inperson"
+                          value="inperson"
+                          className="accent-[#37568d] w-4 h-4"
+                        />
+                        <label
+                          htmlFor="inperson"
+                          className="text-sm text-gray-700"
+                        >
+                          In person
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="online"
+                          value="online"
+                          className="accent-[#37568d] w-4 h-4"
+                        />
+                        <label
+                          htmlFor="online"
+                          className="text-sm text-gray-700"
+                        >
+                          Online
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="emergency"
+                          value="emergency"
+                          className="accent-[#37568d] w-4 h-4"
+                        />
+                        <label
+                          htmlFor="emergency"
+                          className="text-sm text-gray-700"
+                        >
+                          Emergency
+                        </label>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
             </div>
           </div>
           <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 px-2">
@@ -329,7 +327,8 @@ export const Settings = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
+        <div>
+        </div>
         {/* Appearance Section
         <TabsContent value="appearance">
           <Card>

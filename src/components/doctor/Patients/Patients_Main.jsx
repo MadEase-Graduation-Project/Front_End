@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LocateIcon, Mail, Phone, PhoneCall, User } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById } from "../../../store/Slices/Users";
+import { fetchUserById } from "../../../store/slices/userSlice";
 import { FcGoogle } from "react-icons/fc";
 import { FaSquareFacebook, FaWhatsapp } from "react-icons/fa6";
 import {
@@ -12,7 +12,7 @@ import {
   IoMailOutline,
   IoPersonOutline,
 } from "react-icons/io5";
-import { fetchAppointments } from "@/store/Slices/Appointments";
+
 
 export const Patients_Main = ({ selectedPatientId }) => {
   const dispatch = useDispatch();
@@ -33,18 +33,6 @@ export const Patients_Main = ({ selectedPatientId }) => {
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
-
-
-  console.log("Selected Patient ID:", selectedPatientId);
-  console.log("Fetched Appointments:", appointments);
-
-
-  useEffect(() => {
-    dispatch(
-      fetchAppointments(localStorage.getItem("doctorToken"))
-    );
-  }, [dispatch]);
-
 
   useEffect(() => {
     if (selectedPatientId) {
@@ -123,40 +111,19 @@ export const Patients_Main = ({ selectedPatientId }) => {
               <div className="flex space-x-2 mt-2">
                 <FcGoogle className="w-5 h-5" />
                 <FaWhatsapp className="w-5 h-5 text-[#4fce5d]" />
+                <FaSquareFacebook className="w-5 h-5 text-[#1877F2]" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Appointments */}
-        {filteredAppointments.length > 0 ? (
-          filteredAppointments.map((appointment) => (
-            <Card
-              key={appointment._id}
-              className="p-4 col-span-2 flex items-center space-x-3 cursor-pointer hover:bg-gray-200"
-            >
-              <CardContent>
-                <h2 className="font-semibold mb-2">Appointment Schedule</h2>
-                <p className="font-semibold">
-                  Patient: {appointment.patientName}
-                </p>
-                <p className="font-semibold">
-                  Doctor: {appointment.doctorName}
-                </p>
-                <p className="font-semibold">
-                  Priority: {appointment.priority}
-                </p>
-                <p className="font-semibold">
-                  Date: {appointment.appointmentDate}
-                </p>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <p className="text-gray-500">
-            No appointments found for this patient
-          </p>
-        )}
+
+        <Card className="p-4 col-span-2">
+          <CardContent>
+            <h2 className="font-semibold mb-2">Appointment Schedule</h2>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );

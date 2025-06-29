@@ -3,24 +3,26 @@ import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import importPlugin from "eslint-plugin-import";
 
 export default [
-  { ignores: ["dist", "node_modules"] }, // Ignore unnecessary folders
+  { ignores: ["dist", "node_modules"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
-      ecmaVersion: "latest", // Ensures latest JavaScript features
+      ecmaVersion: "latest",
       globals: globals.browser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
         sourceType: "module",
       },
     },
-    settings: { react: { version: "detect" } }, // Auto-detect React version
+    settings: { react: { version: "detect" } },
     plugins: {
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
+      import: importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,

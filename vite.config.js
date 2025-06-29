@@ -11,5 +11,33 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: false,
+    minify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: [
+            "react",
+            "react-dom",
+            "react-router-dom",
+            "@reduxjs/toolkit",
+            "react-redux",
+          ],
+          ui: [
+            "@mui/material",
+            "@radix-ui/react-avatar",
+            "@radix-ui/react-dialog",
+            "lucide-react",
+          ],
+        },
+      },
+    },
+  },
+  // Ensure base path is set correctly for production
+  base: "/",
 });
