@@ -17,6 +17,7 @@ import { fetchAppointments } from "@/store/Slices/Appointments";
 export const Patients_Main = ({ selectedPatientId }) => {
   const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
+
   const {
     items: appointments,
     loading,
@@ -26,11 +27,13 @@ export const Patients_Main = ({ selectedPatientId }) => {
     (appointment) => appointment.patientId === selectedPatientId
   );
 
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
+
 
   console.log("Selected Patient ID:", selectedPatientId);
   console.log("Fetched Appointments:", appointments);
@@ -41,6 +44,7 @@ export const Patients_Main = ({ selectedPatientId }) => {
       fetchAppointments(localStorage.getItem("doctorToken"))
     );
   }, [dispatch]);
+
 
   useEffect(() => {
     if (selectedPatientId) {
