@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TodayDate from "../TodayDate";
-import { AccountToggle } from "../OldSidebar/AccountToggle";
 import { FiSearch } from "react-icons/fi";
 import { UserAvatar } from "./UserAvatar";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
+import { fetchUserById } from "@/store/Slices/Users";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { details } = useSelector((state) => state.users);
+  console.log(details);
+  useEffect(() => {
+    dispatch(
+      fetchUserById({
+        id: "67ca34e0f2d6e1f39d3e1759",
+        token:
+        localStorage.getItem("doctorToken"),
+      })
+    );
+  }, [dispatch]);
+
+  console.log(details);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+
+  useEffect(() => {
+    if (details[0]) {
+      setName(details[0].name || "");
+      setEmail(details[0].email || "");
+    }
+  }, [details[0]]);
+
   const getPageTitle = () => {
     const path = location.pathname;
     switch (path) {
       case "/doctor":
-        return "Hello, Doctor Tasneem!";
+        return `Hello, Doctor ${name}!`;
       case "/doctor/chat":
         return "Chat";
       case "/doctor/diseases":
@@ -57,7 +84,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
             />
           </div>
           <div>
-            <UserAvatar />
+            <UserAvatar name={name} email={email} />
           </div>
         </div>
       </div>
