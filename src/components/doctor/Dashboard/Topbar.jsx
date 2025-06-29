@@ -4,7 +4,7 @@ import { FiSearch } from "react-icons/fi";
 import { UserAvatar } from "./UserAvatar";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
-import { fetchUserById } from "@/store/Slices/Users";
+import { fetchUserById } from "@/store/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
