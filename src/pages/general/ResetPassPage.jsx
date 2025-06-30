@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import { useForm, Controller } from "react-hook-form";
-import api from "../../services/axios";
 import { useState } from "react";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 
@@ -23,23 +22,9 @@ const ResetPasswordPage = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await api.post("/api/password-reset", {
-        email: data.email,
-      });
-      setMessage("Reset code sent! Please check your email.");
-      setErrorMsg("");
-    } catch (error) {
-      const msg = error.response?.data?.message || "Failed to send reset code.";
-      setErrorMsg(msg);
-      setMessage("");
-    }
-  };
-
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit()}
       className="w-full bg-mewhite min-h-screen flex items-center justify-center p-5"
     >
       <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-meblue rounded-[20px] flex flex-col justify-center items-center gap-[15px] p-5 h-auto">

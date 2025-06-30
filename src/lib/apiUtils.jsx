@@ -4,16 +4,6 @@
  */
 
 /**
- ** Creates authorization header with token
- * @param {string} token - JWT token
- * @returns {Object} Headers object with authorization
- */
-// let token = localStorage.getItem("token");
-export const createAuthHeader = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-});
-
-/**
  ** Handles API response and extracts data
  * @param {Object} response - Axios response object
  * @param {string} errorMessage - Custom error message

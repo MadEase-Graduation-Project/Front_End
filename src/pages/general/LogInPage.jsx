@@ -12,7 +12,10 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0f8a81e70dac9c3b221693996c380e9cd4903092
 import { loginUser } from "@/services/usersApi";
 const LogInPage = () => {
   const navigate = useNavigate();

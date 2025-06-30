@@ -1,9 +1,5 @@
 import api from "../lib/axios";
-import {
-  createAuthHeader,
-  handleApiResponse,
-  handleApiError,
-} from "../lib/apiUtils";
+import { handleApiResponse, handleApiError } from "../lib/apiUtils";
 
 /**
  * Appointments API Service
@@ -19,7 +15,7 @@ const BASE_ENDPOINT = "/appointments";
  */
 export async function getAllAppointments() {
   try {
-    const response = await api.get(`${BASE_ENDPOINT}/`, createAuthHeader());
+    const response = await api.get(`${BASE_ENDPOINT}/`);
     return handleApiResponse(response, "No appointments found");
   } catch (error) {
     return handleApiError(error, "fetching appointments");
@@ -33,10 +29,7 @@ export async function getAllAppointments() {
  */
 export async function showAppointment(id) {
   try {
-    const response = await api.get(
-      `${BASE_ENDPOINT}/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
     return handleApiResponse(response, `Appointment with id ${id} not found`);
   } catch (error) {
     return handleApiError(error, `fetching appointment ${id}`);
@@ -51,11 +44,7 @@ export async function showAppointment(id) {
  */
 export async function addAppointment(appointmentData) {
   try {
-    const response = await api.post(
-      BASE_ENDPOINT,
-      appointmentData,
-      createAuthHeader()
-    );
+    const response = await api.post(BASE_ENDPOINT, appointmentData);
     return handleApiResponse(response, "Failed to create appointment");
   } catch (error) {
     return handleApiError(error, "adding appointment");
@@ -70,11 +59,7 @@ export async function addAppointment(appointmentData) {
  */
 export async function editAppointment(id, appointmentData) {
   try {
-    const response = await api.put(
-      `${BASE_ENDPOINT}/${id}`,
-      appointmentData,
-      createAuthHeader()
-    );
+    const response = await api.put(`${BASE_ENDPOINT}/${id}`, appointmentData);
     return handleApiResponse(response, `Failed to update appointment ${id}`);
   } catch (error) {
     return handleApiError(error, `editing appointment ${id}`);
@@ -88,10 +73,7 @@ export async function editAppointment(id, appointmentData) {
  */
 export async function deleteAppointment(id) {
   try {
-    const response = await api.delete(
-      `${BASE_ENDPOINT}/user/${id}`,
-      createAuthHeader()
-    );
+    const response = await api.delete(`${BASE_ENDPOINT}/user/${id}`);
     return handleApiResponse(response, `Failed to delete appointment ${id}`);
   } catch (error) {
     return handleApiError(error, `deleting appointment ${id}`);
