@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import HomePage from "@/pages/main/HomePage";
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
@@ -23,6 +23,8 @@ import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
 import ProtectedRoute from "@/routes/protectedRoute";
+import NurseApp from "@/NurseApp";
+
 
 function App() {
   return (
@@ -72,6 +74,10 @@ function App() {
         <Route path="setting" element={<SettingPage />} />
         <Route path="chat" element={<Chat />} />
       </Route>
+
+      {/* nurse layout */}
+      <Route path="nurse/*" element={<NurseApp />} />
+      
     </Routes>
   );
 }
