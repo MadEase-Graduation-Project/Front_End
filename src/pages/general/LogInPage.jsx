@@ -1,4 +1,3 @@
-// ✅ Login Page — Smooth Field-by-Field Validation & Password Toggle
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
@@ -197,5 +196,3 @@ const LogInPage = () => {
 
 export default LogInPage;
 
-// justify: aligns items along the main axis of the flex container
-// items: aligns items along the cross axis of the flex container
