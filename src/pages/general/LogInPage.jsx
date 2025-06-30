@@ -12,11 +12,8 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-<<<<<<< HEAD
-
-=======
->>>>>>> 0f8a81e70dac9c3b221693996c380e9cd4903092
 import { loginUser } from "@/services/usersApi";
+
 const LogInPage = () => {
   const navigate = useNavigate();
   const [isActivePopup, setActivePopup] = useState(false);
@@ -31,6 +28,7 @@ const LogInPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const fieldOrder = ["email", "password"];
+
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -39,9 +37,7 @@ const LogInPage = () => {
 
       if (isValid) {
         if (currentIndex < fieldOrder.length - 1) {
-          const nextInput = document.getElementById(
-            fieldOrder[currentIndex + 1]
-          );
+          const nextInput = document.getElementById(fieldOrder[currentIndex + 1]);
           if (nextInput) nextInput.focus();
         } else {
           document.querySelector("form").requestSubmit();
@@ -51,14 +47,12 @@ const LogInPage = () => {
   };
 
   const onSubmit = async (data) => {
-    //! toDo: fix login slice -------------------------------------------------
     const response = await loginUser(data);
     console.log(response);
     const token = response.token;
     localStorage.setItem("token", token);
 
     if (token) {
-      //! toDo: fix navigation -------------------------------------------------
       navigate(`/admin/overview`);
     } else {
       setActivePopup(true);
@@ -91,14 +85,12 @@ const LogInPage = () => {
 
         {/* Right side — form */}
         <div className="w-full lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none flex flex-col justify-center items-center gap-[15px] p-5 h-full">
-          {/* //toDo: popup for wrong pass and email */}
           {isActivePopup && (
             <div className="absolute top-5 left-1/2 translate-x-[-50%] rounded px-4 py-2 bg-red-300">
               <p>invalid email or password</p>
             </div>
           )}
 
-          {/* Logo shown only on small screens */}
           <Link to="/home">
             <img
               src={Logo_navy}
@@ -141,9 +133,7 @@ const LogInPage = () => {
               )}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
             )}
 
             {/* Password */}
@@ -180,9 +170,7 @@ const LogInPage = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
 
@@ -209,5 +197,5 @@ const LogInPage = () => {
 
 export default LogInPage;
 
-//justify>>with the axis of the flex
-//items>>with the normal to the flex
+// justify: aligns items along the main axis of the flex container
+// items: aligns items along the cross axis of the flex container
