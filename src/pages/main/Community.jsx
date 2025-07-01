@@ -12,12 +12,15 @@ import {
   selectAllAdvices,
 } from "@/store/selectors/adviceSelectors";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Community() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-
+const location = useLocation();
+const [selectedCategory, setSelectedCategory] = useState(
+  location.state?.selectedCategory || "All Categories"
+);
   const navigate = useNavigate();
   const handleAdviceClick = (adviceId) => {
     navigate(`/community/${adviceId}`);
