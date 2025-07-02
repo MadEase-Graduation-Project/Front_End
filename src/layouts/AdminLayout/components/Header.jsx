@@ -5,7 +5,7 @@ import { FiLogOut } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserData } from "@/store/slices/userSlice";
+import { fetchMYData } from "@/store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -23,7 +23,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
 
   // Fetch user data on component mount
   useEffect(() => {
-    dispatch(fetchUserData());
+    dispatch(fetchMYData());
   }, [dispatch, navigate]);
   return (
     <header className="flex items-center gap-2 h-12 lg:h-14 px-2">

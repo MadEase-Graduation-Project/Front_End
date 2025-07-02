@@ -13,9 +13,9 @@ const BASE_ENDPOINT = "/diseases";
  * Gets all diseases
  * @returns {Promise<Array>} List of diseases
  */
-export async function getAllDiseases() {
+export async function getAllDiseases({ page = 1 } = {}) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
+    const response = await api.get(BASE_ENDPOINT, { params: { page } });
     return handleApiResponse(response, "No diseases found");
   } catch (error) {
     return handleApiError(error, "fetching diseases");
@@ -29,15 +29,8 @@ export async function getAllDiseases() {
  */
 export async function showDisease(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
-    const data = handleApiResponse(response, "No diseases found");
-
-    const disease = data.find((disease) => disease._id === id);
-    if (!disease) {
-      throw new Error(`Disease with id ${id} not found`);
-    }
-
-    return disease;
+    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+    return handleApiResponse(response, "this disease not found");
   } catch (error) {
     return handleApiError(error, `fetching disease ${id}`);
   }

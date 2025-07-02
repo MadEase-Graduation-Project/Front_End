@@ -36,15 +36,17 @@ export async function showAppointment(id) {
   }
 }
 
-// TODO: look create endpoint and edit that
 /**
  * Adds a new appointment
  * @param {Object} appointmentData - New appointment data
  * @returns {Promise<Object>} Created appointment
  */
-export async function addAppointment(appointmentData) {
+export async function addAppointment(doctorId, appointmentData) {
   try {
-    const response = await api.post(BASE_ENDPOINT, appointmentData);
+    const response = await api.post(
+      `${BASE_ENDPOINT}/doctor/${doctorId}`,
+      appointmentData
+    );
     return handleApiResponse(response, "Failed to create appointment");
   } catch (error) {
     return handleApiError(error, "adding appointment");
@@ -67,13 +69,27 @@ export async function editAppointment(id, appointmentData) {
 }
 
 /**
- * Deletes an appointment
+ * Deletes user appointment
  * @param {string} id - Appointment ID
  * @returns {Promise<Object>} Deletion result
  */
-export async function deleteAppointment(id) {
+export async function deleteUserAppointment(id) {
   try {
     const response = await api.delete(`${BASE_ENDPOINT}/user/${id}`);
+    return handleApiResponse(response, `Failed to delete appointment ${id}`);
+  } catch (error) {
+    return handleApiError(error, `deleting appointment ${id}`);
+  }
+}
+
+/**
+ * Deletes Doctor appointment
+ * @param {string} id - Appointment ID
+ * @returns {Promise<Object>} Deletion result
+ */
+export async function deleteDoctorAppointment(id) {
+  try {
+    const response = await api.delete(`${BASE_ENDPOINT}/doctor/${id}`);
     return handleApiResponse(response, `Failed to delete appointment ${id}`);
   } catch (error) {
     return handleApiError(error, `deleting appointment ${id}`);
