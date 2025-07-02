@@ -1,0 +1,92 @@
+/* Messanger.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5; /* Light background for the entire app */
+}
+
+.messanger {
+    display: flex;
+    height: 100vh; /* Full height of the viewport */
+    width: 100%;
+}
+
+/* Chat Menu Styles */
+.chatMenue {
+    flex: 1; /* Take up 1 part of the flex container */
+    background-color: #fff; /* White background for the chat menu */
+    border-right: 1px solid #ddd; /* Right border for separation */
+    padding: 20px; /* Padding around the chat menu */
+}
+
+.chatMenuWrapper {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+
+.chatMenuInput {
+    padding: 10px; /* Padding for the input */
+    border: 1px solid #ddd; /* Border for the input */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 20px; /* Space below the input */
+}
+
+/* Chat Box Styles */
+.chatBox {
+    flex: 2; /* Take up 2 parts of the flex container */
+    background-color: #e9eff1; /* Light background for the chat box */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    padding: 20px; /* Padding around the chat box */
+}
+
+.chatBoxWrapper {
+    flex: 1; /* Take up available space */
+    background-color: #fff; /* White background for the message area */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Padding inside the message area */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+/* Chat Box Bottom Styles */
+.chatBoxBottom {
+    display: flex; /* Align items in a row */
+    margin-top: 10px; /* Space above the input area */
+}
+
+.chatMessageInput {
+    flex: 1; /* Take up available space */
+    padding: 10px; /* Padding for the input */
+    border: 1px solid #ddd; /* Border for the input */
+    border-radius: 5px; /* Rounded corners */
+    resize: none; /* Disable resizing */
+    height: 40px; /* Fixed height for the input */
+}
+
+/* Chat Online Styles */
+.chatOnline {
+    flex: 1; /* Take up 1 part of the flex container */
+    background-color: #fff; /* White background for the online friends section */
+    border-left: 1px solid #ddd; /* Left border for separation */
+    padding: 20px; /* Padding around the online friends section */
+}
+
+.chatOnlineWrapper {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+
+/* Additional styles for online friends */
+.chatOnlineWrapper div {
+    margin: 10px 0; /* Space between online friends */
+    padding: 10px; /* Padding for each online friend */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f1f1f1; /* Light gray background for online friends */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.chatOnlineWrapper div:hover {
+    background-color: #e0e0e0; /* Darker gray on hover */
+}

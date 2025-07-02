@@ -1,36 +1,50 @@
-import { Link, useNavigate } from "react-router-dom";
 import TopReg from "../../components/patientComps/register/TopReg";
-import DividerText from "../../components/patientComps/register/DividerText";
 import BottomBtn from "@/components/patientComps/register/BottomBtn";
 import google from "../../assets/images/google.svg";
 import apple from "../../assets/images/apple.svg";
-import FloatingInput from "../../components/patientComps/register/FloatingInput";
+import DividerText from "../../components/patientComps/register/DividerText";
+import FloatingInput from "@/components/patientComps/register/FloatingInput";
+import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { loginUser } from "@/services/userApi";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-// import { registerUser, loginUser } from "@/services/userApi";
+
 import { usePopup } from "@/contexts/PopupContext";
 
-export default function SignUp() {
+export default function LogIn() {
   const navigate = useNavigate();
-  const { showPopup } = usePopup();
+  const { isActivePopup, setActivePopup } = usePopup();
+  const [hasLoginError, setHasLoginError] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     trigger,
+
     clearErrors,
   } = useForm({ mode: "onTouched" });
 
   const [showPassword, setShowPassword] = useState(false);
-  const fieldOrder = ["name", "phone", "email", "password"];
+  const fieldOrder = ["email", "password"];
 
+  useEffect(() => {
+    if (isActivePopup) {
+      const timer = setTimeout(() => {
+        setActivePopup(false);
+      }, 8000); // Auto-close after 3 seconds
+      return () => clearTimeout(timer); // Cleanup
+    }
+  }, [isActivePopup]);
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
       const isValid = await trigger(name);
       const currentIndex = fieldOrder.indexOf(name);
+
       if (isValid) {
         if (currentIndex < fieldOrder.length - 1) {
           const nextInput = document.getElementById(
@@ -44,37 +58,45 @@ export default function SignUp() {
     }
   };
 
-  const onSubmit = async (data) => {
-    try {
-      const payload = { ...data, role: "Patient" };
+  // const onSubmit = async (data) => {
+  //   try {
+  //     const response = await loginUser(data);
+  //     console.log("Login response:", response);
 
-      const regRes = await registerUser(payload);
-      console.log("Registered:", regRes);
+  //     if (!response.accessToken) {
+  //       setHasLoginError(true);
+  //       setActivePopup(true);
+  //       return;
+  //     }
 
-      // 👇 Check if backend returned errors
-      if (regRes?.error) {
-        showPopup(regRes.error || "Registration failed", "error");
-        return;
-      }
+  //     const role = response.Role;
+  //     localStorage.setItem("accessToken", response.accessToken);
+  //     localStorage.setItem("userRole", role);
 
-      // ✅ Auto-login
-      const loginRes = await loginUser({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (loginRes?.accessToken) {
-        localStorage.setItem("accessToken", loginRes.accessToken);
-        localStorage.setItem("userRole", loginRes.Role || "Patient");
-        navigate("/home");
-      } else {
-        showPopup("Registered but couldn't log in automatically", "warning");
-      }
-    } catch (err) {
-      console.error("Signup error:", err);
-      showPopup("Something went wrong. Please try again.", "error");
-    }
-  };
+  //     // 🌟 Navigate based on role
+  //     switch (role) {
+  //       case "Patient":
+  //         navigate("/home");
+  //         break;
+  //       case "Admin":
+  //         navigate("/admin/overview");
+  //         break;
+  //       // case "Nurse":
+  //       //   navigate("/nurse/dashboard");
+  //       //   break;
+  //       case "Doctor":
+  //         navigate("/doctor");
+  //         break;
+  //       default:
+  //         console.warn("Unknown role");
+  //         navigate("/");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //     setHasLoginError(true);
+  //     setActivePopup(true);
+  //   }
+  // };
 
   return (
     <form
@@ -83,71 +105,11 @@ export default function SignUp() {
     >
       <div className="w-3/4 flex flex-col justify-start gap-[5px]">
         <TopReg
-          regtitle="Create an account"
-          regnote="Already have one?"
-          reg="Log in"
-          dest="/register/login"
+          regtitle="Welcome Back!!"
+          regnote="Don't have an account?"
+          reg="Sign up"
+          dest="/register"
         />
-
-        {/* Name */}
-        <Controller
-          name="name"
-          control={control}
-          rules={{ required: "Name is required" }}
-          render={({ field }) => (
-            <FloatingInput
-              {...field}
-              label="Name"
-              id="name"
-              onChange={(e) => {
-                field.onChange(e);
-                clearErrors("name");
-              }}
-              onKeyDown={(e) => handleKeyDown(e, "name")}
-            />
-          )}
-        />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-        )}
-
-        {/* Phone Number */}
-        <Controller
-          name="phone"
-          control={control}
-          rules={{
-            required: "Phone number is required",
-            validate: (value) => {
-              const digitsOnly = (value || "").replace(/\D/g, "");
-
-              if (/\D/.test(value)) return "Only numbers are allowed";
-              if (!/^01[0125]/.test(digitsOnly))
-                return "Phone number must start with 010, 011, 012, or 015";
-              if (digitsOnly.length < 11)
-                return "Phone number must be exactly 11 digits";
-              if (digitsOnly.length > 11)
-                return "Phone number can't exceed 11 digits";
-              return true;
-            },
-          }}
-          render={({ field }) => (
-            <FloatingInput
-              {...field}
-              label="Phone Number"
-              id="phone"
-              type="tel"
-              value={field.value || ""}
-              onChange={(e) => {
-                field.onChange(e);
-                clearErrors("phone");
-              }}
-              onKeyDown={(e) => handleKeyDown(e, "phone")}
-            />
-          )}
-        />
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-        )}
 
         {/* Email */}
         <Controller
@@ -166,9 +128,11 @@ export default function SignUp() {
               label="E-mail"
               id="email"
               type="email"
+              hasError={hasLoginError}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("email");
+                setHasLoginError(false);
               }}
               onKeyDown={(e) => handleKeyDown(e, "email")}
             />
@@ -196,9 +160,11 @@ export default function SignUp() {
                 label="Password"
                 id="password"
                 type={showPassword ? "text" : "password"}
+                hasError={hasLoginError}
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("password");
+                  setHasLoginError(false);
                 }}
                 onKeyDown={(e) => handleKeyDown(e, "password")}
               />
@@ -217,15 +183,14 @@ export default function SignUp() {
             </p>
           )}
         </div>
-
+        <UnderLined text="Forgot your password?" link="/resetpass" />
         <button
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
           type="submit"
         >
-          Sign up
+          Login
         </button>
-
-        <DividerText reg="or signup with" />
+        <DividerText reg="or login with" />
         <div className="flex gap-[12px]">
           <BottomBtn source={google} btn="Google" />
           <BottomBtn source={apple} btn="Apple" />
