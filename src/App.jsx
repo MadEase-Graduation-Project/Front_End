@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import HomePage from "@/pages/main/HomePage";
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage from "@/pages/main/HomePage";
 import HomePage1 from "@/pages/general/HomePage1";
@@ -25,15 +25,21 @@ import Otp from "@/pages/main/Otp";
 
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
+
 import Community from "@/pages/main/Community";
 
 import About from "@/pages/main/About";
 import SignUp from "@/pages/main/SignUp";
 import LogIn from "@/pages/main/LogIn";
 
-import ProtectedRoute from "@/routes/protectedRoute";
+
 import Test from "@/pages/general/test";
 import Register_Layout from "@/layouts/Register_Layout";
+
+import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
+import ProtectedRoute from "@/routes/protectedRoute";
+import NurseApp from "@/NurseApp";
+
 
 function App() {
   return (
@@ -43,6 +49,7 @@ function App() {
         <Route index element={<HomePage />} />
 
         <Route path="community" element={<Community />} />
+        <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
 
       {/* Register layout */}
@@ -62,6 +69,7 @@ function App() {
       </Route>
 
       <Route path="/home" element={<HomePage1 />} />
+
 
       {/* reset pass layout */}
       <Route path="/resetpass" element={<ResetPass_Layout />}>
@@ -86,6 +94,9 @@ function App() {
         <Route path="setting" element={<SettingPage />} />
         <Route path="chat" element={<Chat />} />
       </Route>
+
+      {/* nurse layout */}
+      <Route path="nurse/*" element={<NurseApp />} />
     </Routes>
   );
 }

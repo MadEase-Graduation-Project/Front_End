@@ -5,148 +5,119 @@ import {
   addDisease,
   editDisease,
   deleteDisease,
-} from "@/services/diseasesApi";
+} from "@/services/diseaseApi";
+import {
+  fulfilledPaginationHandler,
+  pendingPaginationHandler,
+  rejectedPaginationHandler,
+} from "@/utils/paginationCasesHandlersUtils";
+import {
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
+// Add pagination params to fetchAllDiseases
 export const fetchAllDiseases = createAsyncThunk(
   "diseases/fetchAllDiseases",
-  async () => {
-    return await getAllDiseases();
+  async ({ page = 1 } = {}) => {
+    return await getAllDiseases({ page });
   }
 );
 
 export const fetchDiseaseById = createAsyncThunk(
   "diseases/fetchDiseaseById",
-  async (id) => {
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedDisease());
     return await showDisease(id);
   }
 );
 
 export const createDisease = createAsyncThunk(
   "diseases/createDisease",
-  async ({ diseaseData }, { dispatch }) => {
-    const response = await addDisease(diseaseData);
-    // Refresh the diseases list after adding
-    if (response) {
-      dispatch(fetchAllDiseases());
-    }
-    return response;
+  async ({ diseaseData }) => {
+    return await addDisease(diseaseData);
   }
 );
 
 export const updateDisease = createAsyncThunk(
   "diseases/updateDisease",
-  async ({ id, diseaseData }, { dispatch }) => {
-    const response = await editDisease(id, diseaseData);
-    // Refresh the diseases list after updating
-    if (response) {
-      dispatch(fetchAllDiseases());
-    }
-    return response;
+  async ({ id, diseaseData }) => {
+    return await editDisease(id, diseaseData);
   }
 );
 
 export const removeDisease = createAsyncThunk(
   "diseases/removeDisease",
-  async (id, { dispatch }) => {
-    const response = await deleteDisease(id);
-    // Refresh the diseases list after deleting
-    if (response) {
-      dispatch(fetchAllDiseases());
-    }
-    return response;
+  async (id) => {
+    return await deleteDisease(id);
   }
 );
 
+const initialState = {
+  // data
+  diseases: [],
+  selectedDisease: {},
+  // counts
+  totalDiseases: 0,
+  // pagination
+  totalPages: 1,
+  currentPage: 1,
+  hasMore: true,
+  // loading
+  loading: false,
+  loadingMore: false,
+  // error
+  error: null,
+};
+
 const diseaseSlice = createSlice({
   name: "diseases",
-  initialState: {
-    items: [],
-    selectedDisease: {},
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     clearSelectedDisease: (state) => {
       state.selectedDisease = {};
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       // Fetch all diseases
-      .addCase(fetchAllDiseases.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAllDiseases.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAllDiseases.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAllDiseases.pending, pendingPaginationHandler())
+      .addCase(
+        fetchAllDiseases.fulfilled,
+        fulfilledPaginationHandler({
+          listKey: "diseases",
+          totalsMap: {
+            totalItems: "totalDiseases",
+          },
+        })
+      )
+      .addCase(fetchAllDiseases.rejected, rejectedPaginationHandler())
 
       // Fetch disease by ID
-      .addCase(fetchDiseaseById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchDiseaseById.fulfilled, (state, action) => {
-        state.selectedDisease = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchDiseaseById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchDiseaseById.pending, pendingHandler())
+      .addCase(
+        fetchDiseaseById.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedDisease" })
+      )
+      .addCase(fetchDiseaseById.rejected, rejectedHandler())
 
       // Create disease
-      .addCase(createDisease.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createDisease.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(createDisease.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(createDisease.pending, pendingHandler())
+      .addCase(createDisease.fulfilled, fulfilledHandler())
+      .addCase(createDisease.rejected, rejectedHandler())
 
       // Update disease
-      .addCase(updateDisease.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateDisease.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update the selected disease if it's the one being edited
-        if (
-          state.selectedDisease &&
-          state.selectedDisease._id === action.payload?._id
-        ) {
-          state.selectedDisease = action.payload;
-        }
-      })
-      .addCase(updateDisease.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(updateDisease.pending, pendingHandler())
+      .addCase(updateDisease.fulfilled, fulfilledHandler())
+      .addCase(updateDisease.rejected, rejectedHandler())
 
       // Remove disease
-      .addCase(removeDisease.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(removeDisease.fulfilled, (state) => {
-        state.loading = false;
-        // Clear selected disease if it was deleted
-        state.selectedDisease = {};
-      })
-      .addCase(removeDisease.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(removeDisease.pending, pendingHandler())
+      .addCase(removeDisease.fulfilled, fulfilledHandler())
+      .addCase(removeDisease.rejected, rejectedHandler());
   },
 });
 

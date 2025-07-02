@@ -13,9 +13,9 @@ const BASE_ENDPOINT = "/diseasescategories";
  * Gets all disease categories
  * @returns {Promise<Array>} List of disease categories
  */
-export async function getAllDiseaseCategories() {
+export async function getAllDiseaseCategories({ page = 1 } = {}) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
+    const response = await api.get(BASE_ENDPOINT, { params: { page } });
     return handleApiResponse(response, "No disease categories found");
   } catch (error) {
     return handleApiError(error, "fetching disease categories");
@@ -29,15 +29,8 @@ export async function getAllDiseaseCategories() {
  */
 export async function showDiseaseCategory(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
-    const data = handleApiResponse(response, "No disease categories found");
-
-    const category = data.find((category) => category._id === id);
-    if (!category) {
-      throw new Error(`Disease category with id ${id} not found`);
-    }
-
-    return category;
+    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+    return handleApiResponse(response, "this category was not found");
   } catch (error) {
     return handleApiError(error, `fetching disease category ${id}`);
   }

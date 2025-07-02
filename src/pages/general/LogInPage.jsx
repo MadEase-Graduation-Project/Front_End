@@ -1,4 +1,3 @@
-// ✅ Login Page — Smooth Field-by-Field Validation & Password Toggle
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from "@/services/usersApi";
+
 const LogInPage = () => {
   const navigate = useNavigate();
   const [isActivePopup, setActivePopup] = useState(false);
@@ -27,6 +26,7 @@ const LogInPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const fieldOrder = ["email", "password"];
+
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -47,18 +47,15 @@ const LogInPage = () => {
   };
 
   const onSubmit = async (data) => {
-    //! toDo: fix login slice -------------------------------------------------
-    const response = await loginUser(data);
-    console.log(response);
-    const token = response.token;
-    localStorage.setItem("token", token);
-
-    if (token) {
-      //! toDo: fix navigation -------------------------------------------------
-      navigate(`/admin/overview`);
-    } else {
-      setActivePopup(true);
-    }
+    // const response = await loginUser(data);
+    // console.log(response);
+    // const token = response.token;
+    // localStorage.setItem("token", token);
+    // if (token) {
+    //   navigate(`/admin/overview`);
+    // } else {
+    //   setActivePopup(true);
+    // }
   };
 
   return (
@@ -87,14 +84,12 @@ const LogInPage = () => {
 
         {/* Right side — form */}
         <div className="w-full lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none flex flex-col justify-center items-center gap-[15px] p-5 h-full">
-          {/* //toDo: popup for wrong pass and email */}
           {isActivePopup && (
             <div className="absolute top-5 left-1/2 translate-x-[-50%] rounded px-4 py-2 bg-red-300">
               <p>invalid email or password</p>
             </div>
           )}
 
-          {/* Logo shown only on small screens */}
           <Link to="/home">
             <img
               src={Logo_navy}
@@ -205,5 +200,3 @@ const LogInPage = () => {
 
 export default LogInPage;
 
-//justify>>with the axis of the flex
-//items>>with the normal to the flex

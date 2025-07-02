@@ -1,4 +1,4 @@
-import { fetchUserData } from "@/store/slices/userSlice";
+import { fetchMYData } from "@/store/slices/userSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SharedSetting from "@/components/shared/Setting/Setting";
@@ -9,7 +9,7 @@ export default function SettingPage() {
   const { details, loading } = useSelector((state) => state.users);
 
   useEffect(() => {
-    if (Object.keys(details).length === 0) dispatch(fetchUserData());
+    if (Object.keys(details).length === 0) dispatch(fetchMYData());
   }, [dispatch]);
 
   return (

@@ -6,147 +6,118 @@ import {
   editDiseaseCategory,
   deleteDiseaseCategory,
 } from "@/services/diseasesCategoriesApi";
+import {
+  fulfilledPaginationHandler,
+  pendingPaginationHandler,
+  rejectedPaginationHandler,
+} from "@/utils/paginationCasesHandlersUtils";
+import {
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
+// Add pagination params to fetchAllDiseasesCategories
 export const fetchAllDiseasesCategories = createAsyncThunk(
   "diseasesCategories/fetchAllDiseasesCategories",
-  async () => {
-    return await getAllDiseaseCategories();
+  async ({ page = 1 } = {}) => {
+    return await getAllDiseaseCategories({ page });
   }
 );
 
 export const fetchDiseaseCategoryById = createAsyncThunk(
   "diseasesCategories/fetchDiseaseCategoryById",
-  async (id) => {
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedDiseaseCategory());
     return await showDiseaseCategory(id);
   }
 );
 
 export const createDiseaseCategory = createAsyncThunk(
   "diseasesCategories/createDiseaseCategory",
-  async (categoryData, { dispatch }) => {
-    const response = await addDiseaseCategory(categoryData);
-    // Refresh the disease categories list after adding
-    if (response) {
-      dispatch(fetchAllDiseasesCategories());
-    }
-    return response;
+  async (categoryData) => {
+    return await addDiseaseCategory(categoryData);
   }
 );
 
 export const updateDiseaseCategory = createAsyncThunk(
   "diseasesCategories/updateDiseaseCategory",
-  async ({ id, categoryData }, { dispatch }) => {
-    const response = await editDiseaseCategory(id, categoryData);
-    // Refresh the disease categories list after updating
-    if (response) {
-      dispatch(fetchAllDiseasesCategories());
-    }
-    return response;
+  async ({ id, categoryData }) => {
+    return await editDiseaseCategory(id, categoryData);
   }
 );
 
 export const removeDiseaseCategory = createAsyncThunk(
   "diseasesCategories/removeDiseaseCategory",
-  async (id, { dispatch }) => {
-    const response = await deleteDiseaseCategory(id);
-    // Refresh the disease categories list after deleting
-    if (response) {
-      dispatch(fetchAllDiseasesCategories());
-    }
-    return response;
+  async (id) => {
+    return await deleteDiseaseCategory(id);
   }
 );
 
+const initialState = {
+  // data
+  categories: [],
+  selectedDiseaseCategory: {},
+  // counts
+  totalDiseaseCategories: 0,
+  // pagination
+  totalPages: 1,
+  currentPage: 1,
+  hasMore: true,
+  // loading
+  loading: false,
+  loadingMore: false,
+  // error
+  error: null,
+};
+
 const diseaseCategorySlice = createSlice({
   name: "diseasesCategories",
-  initialState: {
-    items: [],
-    selectedDiseaseCategory: {},
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     clearSelectedDiseaseCategory: (state) => {
       state.selectedDiseaseCategory = {};
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       // Fetch all disease categories
-      .addCase(fetchAllDiseasesCategories.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAllDiseasesCategories.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAllDiseasesCategories.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAllDiseasesCategories.pending, pendingPaginationHandler())
+      .addCase(
+        fetchAllDiseasesCategories.fulfilled,
+        fulfilledPaginationHandler({
+          listKey: "categories",
+          totalsMap: {
+            totalItems: "totalDiseaseCategories",
+          },
+        })
+      )
+      .addCase(fetchAllDiseasesCategories.rejected, rejectedPaginationHandler())
 
       // Fetch disease category by ID
-      .addCase(fetchDiseaseCategoryById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchDiseaseCategoryById.fulfilled, (state, action) => {
-        state.selectedDiseaseCategory = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchDiseaseCategoryById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchDiseaseCategoryById.pending, pendingHandler())
+      .addCase(
+        fetchDiseaseCategoryById.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedDiseaseCategory" })
+      )
+      .addCase(fetchDiseaseCategoryById.rejected, rejectedHandler())
 
       // Create disease category
-      .addCase(createDiseaseCategory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createDiseaseCategory.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(createDiseaseCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(createDiseaseCategory.pending, pendingHandler())
+      .addCase(createDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(createDiseaseCategory.rejected, rejectedHandler())
 
       // Update disease category
-      .addCase(updateDiseaseCategory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateDiseaseCategory.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update the selected disease category if it's the one being edited
-        if (
-          state.selectedDiseaseCategory &&
-          state.selectedDiseaseCategory._id === action.payload?._id
-        ) {
-          state.selectedDiseaseCategory = action.payload;
-        }
-      })
-      .addCase(updateDiseaseCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(updateDiseaseCategory.pending, pendingHandler())
+      .addCase(updateDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(updateDiseaseCategory.rejected, rejectedHandler())
 
       // Remove disease category
-      .addCase(removeDiseaseCategory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(removeDiseaseCategory.fulfilled, (state) => {
-        state.loading = false;
-        // Clear selected disease category if it was deleted
-        state.selectedDiseaseCategory = {};
-      })
-      .addCase(removeDiseaseCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(removeDiseaseCategory.pending, pendingHandler())
+      .addCase(removeDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(removeDiseaseCategory.rejected, rejectedHandler());
   },
 });
 
