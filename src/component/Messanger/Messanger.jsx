@@ -3,7 +3,7 @@ import Conversation from "../Conversation/Conversation";
 import Message from "../Message/Message";
 import { io } from "socket.io-client";
 import { Menu, X } from "lucide-react";
-import { getAllDoctors } from "@/services/userApi";
+// import { getAllDoctors } from "@/services/userApi";
 
 const Messenger = () => {
   const [conversations, setConversations] = useState([]);
