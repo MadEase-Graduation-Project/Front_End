@@ -25,7 +25,7 @@ import Otp from "@/pages/main/Otp";
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 
-import Community from "@/pages/main/Community";
+import Community from "@/pages/main/Community/Community";
 
 import About from "@/pages/main/About";
 import SignUp from "@/pages/main/SignUp";
