@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import HomePage from "@/pages/main/HomePage";
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage1 from "./pages/general/HomePage1";
 import LogInPage from "./pages/general/LogInPage";
@@ -20,9 +21,10 @@ import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
-import Community from "@/pages/main/Community";
-import ProtectedRoute from "@/routes/protectedRoute";
+import Community from "@/pages/main/Community/Community";
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
+import ProtectedRoute from "@/routes/protectedRoute";
+import NurseApp from "@/NurseApp";
 
 function App() {
   return (
@@ -42,14 +44,11 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
-
       <Route path="/home" element={<HomePage1 />} />
       <Route path="/login" element={<LogInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/resetpass" element={<ResetPassPage />} />
 
-      {/* children (pages that use this layout) like down */}
-      {/* <Route index element={<Home/>}/> */}
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />
@@ -62,6 +61,9 @@ function App() {
         <Route path="setting" element={<SettingPage />} />
         <Route path="chat" element={<Chat />} />
       </Route>
+
+      {/* nurse layout */}
+      <Route path="nurse/*" element={<NurseApp />} />
     </Routes>
   );
 }

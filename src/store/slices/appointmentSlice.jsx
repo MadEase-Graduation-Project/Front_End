@@ -4,8 +4,14 @@ import {
   showAppointment,
   addAppointment,
   editAppointment,
-  deleteAppointment,
+  deleteUserAppointment,
+  deleteDoctorAppointment,
 } from "@/services/appointmentApi";
+import {
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
 export const fetchAppointments = createAsyncThunk(
   "appointments/fetchAppointments",
@@ -16,137 +22,97 @@ export const fetchAppointments = createAsyncThunk(
 
 export const fetchAppointmentById = createAsyncThunk(
   "appointments/fetchAppointmentById",
-  async (id) => {
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedAppointment());
     return await showAppointment(id);
   }
 );
 
 export const createAppointment = createAsyncThunk(
   "appointments/createAppointment",
-  async (appointmentData, { dispatch }) => {
-    const response = await addAppointment(appointmentData);
-    // Refresh the appointments list after adding
-    if (response) {
-      dispatch(fetchAppointments());
-    }
-    return response;
+  async ({ doctorId, appointmentData }) => {
+    return await addAppointment(doctorId, appointmentData);
   }
 );
 
 export const updateAppointment = createAsyncThunk(
   "appointments/updateAppointment",
-  async ({ id, appointmentData }, { dispatch }) => {
-    const response = await editAppointment(id, appointmentData);
-    // Refresh the appointments list after updating
-    if (response) {
-      dispatch(fetchAppointments());
-    }
-    return response;
+  async ({ id, appointmentData }) => {
+    return await editAppointment(id, appointmentData);
   }
 );
 
-export const removeAppointment = createAsyncThunk(
-  "appointments/removeAppointment",
-  async (id, { dispatch }) => {
-    const response = await deleteAppointment(id);
-    // Refresh the appointments list after deleting
-    if (response) {
-      dispatch(fetchAppointments());
-    }
-    return response;
+export const removeUserAppointment = createAsyncThunk(
+  "appointments/removeUserAppointment",
+  async (id) => {
+    return await deleteUserAppointment(id);
   }
 );
+
+export const removeDoctorAppointment = createAsyncThunk(
+  "appointments/removeDoctorAppointment",
+  async (id) => {
+    return await deleteDoctorAppointment(id);
+  }
+);
+
+const initialState = {
+  // data
+  appointments: [],
+  selectedAppointment: {},
+  // loading
+  loading: false,
+  // error
+  error: null,
+};
 
 const appointmentSlice = createSlice({
   name: "appointments",
-  initialState: {
-    items: [],
-    selectedAppointment: {},
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     clearSelectedAppointment: (state) => {
       state.selectedAppointment = {};
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       // Fetch all appointments
-      .addCase(fetchAppointments.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAppointments.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAppointments.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAppointments.pending, pendingHandler())
+      .addCase(
+        fetchAppointments.fulfilled,
+        fulfilledHandler({ listKey: "appointments" })
+      )
+      .addCase(fetchAppointments.rejected, rejectedHandler())
 
       // Fetch appointment by ID
-      .addCase(fetchAppointmentById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAppointmentById.fulfilled, (state, action) => {
-        state.selectedAppointment = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAppointmentById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAppointmentById.pending, pendingHandler())
+      .addCase(
+        fetchAppointmentById.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedAppointment" })
+      )
+      .addCase(fetchAppointmentById.rejected, rejectedHandler())
 
       // Create appointment
-      .addCase(createAppointment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createAppointment.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(createAppointment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(createAppointment.pending, pendingHandler())
+      .addCase(createAppointment.fulfilled, fulfilledHandler())
+      .addCase(createAppointment.rejected, rejectedHandler())
 
       // Update appointment
-      .addCase(updateAppointment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateAppointment.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update the selected appointment if it's the one being edited
-        if (
-          state.selectedAppointment &&
-          state.selectedAppointment._id === action.payload?._id
-        ) {
-          state.selectedAppointment = action.payload;
-        }
-      })
-      .addCase(updateAppointment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(updateAppointment.pending, pendingHandler())
+      .addCase(updateAppointment.fulfilled, fulfilledHandler())
+      .addCase(updateAppointment.rejected, rejectedHandler())
 
-      // Remove appointment
-      .addCase(removeAppointment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(removeAppointment.fulfilled, (state) => {
-        state.loading = false;
-        // Clear selected appointment if it was deleted
-        state.selectedAppointment = {};
-      })
-      .addCase(removeAppointment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      // Remove user appointment
+      .addCase(removeUserAppointment.pending, pendingHandler())
+      .addCase(removeUserAppointment.fulfilled, fulfilledHandler())
+      .addCase(removeUserAppointment.rejected, rejectedHandler())
+
+      // Remove doctor appointment
+      .addCase(removeDoctorAppointment.pending, pendingHandler())
+      .addCase(removeDoctorAppointment.fulfilled, fulfilledHandler())
+      .addCase(removeDoctorAppointment.rejected, rejectedHandler());
   },
 });
 

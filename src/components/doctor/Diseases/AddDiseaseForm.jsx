@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addDisease } from "../../../services/diseasesApi";
+import { addDisease } from "../../../services/diseaseApi";
 
 const ranks = ["critical", "severe", "moderate", "mild"];
 
