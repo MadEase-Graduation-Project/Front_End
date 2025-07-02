@@ -72,10 +72,10 @@ const patientSlice = createSlice({
 
       // showPatientById
       .addCase(fetchShowPatientById.pending, pendingHandler())
-      .addCase(
-        fetchShowPatientById.fulfilled,
-        fulfilledHandler({ detailsKey: "selectedPatient" })
-      )
+      .addCase(fetchShowPatientById.fulfilled, (state, action) => {
+        state.selectedPatient = action.payload;
+        state.loading = false;
+      })
       .addCase(fetchShowPatientById.rejected, rejectedHandler());
   },
 });

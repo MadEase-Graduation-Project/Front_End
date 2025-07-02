@@ -37,8 +37,9 @@ export async function showPatients() {
 // get one patient by id
 export async function showPatientById(id) {
   try {
-    const response = await api.get(`/patient/${id}`);
-    return handleApiResponse(response, "this patient not found");
+    const response = await api.get(`/patient/one/${id}`);
+    const data = handleApiResponse(response, "this patient not found");
+    return data?.patient;
   } catch (error) {
     return handleApiError(error, "fetching patient");
   }

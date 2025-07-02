@@ -15,6 +15,7 @@ import {
   sortedAdvices,
   selectFilteredAdvices,
 } from "@/store/selectors/index";
+import Popup from "./components/Popup";
 
 export default function Community() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export default function Community() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [page, setPage] = useState(1);
   const [showLoader, setShowLoader] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const loaderRef = useRef(null);
 
   // Use selectors to get data from Redux store
@@ -72,11 +74,13 @@ export default function Community() {
   }, [loading, paginatedAdvices.length, hasMore]);
 
   function handleLike(id) {
-    dispatch(likeAdvice(id));
+    setShowPopup(true);
+    // dispatch(likeAdvice(id));
   }
 
-  function handleDislike(id) {
-    dispatch(dislikeAdvice(id));
+  function handleDisLike(id) {
+    setShowPopup(true);
+    // dispatch(dislikeAdvice(id));
   }
 
   return (
@@ -186,7 +190,7 @@ export default function Community() {
                       selectedCategory={selectedCategory}
                       link={"/community"}
                       handleLike={handleLike}
-                      handleDislike={handleDislike}
+                      handleDisLike={handleDisLike}
                     />
                   </div>
                 ))}
@@ -200,6 +204,9 @@ export default function Community() {
             </>
           )}
         </div>
+
+        {/* Popup Component */}
+        <Popup open={showPopup} onClose={() => setShowPopup(false)} />
       </div>
     </div>
   );
