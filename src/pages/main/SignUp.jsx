@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TopReg from "../../components/patientComps/register/TopReg";
 import DividerText from "../../components/patientComps/register/DividerText";
 import BottomBtn from "@/components/patientComps/register/BottomBtn";
@@ -8,8 +8,13 @@ import FloatingInput from "../../components/patientComps/register/FloatingInput"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
+import { registerUser, loginUser } from "@/services/usersApi";
+import { usePopup } from "@/contexts/PopupContext";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const { showPopup } = usePopup();
+
   const {
     control,
     handleSubmit,
@@ -19,15 +24,13 @@ export default function SignUp() {
   } = useForm({ mode: "onTouched" });
 
   const [showPassword, setShowPassword] = useState(false);
-
-  const fieldOrder = ["firstName", "phone", "email", "password"];
+  const fieldOrder = ["name", "phone", "email", "password"];
 
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
       const isValid = await trigger(name);
       const currentIndex = fieldOrder.indexOf(name);
-
       if (isValid) {
         if (currentIndex < fieldOrder.length - 1) {
           const nextInput = document.getElementById(
@@ -35,16 +38,44 @@ export default function SignUp() {
           );
           if (nextInput) nextInput.focus();
         } else {
-          // If it's the last field and valid, submit the form
           document.querySelector("form").requestSubmit();
         }
       }
     }
   };
 
-  const onSubmit = (data) => {
-    console.log("Signup data:", data);
+  const onSubmit = async (data) => {
+    try {
+      const payload = { ...data, role: "Patient" };
+
+      const regRes = await registerUser(payload);
+      console.log("Registered:", regRes);
+
+      // 👇 Check if backend returned errors
+      if (regRes?.error) {
+        showPopup(regRes.error || "Registration failed", "error");
+        return;
+      }
+
+      // ✅ Auto-login
+      const loginRes = await loginUser({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (loginRes?.accessToken) {
+        localStorage.setItem("accessToken", loginRes.accessToken);
+        localStorage.setItem("userRole", loginRes.Role || "Patient");
+        navigate("/home");
+      } else {
+        showPopup("Registered but couldn't log in automatically", "warning");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      showPopup("Something went wrong. Please try again.", "error");
+    }
   };
+
   return (
     <form
       className="w-full h-auto flex items-center justify-center relative"
@@ -58,28 +89,26 @@ export default function SignUp() {
           dest="/register/login"
         />
 
-        {/* First Name */}
+        {/* Name */}
         <Controller
-          name="firstName"
+          name="name"
           control={control}
-          rules={{ required: "First name is required" }}
+          rules={{ required: "Name is required" }}
           render={({ field }) => (
             <FloatingInput
               {...field}
-              label="First name"
-              id="firstName"
+              label="Name"
+              id="name"
               onChange={(e) => {
                 field.onChange(e);
-                clearErrors("firstName");
+                clearErrors("name");
               }}
-              onKeyDown={(e) => handleKeyDown(e, "firstName")}
+              onKeyDown={(e) => handleKeyDown(e, "name")}
             />
           )}
         />
-        {errors.firstName && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.firstName.message}
-          </p>
+        {errors.name && (
+          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
         )}
 
         {/* Phone Number */}
@@ -89,16 +118,15 @@ export default function SignUp() {
           rules={{
             required: "Phone number is required",
             validate: (value) => {
-              const raw = value || "";
-              const afterPrefix = raw.replace("+20", "");
-              const digitsOnly = afterPrefix.replace(/\D/g, "");
-              if (!raw.startsWith("+20"))
-                return "Phone number must start with +20";
-              if (/[^\d]/.test(afterPrefix)) return "Only numbers are allowed";
-              if (digitsOnly.length > 10)
-                return "Phone number can't exceed 10 digits";
-              if (digitsOnly.length < 10)
-                return "Phone number must be exactly 10 digits after +20";
+              const digitsOnly = (value || "").replace(/\D/g, "");
+
+              if (/\D/.test(value)) return "Only numbers are allowed";
+              if (!/^01[0125]/.test(digitsOnly))
+                return "Phone number must start with 010, 011, 012, or 015";
+              if (digitsOnly.length < 11)
+                return "Phone number must be exactly 11 digits";
+              if (digitsOnly.length > 11)
+                return "Phone number can't exceed 11 digits";
               return true;
             },
           }}
@@ -109,30 +137,11 @@ export default function SignUp() {
               id="phone"
               type="tel"
               value={field.value || ""}
-              onFocus={() => {
-                if (!field.value?.startsWith("+20")) {
-                  field.onChange("+20");
-                }
-              }}
               onChange={(e) => {
-                let input = e.target.value;
-                if (!input.startsWith("+20")) {
-                  input = "+20" + input.replace(/^\+?2?0?/, "");
-                }
-                field.onChange(input);
-                trigger("phone");
+                field.onChange(e);
+                clearErrors("phone");
               }}
-              onBlur={() => trigger("phone")}
-              onKeyDown={(e) => {
-                const cursorPos = e.target.selectionStart;
-                if (
-                  (e.key === "Backspace" && cursorPos <= 3) ||
-                  (e.key === "Delete" && cursorPos < 4)
-                ) {
-                  e.preventDefault();
-                }
-                handleKeyDown(e, "phone");
-              }}
+              onKeyDown={(e) => handleKeyDown(e, "phone")}
             />
           )}
         />

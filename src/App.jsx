@@ -2,8 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage from "@/pages/main/HomePage";
-import HomePage1 from "./pages/general/HomePage1";
-import ResetPassPage from "./pages/general/ResetPassPage";
+import HomePage1 from "@/pages/general/HomePage1";
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
@@ -19,6 +18,11 @@ import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
 
+import ResetPass_Layout from "@/layouts/ResetPass_Layout";
+import ResetPass from "@/pages/main/ResetPass";
+import NewPass from "@/pages/main/NewPass";
+import Otp from "@/pages/main/Otp";
+
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 import Community from "@/pages/main/Community";
@@ -29,14 +33,13 @@ import LogIn from "@/pages/main/LogIn";
 
 import ProtectedRoute from "@/routes/protectedRoute";
 import Test from "@/pages/general/test";
-import RegisterLayout from "./layouts/Registerlayout";
+import Register_Layout from "@/layouts/Register_Layout";
 
 function App() {
   return (
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Main_Layout />}>
-
         <Route index element={<HomePage />} />
 
         <Route path="community" element={<Community />} />
@@ -44,7 +47,7 @@ function App() {
 
       {/* Register layout */}
 
-      <Route path="/register" element={<RegisterLayout />}>
+      <Route path="/register" element={<Register_Layout />}>
         <Route index element={<SignUp />} />
         <Route path="login" element={<LogIn />} />
       </Route>
@@ -60,8 +63,13 @@ function App() {
 
       <Route path="/home" element={<HomePage1 />} />
 
+      {/* reset pass layout */}
+      <Route path="/resetpass" element={<ResetPass_Layout />}>
+        <Route index element={<ResetPass />} />
+        <Route path="new" element={<NewPass />} />
+        <Route path="otp" element={<Otp />} />
+      </Route>
 
-      <Route path="/resetpass" element={<ResetPassPage />} />
       <Route path="/test" element={<Test />} />
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}

@@ -1,10 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
-import Logo_navy from "../assets/images/LogoNew_navy.svg";
-import Logo_white from "../assets/images/LogoNew_white.svg";
+import Logo_navy from "@/assets/images/LogoNew_navy.svg";
+import Logo_white from "@/assets/images/LogoNew_white.svg";
 
 import { usePopup } from "@/contexts/PopupContext";
 
-const RegisterLayout = () => {
+const Register_Layout = () => {
   const { isActivePopup } = usePopup(); // 👈 get state from context
   return (
     <div className="w-full bg-mewhite min-h-screen flex items-center justify-center relative">
@@ -27,7 +27,7 @@ const RegisterLayout = () => {
         </div>
 
         {isActivePopup && (
-          <div className="absolute top-10 lg:top-10 left-1/2 lg:left-3/4 transform -translate-x-1/2 w-[80%] md:w-[70%] lg:w-[60%] max-w-[400px] ">
+          <div className="absolute top-10 lg:top-10 left-1/2 lg:left-3/4 transform -translate-x-1/2 w-[80%] md:w-[70%] lg:w-[60%] max-w-[400px] z-50">
             <div className="animate-slide-up bg-red-100 text-red-800 border border-red-300 rounded-xl px-3 sm:px-5 py-2 sm:py-3 shadow-md transition-all duration-700 ease-in-out text-center">
               <p className="text-[11px] sm:text-sm md:text-base font-medium">
                 Invalid email or password
@@ -51,7 +51,4 @@ const RegisterLayout = () => {
   );
 };
 
-export default RegisterLayout;
-
-//justify>>with the axis of the flex
-//items>>with the normal to the flex
+export default Register_Layout;

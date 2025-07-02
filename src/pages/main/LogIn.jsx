@@ -24,6 +24,7 @@ export default function LogIn() {
     handleSubmit,
     formState: { errors },
     trigger,
+
     clearErrors,
   } = useForm({ mode: "onTouched" });
 
@@ -57,21 +58,46 @@ export default function LogIn() {
     }
   };
 
-  const onSubmit = async (data) => {
-    //! toDo: fix login slice -------------------------------------------------
-    const response = await loginUser(data);
-    console.log(response);
-    const token = response.token;
-    localStorage.setItem("token", token);
+  // const onSubmit = async (data) => {
+  //   try {
+  //     const response = await loginUser(data);
+  //     console.log("Login response:", response);
 
-    if (token) {
-      //! toDo: fix navigation -------------------------------------------------
-      navigate(`/admin/overview`);
-    } else {
-      setActivePopup(true);
-      setHasLoginError(true);
-    }
-  };
+  //     if (!response.accessToken) {
+  //       setHasLoginError(true);
+  //       setActivePopup(true);
+  //       return;
+  //     }
+
+  //     const role = response.Role;
+  //     localStorage.setItem("accessToken", response.accessToken);
+  //     localStorage.setItem("userRole", role);
+
+  //     // 🌟 Navigate based on role
+  //     switch (role) {
+  //       case "Patient":
+  //         navigate("/home");
+  //         break;
+  //       case "Admin":
+  //         navigate("/admin/overview");
+  //         break;
+  //       // case "Nurse":
+  //       //   navigate("/nurse/dashboard");
+  //       //   break;
+  //       case "Doctor":
+  //         navigate("/doctor");
+  //         break;
+  //       default:
+  //         console.warn("Unknown role");
+  //         navigate("/");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //     setHasLoginError(true);
+  //     setActivePopup(true);
+  //   }
+  // };
+
   return (
     <form
       className="w-full h-auto flex items-center justify-center relative"
@@ -157,16 +183,13 @@ export default function LogIn() {
             </p>
           )}
         </div>
-
         <UnderLined text="Forgot your password?" link="/resetpass" />
-
         <button
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
           type="submit"
         >
           Login
         </button>
-
         <DividerText reg="or login with" />
         <div className="flex gap-[12px]">
           <BottomBtn source={google} btn="Google" />
