@@ -7,8 +7,8 @@ export default function AdviceCard({
   advice,
   selectedCategory,
   link,
-  handelLike,
-  handelDisLike,
+  handleLike,
+  handleDislike,
 }) {
   return (
     <div
@@ -80,7 +80,7 @@ export default function AdviceCard({
             {/* //todo: add like and dislike actions */}
             <button
               onClick={() => {
-                handelLike(advice._id);
+                handleLike(advice._id);
               }}
               className="flex items-center"
             >
@@ -89,7 +89,7 @@ export default function AdviceCard({
             </button>
             <button
               onClick={() => {
-                handelDisLike(advice._id);
+                handleDislike(advice._id);
               }}
               className="flex items-end"
             >

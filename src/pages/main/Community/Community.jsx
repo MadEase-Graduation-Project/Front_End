@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Search, RefreshCw } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "@/utils/objectUtils";
-import { fetchAllAdvices } from "@/store/slices/adviceSlice";
+import {
+  fetchAllAdvices,
+  likeAdvice,
+  dislikeAdvice,
+} from "@/store/slices/adviceSlice";
 import AdviceCard from "@/components/shared/AdviceCard";
 import {
   selectAdviceCategories,
@@ -29,9 +33,11 @@ export default function Community() {
   );
 
   // Calculate if there is more data to load
-  const hasMore = paginatedAdvices.length < useSelector((state) =>
-    selectFilteredAdvices(state, searchQuery, selectedCategory)
-  ).length;
+  const hasMore =
+    paginatedAdvices.length <
+    useSelector((state) =>
+      selectFilteredAdvices(state, searchQuery, selectedCategory)
+    ).length;
 
   // Fetch data only once when component mounts
   useEffect(() => {
@@ -49,11 +55,7 @@ export default function Community() {
   useEffect(() => {
     const observer = new window.IntersectionObserver(
       (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          !loading &&
-          hasMore
-        ) {
+        if (entries[0].isIntersecting && !loading && hasMore) {
           setShowLoader(true);
           setTimeout(() => {
             setPage((prev) => prev + 1);
@@ -69,10 +71,13 @@ export default function Community() {
     };
   }, [loading, paginatedAdvices.length, hasMore]);
 
-  // todo: add like and dislike
-  function handelLike(e) {}
+  function handleLike(id) {
+    dispatch(likeAdvice(id));
+  }
 
-  function handelDisLike(e) {}
+  function handleDislike(id) {
+    dispatch(dislikeAdvice(id));
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -180,8 +185,8 @@ export default function Community() {
                       advice={advice}
                       selectedCategory={selectedCategory}
                       link={"/community"}
-                      handelLike={handelLike}
-                      handelDisLike={handelDisLike}
+                      handleLike={handleLike}
+                      handleDislike={handleDislike}
                     />
                   </div>
                 ))}
