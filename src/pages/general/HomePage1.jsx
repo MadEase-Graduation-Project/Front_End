@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import NavBar from "@/components/home/NavBar";
+import NavBar from "@/components/home/Navbar";
 import about from "@/assets/images/about.png";
 import ServicesLine from "@/components/patientComps/landingPage/ServicesLine";
 import Hero from "@/components/patientComps/Hero";
