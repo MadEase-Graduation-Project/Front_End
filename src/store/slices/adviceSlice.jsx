@@ -7,11 +7,6 @@ import {
   deleteAdvice,
 } from "@/services/adviceApi";
 import {
-  fulfilledPaginationHandler,
-  pendingPaginationHandler,
-  rejectedPaginationHandler,
-} from "@/utils/paginationCasesHandlersUtils";
-import {
   fulfilledHandler,
   pendingHandler,
   rejectedHandler,
@@ -19,8 +14,8 @@ import {
 
 export const fetchAllAdvices = createAsyncThunk(
   "advices/fetchAllAdvices",
-  async ({ page = 1 } = {}) => {
-    return await getAllAdvices({ page });
+  async () => {
+    return await getAllAdvices();
   }
 );
 
@@ -59,11 +54,6 @@ const initialState = {
   selectedAdvice: {},
   // counts
   totalAdvices: 0,
-  // pagination
-  totalPages: 1,
-  currentPage: 1,
-  hasMore: true,
-  loadingMore: false,
   // handling
   loading: false,
   error: null,
@@ -82,17 +72,13 @@ const adviceSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all advices
-      .addCase(fetchAllAdvices.pending, pendingPaginationHandler())
-      .addCase(
-        fetchAllAdvices.fulfilled,
-        fulfilledPaginationHandler({
-          listKey: "advices",
-          totalsMap: {
-            totalItems: "totalAdvices",
-          },
-        })
-      )
-      .addCase(fetchAllAdvices.rejected, rejectedPaginationHandler())
+      .addCase(fetchAllAdvices.pending, pendingHandler())
+      .addCase(fetchAllAdvices.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalAdvices = action.payload?.total;
+        state.advices = action.payload?.data;
+      })
+      .addCase(fetchAllAdvices.rejected, rejectedHandler())
 
       // Fetch advice by ID
       .addCase(fetchAdviceById.pending, pendingHandler())

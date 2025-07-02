@@ -8,14 +8,8 @@ export const selectAdvicesLoading = (state) =>
 export const selectAdvicesError = (state) => selectAdvicesState(state).error;
 export const selectSelectedAdvice = (state) =>
   selectAdvicesState(state).selectedAdvice;
-
-//* selectAdvicesPagination
-export const selectAdvicesPagination = (state) => ({
-  currentPage: selectAdvicesState(state).currentPage,
-  totalPages: selectAdvicesState(state).totalPages,
-  hasMore: selectAdvicesState(state).hasMore,
-  loadingMore: selectAdvicesState(state).loadingMore,
-});
+export const selectAdviceCount = (state) =>
+  selectAdvicesState(state).totalAdvices;
 
 // Memoized selectors
 export const selectAdviceCategories = createSelector(
