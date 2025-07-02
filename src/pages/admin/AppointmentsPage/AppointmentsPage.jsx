@@ -3,7 +3,7 @@ import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import AppointmentDialog from "@/components/ui/AppointmentDialog";
 import {
   fetchAppointments,
-  removeAppointment,
+  removeUserAppointment,
 } from "@/store/slices/appointmentSlice";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,7 +52,7 @@ export default function AppointmentsPage() {
   // Actual delete function when confirmed
   const confirmDelete = () => {
     if (appointmentToDelete) {
-      dispatch(removeAppointment(appointmentToDelete._id));
+      dispatch(removeUserAppointment(appointmentToDelete._id));
       console.log("Deleting appointment:", appointmentToDelete);
       // Close the dialog after deletion
       setDeleteDialogOpen(false);

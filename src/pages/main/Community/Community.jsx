@@ -1,22 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
-import { Search, Calendar, Clock, ThumbsUp, ThumbsDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "@/utils/objectUtils";
 import { fetchAllAdvices } from "@/store/slices/adviceSlice";
-import { readTime } from "@/utils/stringUtils";
+import AdviceCard from "@/components/shared/AdviceCard";
 import {
   selectAdviceCategories,
   selectFilteredAdvices,
   selectAdvicesLoading,
   selectAllAdvices,
-  selectPagination,
-} from "@/store/selectors/adviceSelectors";
-import DoctorImageIcon from "./components/DoctorImageIcon";
+} from "@/store/selectors/index";
 
 export default function Community() {
   const dispatch = useDispatch();
-  const sentinelRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
@@ -27,39 +23,13 @@ export default function Community() {
   const filteredAdvices = useSelector((state) =>
     selectFilteredAdvices(state, searchQuery, selectedCategory)
   );
-  const { currentPage, totalPages, hasMore, loadingMore } =
-    useSelector(selectPagination);
 
   // Fetch data only once when component mounts
   useEffect(() => {
     if (isEmpty(advices)) {
-      dispatch(fetchAllAdvices({ page: 1 }));
+      dispatch(fetchAllAdvices());
     }
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!sentinelRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && hasMore && !loadingMore) {
-          dispatch(fetchAllAdvices({ page: currentPage + 1, limit: 10 }));
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [currentPage, dispatch, hasMore, loadingMore]);
-
-  // Format date
-  const formatDate = useCallback((dateString) => {
-    if (!dateString) return "";
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  }, []);
 
   // todo: add like and dislike
   function handelLike(e) {}
@@ -170,101 +140,20 @@ export default function Community() {
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredAdvices.map((advice) => (
-                <div
-                  key={advice._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition-transform hover:shadow-lg"
-                >
-                  <img
-                    className="h-48 w-full object-cover"
-                    src={advice.ImgUrl}
-                    alt={advice.title || "Medical article"}
+                <div key={advice._id}>
+                  <AdviceCard
+                    advice={advice}
+                    selectedCategory={selectedCategory}
+                    link={"/community"}
+                    handelLike={handelLike}
+                    handelDisLike={handelDisLike}
                   />
-                  <div className="py-3 px-6 flex-1 flex flex-col">
-                    <div className="flex-1">
-                      {/* <p className="text-sm font-medium text-blue-600">
-                        {advice.diseasesCategoryName || "Health"}
-                      </p> */}
-                      <Link
-                        to={`/community`}
-                        className="block mt-2 text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors"
-                      >
-                        {advice.title || "Untitled Article"}
-                      </Link>
-                      <p className="mt-3 text-base text-gray-500 line-clamp-3">
-                        {advice.description || "No description available."}
-                      </p>
-                    </div>
-
-                    <div className="mt-6 flex items-center">
-                      <div className="flex-shrink-0">
-                        {/* //todo: add doctor image from private components */}
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={
-                            "https://res.cloudinary.com/dweffiohi/image/upload/v1745583748/wn6wqxmsalbweclrngrn.jpg"
-                          }
-                          alt={"Doctor"}
-                        />
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900">
-                          {advice.doctorName || "Unknown Doctor"}
-                        </p>
-                        <div className="flex items-center space-x-1 text-sm text-gray-500">
-                          <Calendar size={12} />
-                          <time dateTime={advice.createdAt}>
-                            {formatDate(advice.createdAt)}
-                          </time>
-                          <span aria-hidden="true">&middot;</span>
-                          <Clock size={12} />
-                          <span>
-                            {advice.description
-                              ? readTime(advice.description)
-                              : 3}{" "}
-                            min read
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 flex justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
-                      <div className="flex items-center justify-between gap-5">
-                        {/* //todo: add like and dislike actions */}
-                        <button
-                          onClick={() => {
-                            handelLike(advice._id);
-                          }}
-                          className="flex items-center"
-                        >
-                          <ThumbsUp className="h-4 w-4 mr-1" />
-                          <span>{advice.likesCount}</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handelDisLike(advice._id);
-                          }}
-                          className="flex items-end"
-                        >
-                          <ThumbsDown className="h-4 w-4 mr-1" />
-                          <span>{advice.dislikesCount}</span>
-                        </button>
-                      </div>
-                      {selectedCategory === "All Categories" && (
-                        <div className="flex items-center">
-                          #{advice.diseasesCategoryName || "unKnown"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
       </div>
-      <div ref={sentinelRef} />
-
-      {loadingMore && <p className="text-center mt-4">Loading…</p>}
     </div>
   );
 }
