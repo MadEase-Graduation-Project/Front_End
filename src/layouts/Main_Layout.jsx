@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import NavBar from "@/components/home/NavBar";
+import NavBar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
 import { loginUser } from "@/services/signUserApi";
 import { useDispatch } from "react-redux";
