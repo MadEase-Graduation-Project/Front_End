@@ -13,13 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { selectMyDetails } from "@/store/selectors";
 
 export default function Header({ isCollapsed, setIsCollapsed }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { details: userData } = useSelector((state) => state.users);
 
-  // Remove console.log in production
+  const userData = useSelector(selectMyDetails);
 
   // Fetch user data on component mount
   useEffect(() => {

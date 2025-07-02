@@ -1,17 +1,17 @@
-import { fetchAllDiseases } from "@/store/slices/diseaseSlice";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaVirus } from "react-icons/fa";
 import { description } from "@/utils/stringUtils";
+import {
+  selectAllDiseases,
+  selectDiseasesLoading,
+  selectTotalDiseases,
+} from "@/store/selectors";
 
 export default function LastDiseases() {
-  const dispatch = useDispatch();
-  const { items: diseases, loading } = useSelector((state) => state.diseases);
-
-  useEffect(() => {
-    dispatch(fetchAllDiseases());
-  }, [dispatch]);
+  const diseases = useSelector(selectAllDiseases);
+  const loading = useSelector(selectDiseasesLoading);
+  const diseasesCount = useSelector(selectTotalDiseases);
 
   if (loading) {
     return (
@@ -30,7 +30,7 @@ export default function LastDiseases() {
     <div className="flex flex-col gap-3 bg-white p-4 shadow-lg rounded-lg">
       <h2 className="text-xl font-semibold mb-2">Recent Diseases</h2>
 
-      {diseases.length === 0 ? (
+      {diseasesCount === 0 ? (
         <p className="text-gray-500 italic">No diseases found</p>
       ) : (
         <>

@@ -6,40 +6,28 @@ import {
   FaUserNurse,
   FaUserCog,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import {
+  selectTotalAdmin,
+  selectTotalHospitals,
+  selectTotalNurses,
+  selectTotalPatients,
+  selectTotalUsers,
+  selectTotalDoctors,
+  selectUsersLoading,
+  selectUsersError,
+} from "@/store/selectors"; // adjust path if needed
 
-export default function TotalUsersChart({
-  PatientsData,
-  DoctorsData,
-  NursesData,
-  AdminsData,
-}) {
-  const {
-    items: patients,
-    loading: patientsLoading,
-    error: patientsError,
-  } = PatientsData;
-  const {
-    items: doctors,
-    loading: doctorsLoading,
-    error: doctorsError,
-  } = DoctorsData;
-  const {
-    items: nurses,
-    loading: nursesLoading,
-    error: nursesError,
-  } = NursesData;
-  const {
-    items: admins,
-    loading: adminsLoading,
-    error: adminsError,
-  } = AdminsData;
+export default function TotalUsersChart() {
+  const totalUsers = useSelector(selectTotalUsers);
+  const totalPatients = useSelector(selectTotalPatients);
+  const totalDoctors = useSelector(selectTotalDoctors);
+  const totalNurses = useSelector(selectTotalNurses);
+  const totalAdmins = useSelector(selectTotalAdmin);
+  const totalHospitals = useSelector(selectTotalHospitals);
 
-  // Check if any data is loading
-  const isLoading =
-    patientsLoading || doctorsLoading || nursesLoading || adminsLoading;
-
-  // Check if any errors occurred
-  const hasError = patientsError || doctorsError || nursesError || adminsError;
+  const isLoading = useSelector(selectUsersLoading);
+  const hasError = useSelector(selectUsersError);
 
   // Define colors for each user type
   const colors = {
@@ -47,43 +35,46 @@ export default function TotalUsersChart({
     Doctors: "#2196F3", // Blue
     Nurses: "#FF9800", // Orange
     Admins: "#9C27B0", // Purple
+    Hospitals: "#00B8D9", // Cyan
   };
-
-  // Icons are defined directly in the userData array
 
   const userData = [
     {
       id: "Patients",
       label: "Patients",
-      value: (!patientsLoading && patients?.length) || 0,
+      value: totalPatients || 0,
       color: colors.Patients,
       icon: FaUserInjured,
     },
     {
       id: "Doctors",
       label: "Doctors",
-      value: (!doctorsLoading && doctors?.length) || 0,
+      value: totalDoctors || 0,
       color: colors.Doctors,
       icon: FaUserMd,
     },
     {
       id: "Nurses",
       label: "Nurses",
-      value: (!nursesLoading && nurses?.length) || 0,
+      value: totalNurses || 0,
       color: colors.Nurses,
       icon: FaUserNurse,
     },
     {
       id: "Admins",
       label: "Admins",
-      value: (!adminsLoading && admins?.length) || 0,
+      value: totalAdmins || 0,
       color: colors.Admins,
       icon: FaUserCog,
     },
+    {
+      id: "Hospitals",
+      label: "Hospitals",
+      value: totalHospitals || 0,
+      color: colors.Hospitals,
+      icon: FaUserCog, // You may want to use a different icon for hospitals
+    },
   ];
-
-  // Calculate total users
-  const totalUsers = userData.reduce((acc, curr) => acc + curr.value, 0);
 
   // Loading state
   if (isLoading) {
@@ -96,6 +87,7 @@ export default function TotalUsersChart({
           <Skeleton className="h-[160px] w-[160px] rounded-full" />
         </div>
         <div className="w-full grid grid-cols-2 gap-x-2 gap-y-2 mt-2">
+          <Skeleton className="h-5 w-full" />
           <Skeleton className="h-5 w-full" />
           <Skeleton className="h-5 w-full" />
           <Skeleton className="h-5 w-full" />

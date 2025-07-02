@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaCalendarAlt, FaClock, FaUserAlt, FaUserMd } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { selectAllAppointments } from "@/store/selectors"; // adjust path if needed
 
-const NextAppointments = ({ appointments }) => {
+const NextAppointments = () => {
+  const appointments = useSelector(selectAllAppointments);
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -2,13 +2,22 @@ import DataTable from "@/components/role/admin/DataTable";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllAdmins } from "@/store/slices/adminSlice";
+import {
+  selectAdminsError,
+  selectAdminsLoading,
+  selectAllAdmins,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function AdminsPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.admins);
+
+  const data = useSelector(selectAllAdmins);
+  const loading = useSelector(selectAdminsLoading);
+  const error = useSelector(selectAdminsError);
 
   useEffect(() => {
-    dispatch(fetchAllAdmins());
+    if (isEmpty(data)) dispatch(fetchAllAdmins());
   }, [dispatch]);
 
   const handleRowClick = (item) => {

@@ -22,15 +22,12 @@ import ResetPass from "@/pages/main/ResetPass";
 import NewPass from "@/pages/main/NewPass";
 import Otp from "@/pages/main/Otp";
 
-import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 
 import Community from "@/pages/main/Community/Community";
 
-import About from "@/pages/main/About";
 import SignUp from "@/pages/main/SignUp";
 import LogIn from "@/pages/main/LogIn";
-
 
 import Test from "@/pages/general/Test";
 import Register_Layout from "@/layouts/Register_Layout";
@@ -38,7 +35,7 @@ import Register_Layout from "@/layouts/Register_Layout";
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";
-
+import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 
 function App() {
   return (
@@ -69,7 +66,6 @@ function App() {
 
       <Route path="/home" element={<HomePage1 />} />
 
-
       {/* reset pass layout */}
       <Route path="/resetpass" element={<ResetPass_Layout />}>
         <Route index element={<ResetPass />} />
@@ -89,9 +85,9 @@ function App() {
         <Route path="doctors" element={<DoctorsPage />} />
         <Route path="admins" element={<AdminsPage />} />
         <Route path="diseases" element={<DiseasesPage />} />
+        <Route path="diseaseCategories" element={<DiseasesCategoriesPage />} />
         <Route path="advices" element={<AdvicesPage />} />
         <Route path="setting" element={<SettingPage />} />
-        <Route path="chat" element={<Chat />} />
       </Route>
 
       {/* nurse layout */}
