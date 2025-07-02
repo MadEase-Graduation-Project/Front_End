@@ -21,7 +21,7 @@ import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
 import Chat from "@/pages/admin/Chat";
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
-import Community from "@/pages/main/Community";
+import Community from "@/pages/main/Community/Community";
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";

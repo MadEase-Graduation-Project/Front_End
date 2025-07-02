@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/home/Header";
 import Footer from "@/components/home/Footer";
-import { loginUser } from "@/services/usersApi";
 
 const Main_Layout = () => {
   // Quick access buttons for development - can be removed in production
@@ -14,20 +13,18 @@ const Main_Layout = () => {
   // }
 
   const handleClickLogin = async () => {
-    const user = {
-      email: "abdo33awd@gmail.com",
-      password: "123456789",
-    };
-    try {
-      const data = await loginUser(user);
-      console.log(data);
-
-      // setTokenCookie(data.accessToken);
-
-      navigate("/admin/setting");
-    } catch (err) {
-      console.error(err.response?.data?.message || "Login failed");
-    }
+    // const user = {
+    //   email: "abdo33awd@gmail.com",
+    //   password: "123456789",
+    // };
+    // try {
+    //   const data = await loginUser(user);
+    //   console.log(data);
+    //   // setTokenCookie(data.accessToken);
+    //   navigate("/admin/setting");
+    // } catch (err) {
+    //   console.error(err.response?.data?.message || "Login failed");
+    // }
   };
 
   const handleDoctorClickLogin = async () => {};

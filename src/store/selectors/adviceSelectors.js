@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit";
 
 // Basic selectors
 const selectAdvicesState = (state) => state.advices;
-export const selectAllAdvices = (state) => selectAdvicesState(state).items;
+export const selectAllAdvices = (state) => selectAdvicesState(state).advices;
 export const selectAdvicesLoading = (state) =>
   selectAdvicesState(state).loading;
 export const selectAdvicesError = (state) => selectAdvicesState(state).error;
@@ -56,6 +56,16 @@ export const selectFilteredAdvices = createSelector(
 
     return filtered;
   }
+);
+
+export const selectPagination = createSelector(
+  [selectAdvicesState],
+  ({ currentPage, totalPages, hasMore, loadingMore }) => ({
+    currentPage,
+    totalPages,
+    hasMore,
+    loadingMore,
+  })
 );
 
 // Get advice by ID
