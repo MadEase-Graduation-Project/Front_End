@@ -33,7 +33,7 @@ import SignUp from "@/pages/main/SignUp";
 import LogIn from "@/pages/main/LogIn";
 
 
-import Test from "@/pages/general/test";
+import Test from "@/pages/general/Test";
 import Register_Layout from "@/layouts/Register_Layout";
 
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
