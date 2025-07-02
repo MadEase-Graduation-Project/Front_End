@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import FilterDropdown from "@/components/ui/FilterDropdown";
+import PatientDialog from "@/components/ui/PatientDialog";
 
 
 const diseases = ["Diabetes", "Hypertension", "Asthma", "Arthritis", "Heart Disease", "Cancer", "Flu"];
@@ -9,7 +9,10 @@ const names = ["Ahmed", "Mona", "Salma", "Khaled", "Youssef", "Fatma", "Nour", "
 
 const generateMockPatients = (count = 40) => {
   return Array.from({ length: count }, (_, i) => {
-    const name = `${names[Math.floor(Math.random() * names.length)]} ${names[Math.floor(Math.random() * names.length)]}`;
+    const first = names[Math.floor(Math.random() * names.length)];
+    const middle = names[Math.floor(Math.random() * names.length)];
+    const last = names[Math.floor(Math.random() * names.length)];
+    const name = `${first} ${middle} ${last}`;
     const age = Math.floor(Math.random() * 50) + 20;
     const disease = diseases[Math.floor(Math.random() * diseases.length)];
     const lastVisit = new Date(Date.now() - Math.random() * 10000000000).toISOString().split("T")[0];
@@ -19,11 +22,14 @@ const generateMockPatients = (count = 40) => {
       age,
       disease,
       lastVisit,
+      email: `${first.toLowerCase()}.${last.toLowerCase()}@hospital.com`,
+      history: "Patient has a history of chronic conditions requiring continuous monitoring.",
+      image: `https://api.dicebear.com/7.x/personas/svg?seed=${first}${last}`,
     };
   });
 };
 
-const mockPatients = generateMockPatients(40); 
+const mockPatients = generateMockPatients(40);
 
 export default function Patients() {
   const [search, setSearch] = useState("");
@@ -61,14 +67,7 @@ export default function Patients() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {filteredPatients.map((patient) => (
-            <Card key={patient.id} className="shadow-sm hover:shadow-md transition">
-              <CardContent className="space-y-2 p-4">
-                <h3 className="text-lg font-bold text-gray-800">{patient.name}</h3>
-                <p className="text-sm text-gray-600">Age: {patient.age}</p>
-                <p className="text-sm text-gray-600">Disease: {patient.disease}</p>
-                <p className="text-sm text-gray-600">Last Visit: {patient.lastVisit}</p>
-              </CardContent>
-            </Card>
+            <PatientDialog key={patient.id} patient={patient} /> // ✅ استخدام المكون المنفصل
           ))}
         </div>
       )}

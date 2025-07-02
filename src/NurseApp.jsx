@@ -4,9 +4,10 @@ import NursePatients from "@/pages/nurse/NursePatients/NursePatients";
 import ChatDoctors from "@/pages/nurse/ChatDoctors/ChatDoctors";
 import Medications from "@/pages/nurse/Medications/Medications";
 import NurseReport from "@/pages/nurse/NurseReport/NurseReport";
-import NurseProfile from "@/pages/nurse/NurseProfile/NurseProfile";
 import NurseHome from "@/pages/nurse/NurseHome/NurseHome";
 import NurseLayout from "./layouts/NurseLayout/NurseLayout";
+import Setting from "@/components/shared/Setting/Setting";
+
 
 const NurseApp = () => {
   return (
@@ -18,7 +19,7 @@ const NurseApp = () => {
         <Route path="chat" element={<ChatDoctors />} />
         <Route path="medications" element={<Medications />} />
         <Route path="reports" element={<NurseReport />} />
-        <Route path="profile" element={<NurseProfile />} />
+        <Route path="profile" element={<Setting />} />
       </Route>
     </Routes>
   );
