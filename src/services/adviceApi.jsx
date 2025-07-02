@@ -78,3 +78,23 @@ export async function deleteAdvice(id) {
     return handleApiError(error, `deleting advice ${id}`);
   }
 }
+
+// advice like
+export async function addAdviceLike(adviceId) {
+  try {
+    const response = await api.post(`/advice/${adviceId}/like`);
+    return handleApiResponse(response, "Failed to like advice");
+  } catch (error) {
+    return handleApiError(error, "liking advice");
+  }
+}
+
+// advice dislike
+export async function addAdviceDislike(adviceId) {
+  try {
+    const response = await api.post(`/advice/${adviceId}/dislike`);
+    return handleApiResponse(response, "Failed to dislike advice");
+  } catch (error) {
+    return handleApiError(error, "disliking advice");
+  }
+}

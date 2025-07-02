@@ -2,29 +2,29 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/home/Header";
 import Footer from "@/components/home/Footer";
+import { loginUser } from "@/services/signUserApi";
+import { useDispatch } from "react-redux";
+import { fetchAllPatients } from "@/store/slices/patientSlice";
 
 const Main_Layout = () => {
-  // Quick access buttons for development - can be removed in production
   const navigate = useNavigate();
-
-  // function setTokenCookie(token) {
-  //   const maxAge = 60 * 15; // 15 minutes
-  //   document.cookie = `accessToken=${token}; path=/; max-age=${maxAge}; secure; samesite=strict`;
-  // }
+  const dispatch = useDispatch();
 
   const handleClickLogin = async () => {
-    // const user = {
-    //   email: "abdo33awd@gmail.com",
-    //   password: "123456789",
-    // };
-    // try {
-    //   const data = await loginUser(user);
-    //   console.log(data);
-    //   // setTokenCookie(data.accessToken);
-    //   navigate("/admin/setting");
-    // } catch (err) {
-    //   console.error(err.response?.data?.message || "Login failed");
-    // }
+    const user = {
+      email: "abdo33awd@gmail.com",
+      password: "1234567",
+    };
+    try {
+      const data = await loginUser(user);
+      // For testing only: fetch patients after login and log them
+      dispatch(fetchAllPatients()).then((res) => {
+        console.log(res?.payload);
+      });
+      // navigate("/admin/setting");
+    } catch (err) {
+      console.error(err.response?.data?.message || "Login failed");
+    }
   };
 
   const handleDoctorClickLogin = async () => {};

@@ -23,3 +23,23 @@ export async function getAllPatients() {
     return handleApiError(error, "fetching patients");
   }
 }
+
+// get all patients by basic data for doctors and nurses
+export async function showPatients() {
+  try {
+    const response = await api.get(`/patient/all`);
+    return handleApiResponse(response, "No users found");
+  } catch (error) {
+    return handleApiError(error, "fetching patients");
+  }
+}
+
+// get one patient by id
+export async function showPatientById(id) {
+  try {
+    const response = await api.get(`/patient/${id}`);
+    return handleApiResponse(response, "this patient not found");
+  } catch (error) {
+    return handleApiError(error, "fetching patient");
+  }
+}

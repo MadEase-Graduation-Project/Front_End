@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllPatients } from "@/services/patientApi";
-import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
+import {
+  getAllPatients,
+  showPatients,
+  showPatientById,
+} from "@/services/patientApi";
+import {
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
 export const fetchAllPatients = createAsyncThunk(
   "patients/fetchPatients",
@@ -9,14 +17,42 @@ export const fetchAllPatients = createAsyncThunk(
   }
 );
 
+// Fetch all patients (basic data for doctors and nurses)
+export const fetchShowPatients = createAsyncThunk(
+  "patients/showPatients",
+  async () => {
+    return await showPatients();
+  }
+);
+
+// Fetch one patient by id
+export const fetchShowPatientById = createAsyncThunk(
+  "patients/showPatientById",
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedPatient());
+    return await showPatientById(id);
+  }
+);
+
+const initialState = {
+  patients: [],
+  showPatients: [],
+  selectedPatient: null,
+  // handling
+  loading: false,
+  error: null,
+};
+
 const patientSlice = createSlice({
   name: "patients",
-  initialState: {
-    patients: [],
-    loading: false,
-    error: null,
+  initialState,
+  reducers: {
+    clearSelectedPatient: (state) => {
+      state.selectedPatient = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPatients.pending, pendingHandler())
@@ -24,8 +60,25 @@ const patientSlice = createSlice({
         state.patients = action.payload;
         state.loading = false;
       })
-      .addCase(fetchAllPatients.rejected, rejectedHandler());
+      .addCase(fetchAllPatients.rejected, rejectedHandler())
+
+      // showPatients
+      .addCase(fetchShowPatients.pending, pendingHandler())
+      .addCase(fetchShowPatients.fulfilled, (state, action) => {
+        state.showPatients = action.payload?.patients;
+        state.loading = false;
+      })
+      .addCase(fetchShowPatients.rejected, rejectedHandler())
+
+      // showPatientById
+      .addCase(fetchShowPatientById.pending, pendingHandler())
+      .addCase(
+        fetchShowPatientById.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedPatient" })
+      )
+      .addCase(fetchShowPatientById.rejected, rejectedHandler());
   },
 });
 
+export const { clearSelectedPatient } = patientSlice.actions;
 export default patientSlice.reducer;
