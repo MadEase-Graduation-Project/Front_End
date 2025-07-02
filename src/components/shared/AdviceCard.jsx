@@ -13,7 +13,7 @@ export default function AdviceCard({
   return (
     <div
       key={advice._id}
-      className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition-transform hover:shadow-lg"
+      className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-transform hover:shadow-lg"
     >
       <img
         className="h-48 w-full object-cover"
@@ -21,7 +21,7 @@ export default function AdviceCard({
         alt={advice.title || "Medical article"}
       />
       <div className="py-3 px-6 flex-1 flex flex-col">
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           {/* <p className="text-sm font-medium text-blue-600">
                         {advice.diseasesCategoryName || "Health"}
                       </p> */}
@@ -31,7 +31,17 @@ export default function AdviceCard({
           >
             {advice.title || "Untitled Article"}
           </Link>
-          <p className="mt-3 text-base text-gray-500 line-clamp-3">
+          <p
+            className="mt-3 text-base text-gray-500 line-clamp-3"
+            style={{
+              minHeight: "72px", // 3 lines * 24px line-height (adjust as needed)
+              maxHeight: "72px",
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
             {advice.description || "No description available."}
           </p>
         </div>

@@ -1,28 +1,37 @@
-import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Search, RefreshCw } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "@/utils/objectUtils";
 import { fetchAllAdvices } from "@/store/slices/adviceSlice";
 import AdviceCard from "@/components/shared/AdviceCard";
 import {
   selectAdviceCategories,
-  selectFilteredAdvices,
+  selectPaginatedAdvices,
   selectAdvicesLoading,
-  selectAllAdvices,
+  sortedAdvices,
+  selectFilteredAdvices,
 } from "@/store/selectors/index";
 
 export default function Community() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [page, setPage] = useState(1);
+  const [showLoader, setShowLoader] = useState(false);
+  const loaderRef = useRef(null);
 
   // Use selectors to get data from Redux store
-  const advices = useSelector(selectAllAdvices);
+  const advices = useSelector(sortedAdvices);
   const loading = useSelector(selectAdvicesLoading);
   const categories = useSelector(selectAdviceCategories);
-  const filteredAdvices = useSelector((state) =>
-    selectFilteredAdvices(state, searchQuery, selectedCategory)
+  const paginatedAdvices = useSelector((state) =>
+    selectPaginatedAdvices(state, searchQuery, selectedCategory, page)
   );
+
+  // Calculate if there is more data to load
+  const hasMore = paginatedAdvices.length < useSelector((state) =>
+    selectFilteredAdvices(state, searchQuery, selectedCategory)
+  ).length;
 
   // Fetch data only once when component mounts
   useEffect(() => {
@@ -30,6 +39,35 @@ export default function Community() {
       dispatch(fetchAllAdvices());
     }
   }, [dispatch]);
+
+  // Reset page when filters/search change
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, selectedCategory]);
+
+  // Infinite scroll: load more when loaderRef is visible
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          !loading &&
+          hasMore
+        ) {
+          setShowLoader(true);
+          setTimeout(() => {
+            setPage((prev) => prev + 1);
+            setShowLoader(false);
+          }, 300); // refresh delay
+        }
+      },
+      { threshold: 1 }
+    );
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => {
+      if (loaderRef.current) observer.unobserve(loaderRef.current);
+    };
+  }, [loading, paginatedAdvices.length, hasMore]);
 
   // todo: add like and dislike
   function handelLike(e) {}
@@ -59,7 +97,7 @@ export default function Community() {
               <input
                 type="text"
                 className="block w-full pl-10 pr-3 py-3 border border-transparent rounded-md leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
-                placeholder="Search for health topics, articles, or doctors..."
+                placeholder="Search for health topics, or doctors..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -101,10 +139,7 @@ export default function Community() {
 
         {/* Articles Grid */}
         <div className="mt-12">
-          {/* <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Latest Articles
-          </h2> */}
-          {loading ? (
+          {loading && page === 1 ? (
             // Loading skeleton
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -118,7 +153,6 @@ export default function Community() {
                     <div className="w-full h-6 bg-gray-200 animate-pulse mb-3"></div>
                     <div className="w-full h-4 bg-gray-200 animate-pulse mb-2"></div>
                     <div className="w-2/3 h-4 bg-gray-200 animate-pulse mb-6"></div>
-
                     <div className="flex items-center mt-6">
                       <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
                       <div className="ml-3">
@@ -130,7 +164,7 @@ export default function Community() {
                 </div>
               ))}
             </div>
-          ) : filteredAdvices.length === 0 ? (
+          ) : paginatedAdvices.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
                 No articles found matching your criteria. Try adjusting your
@@ -138,19 +172,27 @@ export default function Community() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {filteredAdvices.map((advice) => (
-                <div key={advice._id}>
-                  <AdviceCard
-                    advice={advice}
-                    selectedCategory={selectedCategory}
-                    link={"/community"}
-                    handelLike={handelLike}
-                    handelDisLike={handelDisLike}
-                  />
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {paginatedAdvices.map((advice) => (
+                  <div key={advice._id}>
+                    <AdviceCard
+                      advice={advice}
+                      selectedCategory={selectedCategory}
+                      link={"/community"}
+                      handelLike={handelLike}
+                      handelDisLike={handelDisLike}
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* Loader/Refresh icon for infinite scroll */}
+              <div ref={loaderRef} className="flex justify-center py-8">
+                {showLoader && hasMore ? (
+                  <RefreshCw className="animate-spin h-4 w-4 text-blue-600" />
+                ) : null}
+              </div>
+            </>
           )}
         </div>
       </div>
