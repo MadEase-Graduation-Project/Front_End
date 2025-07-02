@@ -8,7 +8,7 @@ import FloatingInput from "../../components/patientComps/register/FloatingInput"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-import { registerUser, loginUser } from "@/services/usersApi";
+import { registerUser, loginUser } from "@/services/userApi";
 import { usePopup } from "@/contexts/PopupContext";
 
 export default function SignUp() {
