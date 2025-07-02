@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllUsers, getMyData, getOneUser } from "@/services/userApi";
-import { deleteUser, updateUserData } from "@/services/editUserApi";
+import {
+  deleteUser,
+  updateUserData,
+  changeUserRole,
+  rateUser,
+} from "@/services/editUserApi";
 import {
   fulfilledHandler,
   pendingHandler,
@@ -34,6 +39,20 @@ export const updateData = createAsyncThunk(
   "users/updateUserData",
   async (userData) => {
     return await updateUserData(userData);
+  }
+);
+
+export const changeUserRoleThunk = createAsyncThunk(
+  "users/changeUserRole",
+  async ({ userId, newRole }) => {
+    return await changeUserRole(userId, { newRole });
+  }
+);
+
+export const rateUserThunk = createAsyncThunk(
+  "users/rateUser",
+  async ({ userId, rating }) => {
+    return await rateUser({ userId, rating });
   }
 );
 
@@ -71,9 +90,34 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // fetch all users
-      .addCase(fetchAllUsers.pending, pendingHandler())
-      .addCase(fetchAllUsers.fulfilled, fulfilledHandler({ listKey: "users" }))
-      .addCase(fetchAllUsers.rejected, rejectedHandler())
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.loadingMore = true;
+        state.error = null;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        const {
+          data,
+          totalUsers,
+          totalAdmin,
+          totalDoctors,
+          totalPatients,
+          totalNurses,
+          totalHospitals,
+        } = action.payload;
+
+        state.users = data;
+        state.loading = false;
+        state.totalUsers = totalUsers;
+        state.totalAdmin = totalAdmin;
+        state.totalDoctors = totalDoctors;
+        state.totalPatients = totalPatients;
+        state.totalNurses = totalNurses;
+        state.totalHospitals = totalHospitals;
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       // fetch user by id
       .addCase(fetchUserById.pending, pendingHandler())
       .addCase(
@@ -95,7 +139,15 @@ const userSlice = createSlice({
       // update user data
       .addCase(updateData.pending, pendingHandler())
       .addCase(updateData.fulfilled, fulfilledHandler())
-      .addCase(updateData.rejected, rejectedHandler());
+      .addCase(updateData.rejected, rejectedHandler())
+      // change user role
+      .addCase(changeUserRoleThunk.pending, pendingHandler())
+      .addCase(changeUserRoleThunk.fulfilled, fulfilledHandler())
+      .addCase(changeUserRoleThunk.rejected, rejectedHandler())
+      // rate user
+      .addCase(rateUserThunk.pending, pendingHandler())
+      .addCase(rateUserThunk.fulfilled, fulfilledHandler())
+      .addCase(rateUserThunk.rejected, rejectedHandler());
   },
 });
 

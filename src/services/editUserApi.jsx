@@ -38,3 +38,25 @@ export async function deleteUser(userId) {
     return handleApiError(error, "deleting user");
   }
 }
+
+// to change any user role
+export async function changeUserRole(userId, { newRole }) {
+  try {
+    const response = await api.patch(`${BASE_ENDPOINT}/role/${userId}`, {
+      newRole,
+    });
+    return handleApiResponse(response, "Failed to update user avatar");
+  } catch (error) {
+    return handleApiError(error, "updating user avatar");
+  }
+}
+
+// to rate hospital or doctor 1 - 5
+export async function rateUser({ userId, rating }) {
+  try {
+    const response = await api.patch(`/rate`, { userId, rating });
+    return handleApiResponse(response, "Failed to update user rating");
+  } catch (error) {
+    return handleApiError(error, "updating user rating");
+  }
+}
