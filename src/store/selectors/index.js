@@ -4,6 +4,17 @@ export * from './diseaseSelectors';
 export * from './patientSelectors';
 export * from './doctorSelectors';
 export * from './appointmentSelectors';
+export * from './adsSelectors';
+export * from './adminSelectors';
+export * from './diagnosisSelectors';
+export * from './diseasesCategorySelectors';
+export * from './hospitalSelectors';
+export * from './nurseSelectors';
+export * from './otpSelectors';
+export * from './signSelectors';
+export * from './treatmentSelectors';
+export * from './userSelectors';
+
 
 // Add any combined selectors here
 import { createSelector } from '@reduxjs/toolkit';
