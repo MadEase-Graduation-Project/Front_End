@@ -12,7 +12,6 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from "@/services/usersApi";
 
 const LogInPage = () => {
   const navigate = useNavigate();
@@ -37,7 +36,9 @@ const LogInPage = () => {
 
       if (isValid) {
         if (currentIndex < fieldOrder.length - 1) {
-          const nextInput = document.getElementById(fieldOrder[currentIndex + 1]);
+          const nextInput = document.getElementById(
+            fieldOrder[currentIndex + 1]
+          );
           if (nextInput) nextInput.focus();
         } else {
           document.querySelector("form").requestSubmit();
@@ -47,16 +48,15 @@ const LogInPage = () => {
   };
 
   const onSubmit = async (data) => {
-    const response = await loginUser(data);
-    console.log(response);
-    const token = response.token;
-    localStorage.setItem("token", token);
-
-    if (token) {
-      navigate(`/admin/overview`);
-    } else {
-      setActivePopup(true);
-    }
+    // const response = await loginUser(data);
+    // console.log(response);
+    // const token = response.token;
+    // localStorage.setItem("token", token);
+    // if (token) {
+    //   navigate(`/admin/overview`);
+    // } else {
+    //   setActivePopup(true);
+    // }
   };
 
   return (
@@ -133,7 +133,9 @@ const LogInPage = () => {
               )}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
 
             {/* Password */}
@@ -170,7 +172,9 @@ const LogInPage = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 

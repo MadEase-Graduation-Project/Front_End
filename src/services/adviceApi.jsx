@@ -13,9 +13,9 @@ const BASE_ENDPOINT = "/advices";
  * Gets all advices
  * @returns {Promise<Array>} List of advices
  */
-export async function getAllAdvices() {
+export async function getAllAdvices({ page = 1 } = {}) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
+    const response = await api.get(BASE_ENDPOINT, { params: { page } });
     return handleApiResponse(response, "No advices found");
   } catch (error) {
     return handleApiError(error, "fetching advices");

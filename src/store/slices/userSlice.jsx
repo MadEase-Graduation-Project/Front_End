@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getAllUsers, getMyData, getOneUser } from "@/services/userApi";
+import { deleteUser, updateUserData } from "@/services/editUserApi";
 import {
-  deleteUser,
-  getAllUsers,
-  getOneUser,
-  getUserData,
-  updateUserData,
-} from "@/services/usersApi";
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
@@ -14,114 +14,90 @@ export const fetchAllUsers = createAsyncThunk(
   }
 );
 
-export const fetchUserData = createAsyncThunk(
-  "users/fetchUserData",
-  async () => {
-    return await getUserData();
-  }
-);
+export const fetchMYData = createAsyncThunk("users/fetchMyData", async () => {
+  return await getMyData();
+});
 
 export const fetchUserById = createAsyncThunk(
   "users/fetchUserById",
-  async (id) => {
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedUser());
     return await getOneUser(id);
   }
 );
 
 export const removeUser = createAsyncThunk("users/removeUser", async (id) => {
-  const response = await deleteUser(id);
-  return response;
+  return await deleteUser(id);
 });
 
 export const updateData = createAsyncThunk(
   "users/updateUserData",
   async (userData) => {
-    const response = await updateUserData(userData);
-    return response;
+    return await updateUserData(userData);
   }
 );
 
 const userSlice = createSlice({
   name: "users",
   initialState: {
-    items: [],
-    details: {},
+    // data
+    users: [],
+    myDetails: {},
+    userDetails: {},
+    // counts
+    totalUsers: 0,
+    totalAdmin: 0,
+    totalDoctors: 0,
+    totalPatients: 0,
+    totalNurses: 0,
+    totalHospitals: 0,
+    // loading
     loading: false,
+    // error
     error: null,
   },
   reducers: {
     clearSelectedUser: (state) => {
-      state.details = {};
+      state.userDetails = {};
+      state.loading = false;
+      state.error = null;
+    },
+    clearMyDetails: (state) => {
+      state.myDetails = {};
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       // fetch all users
-      .addCase(fetchAllUsers.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAllUsers.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAllUsers.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAllUsers.pending, pendingHandler())
+      .addCase(fetchAllUsers.fulfilled, fulfilledHandler({ listKey: "users" }))
+      .addCase(fetchAllUsers.rejected, rejectedHandler())
       // fetch user by id
-      .addCase(fetchUserById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchUserById.fulfilled, (state, action) => {
-        state.details = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchUserById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchUserById.pending, pendingHandler())
+      .addCase(
+        fetchUserById.fulfilled,
+        fulfilledHandler({ detailsKey: "userDetails" })
+      )
+      .addCase(fetchUserById.rejected, rejectedHandler())
       // fetch user data
-      .addCase(fetchUserData.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.details = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchMYData.pending, pendingHandler())
+      .addCase(
+        fetchMYData.fulfilled,
+        fulfilledHandler({ detailsKey: "myDetails" })
+      )
+      .addCase(fetchMYData.rejected, rejectedHandler())
       // remove user
-      .addCase(removeUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(removeUser.fulfilled, (state) => {
-        state.loading = false;
-        state.details = {};
-      })
-      .addCase(removeUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(removeUser.pending, pendingHandler())
+      .addCase(removeUser.fulfilled, fulfilledHandler())
+      .addCase(removeUser.rejected, rejectedHandler())
       // update user data
-      .addCase(updateData.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateData.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(updateData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(updateData.pending, pendingHandler())
+      .addCase(updateData.fulfilled, fulfilledHandler())
+      .addCase(updateData.rejected, rejectedHandler());
   },
 });
 
-export const { clearSelectedUser } = userSlice.actions;
+export const { clearSelectedUser, clearMyDetails } = userSlice.actions;
 export default userSlice.reducer;

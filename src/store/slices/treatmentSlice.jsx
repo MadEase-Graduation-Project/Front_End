@@ -6,147 +6,117 @@ import {
   editTreatment,
   deleteTreatment,
 } from "@/services/treatmentsApi";
+import {
+  fulfilledPaginationHandler,
+  pendingPaginationHandler,
+  rejectedPaginationHandler,
+} from "@/utils/paginationCasesHandlersUtils";
+import {
+  fulfilledHandler,
+  pendingHandler,
+  rejectedHandler,
+} from "@/utils/casesHandlersUtils";
 
 export const fetchAllTreatments = createAsyncThunk(
   "treatments/fetchAllTreatments",
-  async () => {
-    return await getAllTreatments();
+  async ({ page = 1 } = {}) => {
+    return await getAllTreatments({ page });
   }
 );
 
 export const fetchTreatmentById = createAsyncThunk(
   "treatments/fetchTreatmentById",
-  async (id) => {
+  async (id, { dispatch }) => {
+    dispatch(clearSelectedTreatment());
     return await showTreatment(id);
   }
 );
 
 export const createTreatment = createAsyncThunk(
   "treatments/createTreatment",
-  async (treatmentData, { dispatch }) => {
-    const response = await addTreatment(treatmentData);
-    // Refresh the treatments list after adding
-    if (response) {
-      dispatch(fetchAllTreatments());
-    }
-    return response;
+  async (treatmentData) => {
+    return await addTreatment(treatmentData);
   }
 );
 
 export const updateTreatment = createAsyncThunk(
   "treatments/updateTreatment",
-  async ({ id, treatmentData }, { dispatch }) => {
-    const response = await editTreatment(id, treatmentData);
-    // Refresh the treatments list after updating
-    if (response) {
-      dispatch(fetchAllTreatments());
-    }
-    return response;
+  async ({ id, treatmentData }) => {
+    return await editTreatment(id, treatmentData);
   }
 );
 
 export const removeTreatment = createAsyncThunk(
   "treatments/removeTreatment",
-  async (id, { dispatch }) => {
-    const response = await deleteTreatment(id);
-    // Refresh the treatments list after deleting
-    if (response) {
-      dispatch(fetchAllTreatments());
-    }
-    return response;
+  async (id) => {
+    return await deleteTreatment(id);
   }
 );
 
+const initialState = {
+  // data
+  treatments: [],
+  selectedTreatment: {},
+  // counts
+  totalTreatments: 0,
+  // pagination
+  totalPages: 1,
+  currentPage: 1,
+  hasMore: true,
+  // loading
+  loading: false,
+  loadingMore: false,
+  // error
+  error: null,
+};
+
 const treatmentSlice = createSlice({
   name: "treatments",
-  initialState: {
-    items: [],
-    selectedTreatment: {},
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     clearSelectedTreatment: (state) => {
       state.selectedTreatment = {};
+      state.loading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       // Fetch all treatments
-      .addCase(fetchAllTreatments.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAllTreatments.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAllTreatments.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchAllTreatments.pending, pendingPaginationHandler())
+      .addCase(
+        fetchAllTreatments.fulfilled,
+        fulfilledPaginationHandler({
+          listKey: "treatments",
+          totalsMap: {
+            totalItems: "totalTreatments",
+          },
+        })
+      )
+      .addCase(fetchAllTreatments.rejected, rejectedPaginationHandler())
 
       // Fetch treatment by ID
-      .addCase(fetchTreatmentById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchTreatmentById.fulfilled, (state, action) => {
-        state.selectedTreatment = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchTreatmentById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(fetchTreatmentById.pending, pendingHandler())
+      .addCase(
+        fetchTreatmentById.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedTreatment" })
+      )
+      .addCase(fetchTreatmentById.rejected, rejectedHandler())
 
       // Create treatment
-      .addCase(createTreatment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createTreatment.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(createTreatment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(createTreatment.pending, pendingHandler())
+      .addCase(createTreatment.fulfilled, fulfilledHandler())
+      .addCase(createTreatment.rejected, rejectedHandler())
 
       // Update treatment
-      .addCase(updateTreatment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateTreatment.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update the selected treatment if it's the one being edited
-        if (
-          state.selectedTreatment &&
-          state.selectedTreatment._id === action.payload?._id
-        ) {
-          state.selectedTreatment = action.payload;
-        }
-      })
-      .addCase(updateTreatment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(updateTreatment.pending, pendingHandler())
+      .addCase(updateTreatment.fulfilled, fulfilledHandler())
+      .addCase(updateTreatment.rejected, rejectedHandler())
 
       // Remove treatment
-      .addCase(removeTreatment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(removeTreatment.fulfilled, (state) => {
-        state.loading = false;
-        // Clear selected treatment if it was deleted
-        state.selectedTreatment = {};
-      })
-      .addCase(removeTreatment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(removeTreatment.pending, pendingHandler())
+      .addCase(removeTreatment.fulfilled, fulfilledHandler())
+      .addCase(removeTreatment.rejected, rejectedHandler());
   },
 });
 

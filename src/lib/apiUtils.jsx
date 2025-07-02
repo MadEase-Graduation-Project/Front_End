@@ -4,18 +4,17 @@
  */
 
 /**
- ** Handles API response and extracts data
+ ** Handles API response
  * @param {Object} response - Axios response object
  * @param {string} errorMessage - Custom error message
  * @returns {Object|Array} Response data
  * @throws {Error} If data is not available
  */
 export const handleApiResponse = (response, errorMessage) => {
-  if (!response.data?.data) {
+  if (!response?.data) {
     throw new Error(errorMessage || "Invalid response from server");
   }
-
-  return response.data.data;
+  return response.data;
 };
 
 /**

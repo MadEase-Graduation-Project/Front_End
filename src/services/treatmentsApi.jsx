@@ -13,9 +13,9 @@ const BASE_ENDPOINT = "/treatments";
  * Gets all treatments
  * @returns {Promise<Array>} List of treatments
  */
-export async function getAllTreatments() {
+export async function getAllTreatments({ page = 1 } = {}) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
+    const response = await api.get(BASE_ENDPOINT, { params: { page } });
     return handleApiResponse(response, "No treatments found");
   } catch (error) {
     return handleApiError(error, "fetching treatments");
@@ -29,15 +29,8 @@ export async function getAllTreatments() {
  */
 export async function showTreatment(id) {
   try {
-    const response = await api.get(BASE_ENDPOINT);
-    const data = handleApiResponse(response, "No treatments found");
-
-    const treatment = data.find((treatment) => treatment._id === id);
-    if (!treatment) {
-      throw new Error(`Treatment with id ${id} not found`);
-    }
-
-    return treatment;
+    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+    return handleApiResponse(response, "this treatment not found");
   } catch (error) {
     return handleApiError(error, `fetching treatment ${id}`);
   }

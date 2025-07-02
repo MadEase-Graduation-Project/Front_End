@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllPatients } from "@/services/usersApi";
+import { getAllPatients } from "@/services/patientApi";
+import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
 
 export const fetchAllPatients = createAsyncThunk(
   "patients/fetchPatients",
@@ -11,25 +12,19 @@ export const fetchAllPatients = createAsyncThunk(
 const patientSlice = createSlice({
   name: "patients",
   initialState: {
-    items: [],
+    patients: [],
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllPatients.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(fetchAllPatients.pending, pendingHandler())
       .addCase(fetchAllPatients.fulfilled, (state, action) => {
-        state.items = action.payload;
+        state.patients = action.payload;
         state.loading = false;
       })
-      .addCase(fetchAllPatients.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(fetchAllPatients.rejected, rejectedHandler());
   },
 });
 

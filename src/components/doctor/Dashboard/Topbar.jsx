@@ -16,8 +16,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
     dispatch(
       fetchUserById({
         id: "67ca34e0f2d6e1f39d3e1759",
-        token:
-        localStorage.getItem("doctorToken"),
+        token: localStorage.getItem("doctorToken"),
       })
     );
   }, [dispatch]);
@@ -26,7 +25,6 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
 
   useEffect(() => {
     if (details[0]) {

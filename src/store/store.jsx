@@ -9,6 +9,9 @@ import patientReducer from "@/store/slices/patientSlice";
 import doctorReducer from "@/store/slices/doctorSlice";
 import nurseReducer from "@/store/slices/nurseSlice";
 import adminReducer from "@/store/slices/adminSlice";
+import hospitalReducer from "@/store/slices/hospitalSlice";
+import signReducer from "@/store/slices/signSlice";
+import otpReducer from "@/store/slices/otpSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +21,9 @@ export const store = configureStore({
     doctors: doctorReducer,
     nurses: nurseReducer,
     admins: adminReducer,
+    hospitals: hospitalReducer,
+    sign: signReducer,
+    otp: otpReducer,
     // --------------------------------
     diseases: diseaseReducer,
     diseasesCategories: diseaseCategoryReducer,
