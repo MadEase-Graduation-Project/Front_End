@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "@/components/home/Header";
 import Footer from "@/components/home/Footer";
 import { loginUser } from "@/services/signUserApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchAllPatients } from "@/store/slices/patientSlice";
 
 const Main_Layout = () => {
