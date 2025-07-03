@@ -48,7 +48,7 @@ const signSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.role = action.payload.data?.Role;
+        state.role = action.payload?.Role;
         state.error = null;
       })
       .addCase(login.rejected, (state, action) => {

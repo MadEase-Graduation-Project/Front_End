@@ -6,14 +6,23 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 
 import { usePopup } from "@/contexts/PopupContext";
+import { login } from "@/store/slices/signSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectSignError,
+  selectSignLoading,
+  selectSignRole,
+} from "@/store/selectors";
 
 export default function LogIn() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isActivePopup, setActivePopup } = usePopup();
   const [hasLoginError, setHasLoginError] = useState(false);
@@ -27,6 +36,37 @@ export default function LogIn() {
     clearErrors,
   } = useForm({ mode: "onTouched" });
 
+  const role = useSelector(selectSignRole);
+  const loading = useSelector(selectSignLoading);
+  const error = useSelector(selectSignError);
+
+  useEffect(() => {
+    if (error) {
+      setActivePopup(true);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!role) return;
+    switch (role) {
+      case "Patient":
+        navigate("/home");
+        break;
+      case "Admin":
+        navigate("/admin/overview");
+        break;
+      case "Nurse":
+        navigate("/nurse/dashboard");
+        break;
+      case "Doctor":
+        navigate("/doctor");
+        break;
+      default:
+        navigate("/");
+        break;
+    }
+  }, [role, navigate]);
+
   const [showPassword, setShowPassword] = useState(false);
   const fieldOrder = ["email", "password"];
 
@@ -38,6 +78,7 @@ export default function LogIn() {
       return () => clearTimeout(timer); // Cleanup
     }
   }, [isActivePopup]);
+
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -57,45 +98,15 @@ export default function LogIn() {
     }
   };
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     const response = await loginUser(data);
-  //     console.log("Login response:", response);
-
-  //     if (!response.accessToken) {
-  //       setHasLoginError(true);
-  //       setActivePopup(true);
-  //       return;
-  //     }
-
-  //     const role = response.Role;
-  //     localStorage.setItem("accessToken", response.accessToken);
-  //     localStorage.setItem("userRole", role);
-
-  //     // 🌟 Navigate based on role
-  //     switch (role) {
-  //       case "Patient":
-  //         navigate("/home");
-  //         break;
-  //       case "Admin":
-  //         navigate("/admin/overview");
-  //         break;
-  //       // case "Nurse":
-  //       //   navigate("/nurse/dashboard");
-  //       //   break;
-  //       case "Doctor":
-  //         navigate("/doctor");
-  //         break;
-  //       default:
-  //         console.warn("Unknown role");
-  //         navigate("/");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login error:", error);
-  //     setHasLoginError(true);
-  //     setActivePopup(true);
-  //   }
-  // };
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(login(data)).unwrap();
+    } catch (error) {
+      console.error("Login error:", error);
+      setHasLoginError(true);
+      setActivePopup(true);
+    }
+  };
 
   return (
     <form

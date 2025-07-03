@@ -73,7 +73,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
               <DropdownMenuItem
                 className="cursor-pointer text-red-600 focus:text-red-600"
                 onClick={() => {
-                  navigate("/");
+                  navigate("/register/login");
                 }}
               >
                 <FiLogOut className="mr-2" />

@@ -287,64 +287,71 @@ export default function ProfileInfo({ details, loading }) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-lg px-4 py-6 sm:p-8 flex flex-col gap-8">
       {/* Profile Avatar Section */}
-      <div className="flex justify-center mb-8">
-        <button
-          className="relative group"
-          onClick={() => setShowImageModal(true)}
-        >
-          <Avatar className="w-32 h-32 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300">
-            <AvatarImage src={editedValues.ImgUrl} alt="User avatar" />
-            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-2xl font-bold">
-              {editedValues.name?.charAt(0)?.toUpperCase() || "U"}
-            </AvatarFallback>
-          </Avatar>
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-full transition-all duration-300 flex items-center justify-center">
-            <Camera
-              size={28}
-              className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
+        <div className="flex-shrink-0 flex flex-col items-center">
+          <button
+            className="relative group"
+            onClick={() => setShowImageModal(true)}
+            aria-label="Edit profile image"
+          >
+            <Avatar className="w-28 h-28 sm:w-32 sm:h-32 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300">
+              <AvatarImage src={editedValues.ImgUrl} alt="User avatar" />
+              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-2xl font-bold">
+                {editedValues.name?.charAt(0)?.toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-full transition-all duration-300 flex items-center justify-center">
+              <Camera
+                size={28}
+                className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              />
+            </div>
+          </button>
+          <span className="mt-2 text-xs text-gray-400">Click to change</span>
+        </div>
+        <div className="flex-1 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputText
+              type="text"
+              label="Full Name"
+              value={editedValues.name}
+              onChange={handleInputChange("name")}
+              placeholder="Enter your full name"
+              icon={User}
+              required
+              className="mb-0"
+            />
+
+            <InputText
+              type="tel"
+              label="Phone Number"
+              value={editedValues.phone}
+              onChange={handleInputChange("phone")}
+              placeholder="Enter your phone number"
+              icon={Phone}
+              className="mb-0"
+            />
+
+            <InputText
+              type="text"
+              label="City"
+              value={editedValues.city}
+              onChange={handleInputChange("city")}
+              placeholder="Enter your city"
+              icon={MapPin}
+              className="sm:col-span-2 mb-0"
             />
           </div>
-        </button>
-      </div>
-
-      {/* Profile Form */}
-      <div className="space-y-2">
-        <InputText
-          type="text"
-          label="Full Name"
-          value={editedValues.name}
-          onChange={handleInputChange("name")}
-          placeholder="Enter your full name"
-          icon={User}
-          required
-        />
-
-        <InputText
-          type="tel"
-          label="Phone Number"
-          value={editedValues.phone}
-          onChange={handleInputChange("phone")}
-          placeholder="Enter your phone number"
-          icon={Phone}
-        />
-
-        <InputText
-          type="text"
-          label="City"
-          value={editedValues.city}
-          onChange={handleInputChange("city")}
-          placeholder="Enter your city"
-          icon={MapPin}
-        />
+        </div>
       </div>
 
       {/* Action Button */}
-      <div className="flex justify-center mt-8">
+      <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-4 mt-4">
         <button
           className={`
-            px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg
+            w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg
             ${
               isSaving
                 ? "bg-gray-400 cursor-not-allowed"
@@ -373,7 +380,6 @@ export default function ProfileInfo({ details, loading }) {
         onImageUrlChange={(e) => handleInputChange("ImgUrl")(e)}
         onSave={() => {
           // Image URL is already updated through onImageUrlChange
-          // You can add additional logic here if needed
         }}
       />
     </div>
