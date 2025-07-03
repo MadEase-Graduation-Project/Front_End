@@ -1,4 +1,5 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useSelector } from "react-redux";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -7,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useState, useMemo } from "react";
+import { selectAllAppointments } from "@/store/selectors"; // adjust path if needed
 
 const months = [
   "Jan",
@@ -25,7 +27,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export default function ChartBar({ appointments }) {
+export default function ChartBar() {
+  const appointments = useSelector(selectAllAppointments);
   const [chartType, setChartType] = useState("day");
   // Process days data
   const daysData = useMemo(() => {

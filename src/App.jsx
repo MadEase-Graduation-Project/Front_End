@@ -1,10 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "@/pages/main/HomePage";
 import Main_Layout from "@/layouts/Main_Layout";
-import HomePage1 from "./pages/general/HomePage1";
-import LogInPage from "./pages/general/LogInPage";
-import SignUpPage from "./pages/general/SignUpPage";
-import ResetPassPage from "./pages/general/ResetPassPage";
+import HomePage from "@/pages/main/HomePage";
+
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
@@ -19,20 +16,43 @@ import { Messages } from "@/pages/doctor/Messages";
 import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
-import Chat from "@/pages/admin/Chat";
+
+import ResetPass_Layout from "@/layouts/ResetPass_Layout";
+import ResetPass from "@/pages/main/ResetPass";
+import NewPass from "@/pages/main/NewPass";
+import Otp from "@/pages/main/Otp";
+
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
+
 import Community from "@/pages/main/Community/Community";
+
+import SignUp from "@/pages/main/SignUp";
+import LogIn from "@/pages/main/LogIn";
+import Landing_Layout from "@/layouts/Landing_Layout";
+import Home from "@/pages/main/Home";
+import Test from "@/pages/general/Test";
+import Register_Layout from "@/layouts/Register_Layout";
+
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";
+import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 
 function App() {
   return (
     <Routes>
       {/* Main layout */}
-      <Route path="/" element={<Main_Layout />}>
+      <Route path="/" element={<Landing_Layout />}>
+        <Route index element={<Home />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
+      </Route>
+
+      {/* Register layout */}
+
+      <Route path="/register" element={<Register_Layout />}>
+        <Route index element={<SignUp />} />
+        <Route path="login" element={<LogIn />} />
       </Route>
 
       {/* doctor layout */}
@@ -44,10 +64,16 @@ function App() {
         <Route path="advice" element={<Advice />} />
       </Route>
 
-      <Route path="/home" element={<HomePage1 />} />
-      <Route path="/login" element={<LogInPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/resetpass" element={<ResetPassPage />} />
+      {/* reset pass layout */}
+      <Route path="/resetpass" element={<ResetPass_Layout />}>
+        <Route index element={<ResetPass />} />
+        <Route path="new" element={<NewPass />} />
+        <Route path="otp" element={<Otp />} />
+      </Route>
+
+      <Route path="/test" element={<Test />} />
+      {/* children (pages that use this layout) like down */}
+      {/* <Route index element={<Home/>}/> */}
 
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
@@ -57,9 +83,9 @@ function App() {
         <Route path="doctors" element={<DoctorsPage />} />
         <Route path="admins" element={<AdminsPage />} />
         <Route path="diseases" element={<DiseasesPage />} />
+        <Route path="diseaseCategories" element={<DiseasesCategoriesPage />} />
         <Route path="advices" element={<AdvicesPage />} />
         <Route path="setting" element={<SettingPage />} />
-        <Route path="chat" element={<Chat />} />
       </Route>
 
       {/* nurse layout */}

@@ -5,10 +5,19 @@ import { fetchAllPatients } from "@/store/slices/patientSlice";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { Settings } from "lucide-react";
 import FilterColumns from "@/components/role/admin/FilterColumns";
+import {
+  selectAllPatients,
+  selectPatientsError,
+  selectPatientsLoading,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function PatientsPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.patients);
+
+  const data = useSelector(selectAllPatients);
+  const loading = useSelector(selectPatientsLoading);
+  const error = useSelector(selectPatientsError);
 
   // State for dialogs
   // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -18,7 +27,7 @@ export default function PatientsPage() {
   // const [patientToEdit, setPatientToEdit] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchAllPatients());
+    if (isEmpty(data)) dispatch(fetchAllPatients());
   }, [dispatch]);
 
   const handleRowClick = (item) => {

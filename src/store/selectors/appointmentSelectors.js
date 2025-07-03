@@ -10,6 +10,8 @@ export const selectAppointmentsError = (state) =>
   selectAppointmentsState(state).error;
 export const selectSelectedAppointment = (state) =>
   selectAppointmentsState(state).selectedAppointment;
+export const selectAppointmentsCount = (state) =>
+  selectAppointmentsState(state).totalAppointments;
 
 // // Memoized selectors
 // export const selectFilteredAppointments = createSelector(

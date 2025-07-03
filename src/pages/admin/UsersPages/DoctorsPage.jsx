@@ -4,13 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllDoctors } from "@/store/slices/doctorSlice";
 import FilterColumns from "@/components/role/admin/FilterColumns";
 import { Settings } from "lucide-react";
+import {
+  selectAllDoctors,
+  selectDoctorsError,
+  selectDoctorsLoading,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function DoctorsPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.doctors);
+
+  const data = useSelector(selectAllDoctors);
+  const loading = useSelector(selectDoctorsLoading);
+  const error = useSelector(selectDoctorsError);
 
   useEffect(() => {
-    dispatch(fetchAllDoctors());
+    if (isEmpty(data)) dispatch(fetchAllDoctors());
   }, [dispatch]);
   const handleRowClick = (item) => {
     console.log("Row clicked:", item);

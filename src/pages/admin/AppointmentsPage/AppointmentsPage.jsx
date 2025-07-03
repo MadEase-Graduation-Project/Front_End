@@ -9,10 +9,19 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Settings } from "lucide-react";
 import FilterColumns from "@/components/role/admin/FilterColumns";
+import {
+  selectAllAppointments,
+  selectAppointmentsError,
+  selectAppointmentsLoading,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function AppointmentsPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.appointments);
+
+  const data = useSelector(selectAllAppointments);
+  const loading = useSelector(selectAppointmentsLoading);
+  const error = useSelector(selectAppointmentsError);
 
   // State for dialogs
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -29,7 +38,7 @@ export default function AppointmentsPage() {
   // };
 
   useEffect(() => {
-    dispatch(fetchAppointments());
+    if (isEmpty(data)) dispatch(fetchAppointments());
   }, [dispatch]);
 
   const handleRowClick = (item) => {

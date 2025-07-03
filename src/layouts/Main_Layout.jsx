@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import Header from "@/components/home/Header";
+import NavBar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
 import { loginUser } from "@/services/signUserApi";
 import { useDispatch } from "react-redux";
@@ -31,7 +31,7 @@ const Main_Layout = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <NavBar />
 
       <main className="flex-grow">
         <Outlet />

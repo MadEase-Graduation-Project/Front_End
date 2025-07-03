@@ -13,13 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { selectMyDetails } from "@/store/selectors";
 
 export default function Header({ isCollapsed, setIsCollapsed }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { details: userData } = useSelector((state) => state.users);
 
-  // Remove console.log in production
+  const userData = useSelector(selectMyDetails);
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
               <DropdownMenuItem
                 className="cursor-pointer text-red-600 focus:text-red-600"
                 onClick={() => {
-                  navigate("/");
+                  navigate("/register/login");
                 }}
               >
                 <FiLogOut className="mr-2" />
