@@ -6,7 +6,6 @@ import DividerText from "../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from "@/services/userApi";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -101,12 +100,12 @@ export default function LogIn() {
   return (
     <form
       className="w-full h-auto flex items-center justify-center relative"
-      onSubmit={handleSubmit(onSubmit)}
+      // onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-3/4 flex flex-col justify-start gap-[5px]">
         <TopReg
           regtitle="Welcome Back!!"
-          regnote="Don't have an account?"
+          regnote="don't have an account?"
           reg="Sign up"
           dest="/register"
         />

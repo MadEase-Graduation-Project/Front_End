@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Main_Layout from "@/layouts/Main_Layout";
 import HomePage from "@/pages/main/HomePage";
-import HomePage1 from "@/pages/general/HomePage1";
+
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
@@ -28,7 +28,8 @@ import Community from "@/pages/main/Community/Community";
 
 import SignUp from "@/pages/main/SignUp";
 import LogIn from "@/pages/main/LogIn";
-
+import Landing_Layout from "@/layouts/Landing_Layout";
+import Home from "@/pages/main/Home";
 import Test from "@/pages/general/Test";
 import Register_Layout from "@/layouts/Register_Layout";
 
@@ -41,9 +42,8 @@ function App() {
   return (
     <Routes>
       {/* Main layout */}
-      <Route path="/" element={<Main_Layout />}>
-        <Route index element={<HomePage />} />
-
+      <Route path="/" element={<Landing_Layout />}>
+        <Route index element={<Home />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
       </Route>
@@ -63,8 +63,6 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
-
-      <Route path="/home" element={<HomePage1 />} />
 
       {/* reset pass layout */}
       <Route path="/resetpass" element={<ResetPass_Layout />}>
