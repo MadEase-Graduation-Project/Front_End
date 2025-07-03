@@ -8,18 +8,30 @@ import {
   DropdownMenuSeparator 
 } from "@/components/ui/dropdown-menu";
 import { DollarSign, LogOut, PoundSterlingIcon, Settings, User } from "lucide-react";
-import femaleDoctorAvatar from "@/assets/doctor-F.png";
+import DoctorAvatar from "@/assets/doctor-M.png";
 
-export function UserAvatar({name , email}) {
+export function UserAvatar({name , gender, email}) {
   const navigate = useNavigate(); // Initialize navigate function
+  const handleLogout = () => {
+    navigate("/register/login");
+  };
+  if (gender === "Female") {
+    DoctorAvatar = "src\assets\doctor-F.png";
+  }
+  if (gender === "Male") {
+    DoctorAvatar = "src\assets\doctor-M.png";
+  }
+
+  console.log(DoctorAvatar);
+
 
   return (
     <DropdownMenu>
       {/* Avatar (Trigger) */}
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src={femaleDoctorAvatar} alt="Doctor Avatar" />
-          <AvatarFallback>TS</AvatarFallback>
+          <AvatarImage src={DoctorAvatar} alt="Doctor Avatar" />
+          <AvatarFallback>Doc</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
@@ -46,8 +58,11 @@ export function UserAvatar({name , email}) {
           <Settings size={16} /> Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-2 text-red-500">
-          <LogOut size={16} /> Log Out
+        <DropdownMenuItem >
+          {/* ✅ Handle Logout */}
+          <button onClick={handleLogout} className="flex items-center gap-2 text-red-500">
+            <LogOut size={16} /> Log Out
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
