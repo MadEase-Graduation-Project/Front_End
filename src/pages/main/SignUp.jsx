@@ -84,7 +84,7 @@ export default function SignUp() {
       <div className="w-3/4 flex flex-col justify-start gap-[5px]">
         <TopReg
           regtitle="Create an account"
-          regnote="Already have one?"
+          regnote="already have one?"
           reg="Log in"
           dest="/register/login"
         />
