@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Array>} List of users
  */
 export async function getAllUsers() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}`);
-    return handleApiResponse(response, "No users found");
-  } catch (error) {
-    return handleApiError(error, "fetching users");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}`);
+  return handleApiResponse(response, "No users found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllUsers() {
  * @returns {Promise<Object>} User details
  */
 export async function getOneUser(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/one/${id}`);
-    return handleApiResponse(response, "this user doesn't exist");
-  } catch (error) {
-    return handleApiError(error, `fetching user ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/one/${id}`);
+  return handleApiResponse(response, "this user doesn't exist");
 }
 
 /**
@@ -41,10 +33,6 @@ export async function getOneUser(id) {
  * @returns {Promise<Object>} Current user data
  */
 export async function getMyData() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/one`);
-    return handleApiResponse(response, "Failed to get user data");
-  } catch (error) {
-    return handleApiError(error, "fetching user data");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/one`);
+  return handleApiResponse(response, "Failed to get user data");
 }

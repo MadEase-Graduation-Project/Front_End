@@ -65,7 +65,7 @@ const initialState = {
   // loading
   loading: false,
   // error
-  error: null,
+  error: false,
 };
 
 const appointmentSlice = createSlice({
@@ -75,7 +75,7 @@ const appointmentSlice = createSlice({
     clearSelectedAppointment: (state) => {
       state.selectedAppointment = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
@@ -84,6 +84,7 @@ const appointmentSlice = createSlice({
       .addCase(fetchAppointments.pending, pendingHandler())
       .addCase(fetchAppointments.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = false;
         state.appointments = action.payload?.data;
         state.totalAppointments = action.payload?.totalAppointments;
       })

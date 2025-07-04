@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllAdmins } from "@/services/adminApi";
+import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
 
 export const fetchAllAdmins = createAsyncThunk(
   "admins/fetchAdmins",
@@ -11,7 +12,7 @@ export const fetchAllAdmins = createAsyncThunk(
 const initialState = {
   admins: [],
   loading: false,
-  error: null,
+  error: false,
 };
 
 //* note that here we take the data of admins direct from payload
@@ -22,18 +23,13 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllAdmins.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(fetchAllAdmins.pending, pendingHandler())
       .addCase(fetchAllAdmins.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
         state.admins = action.payload;
-        state.loading = false;
       })
-      .addCase(fetchAllAdmins.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(fetchAllAdmins.rejected, rejectedHandler());
   },
 });
 

@@ -6,7 +6,7 @@ export const pendingHandler = ({
 } = {}) => {
   return (state) => {
     state[loadingKey] = true;
-    state[errorKey] = null;
+    state[errorKey] = false;
   };
 };
 
@@ -14,10 +14,12 @@ export const pendingHandler = ({
 
 export const fulfilledHandler = ({
   loadingKey = "loading",
+  errorKey = "error",
   detailsKey = null,
 } = {}) => {
   return (state, action) => {
     state[loadingKey] = false;
+    state[errorKey] = false;
     if (detailsKey) {
       state[detailsKey] = action.payload?.data;
     }
@@ -30,8 +32,8 @@ export const rejectedHandler = ({
   loadingKey = "loading",
   errorKey = "error",
 } = {}) => {
-  return (state, action) => {
+  return (state) => {
     state[loadingKey] = false;
-    state[errorKey] = action.error?.message ?? "unexpected error";
+    state[errorKey] = true;
   };
 };

@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/diseases";
  * @returns {Promise<Array>} List of diseases
  */
 export async function getAllDiseases({ page = 1 } = {}) {
-  try {
-    const response = await api.get(BASE_ENDPOINT, { params: { page } });
-    return handleApiResponse(response, "No diseases found");
-  } catch (error) {
-    return handleApiError(error, "fetching diseases");
-  }
+  const response = await api.get(BASE_ENDPOINT, { params: { page } });
+  return handleApiResponse(response, "No diseases found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllDiseases({ page = 1 } = {}) {
  * @returns {Promise<Object>} Disease details
  */
 export async function showDisease(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, "this disease not found");
-  } catch (error) {
-    return handleApiError(error, `fetching disease ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, "this disease not found");
 }
 
 /**
@@ -42,12 +34,8 @@ export async function showDisease(id) {
  * @returns {Promise<Object>} Created disease
  */
 export async function addDisease(diseaseData) {
-  try {
-    const response = await api.post(BASE_ENDPOINT, diseaseData);
-    return handleApiResponse(response, "Failed to create disease");
-  } catch (error) {
-    return handleApiError(error, "adding disease");
-  }
+  const response = await api.post(BASE_ENDPOINT, diseaseData);
+  return handleApiResponse(response, "Failed to create disease");
 }
 
 /**
@@ -57,12 +45,8 @@ export async function addDisease(diseaseData) {
  * @returns {Promise<Object>} Updated disease
  */
 export async function editDisease(id, diseaseData) {
-  try {
-    const response = await api.put(`${BASE_ENDPOINT}/${id}`, diseaseData);
-    return handleApiResponse(response, `Failed to update disease ${id}`);
-  } catch (error) {
-    return handleApiError(error, `editing disease ${id}`);
-  }
+  const response = await api.put(`${BASE_ENDPOINT}/${id}`, diseaseData);
+  return handleApiResponse(response, `Failed to update disease ${id}`);
 }
 
 /**
@@ -71,10 +55,6 @@ export async function editDisease(id, diseaseData) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteDisease(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, `Failed to delete disease ${id}`);
-  } catch (error) {
-    return handleApiError(error, `deleting disease ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Failed to delete disease ${id}`);
 }

@@ -14,14 +14,10 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Array>} List of doctors
  */
 export async function getAllDoctors() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/`);
-    const data = handleApiResponse(response, "No users found");
-    const doctors = data?.data.filter((user) => user.role === "Doctor");
-    return doctors;
-  } catch (error) {
-    return handleApiError(error, "fetching doctors");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/`);
+  const data = handleApiResponse(response, "No users found");
+  const doctors = data?.data.filter((user) => user.role === "Doctor");
+  return doctors;
 }
 
 /**
@@ -29,14 +25,10 @@ export async function getAllDoctors() {
  * @returns {Promise<Array>} List of doctors
  */
 export async function getAllDoctorsPublic({ page = 1 } = {}) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/doctors`, {
-      params: { page },
-    });
-    return handleApiResponse(response, "No Doctors found");
-  } catch (error) {
-    return handleApiError(error, "fetching doctors");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/doctors`, {
+    params: { page },
+  });
+  return handleApiResponse(response, "No Doctors found");
 }
 
 /**
@@ -45,11 +37,7 @@ export async function getAllDoctorsPublic({ page = 1 } = {}) {
  * @returns {Promise<Object>} Doctor details
  */
 export async function showDoctorDetails({ name }) {
-  try {
-    const response = await api.get(`/doctor`, { params: { name } });
-    const data = handleApiResponse(response, "No Doctor found");
-    return data.doctor;
-  } catch (error) {
-    return handleApiError(error, "fetching doctor details");
-  }
+  const response = await api.get(`/doctor`, { params: { name } });
+  const data = handleApiResponse(response, "No Doctor found");
+  return data.doctor;
 }

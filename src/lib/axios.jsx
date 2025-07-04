@@ -41,12 +41,22 @@ function processQueue(error) {
   failedQueue = [];
 }
 
+function isAuthEndpoint(url = "") {
+  return (
+    url.endsWith("/login") ||
+    url.endsWith("/register") ||
+    url.endsWith("/resetpass")
+  );
+}
+
 // Response interceptor
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
     const { response, config } = err;
     const code = response?.status;
+
+    if (isAuthEndpoint(config.url)) return Promise.reject(err);
 
     if ((code === 401 || code === 403) && !config._retry) {
       if (isRefreshing) {
