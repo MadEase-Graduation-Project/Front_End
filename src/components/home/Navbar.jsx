@@ -5,7 +5,12 @@ import { User, Mail, Menu } from "lucide-react";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { motion, useAnimationControls } from "framer-motion";
-const navItems = ["Medical blogs", "Location", "Doctors"];
+const navItems = [
+  { label: "Medical blogs", path: "/community" },
+  { label: "Location", path: "/location" },
+  { label: "Doctors", path: "/doctors" },
+  { label: "About us", path: "/about" },
+];
 
 const NavBar = ({ scrolled }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -65,17 +70,23 @@ const NavBar = ({ scrolled }) => {
         </div>
 
         <nav className="flex flex-col gap-10">
-          {navItems.map((item) => (
-            <p
-              key={item}
+          {navItems.map(({ label, path }) => (
+            <Link
+              key={label}
+              to={path}
+              onClick={() => setMenuOpen(false)} // Close sidebar on click
               className="font-jost text-base text-menavy font-semibold"
             >
-              {item}
-            </p>
+              {label}
+            </Link>
           ))}
-          <p className="font-jost text-base text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x">
+          <Link
+            to="/medbot"
+            onClick={() => setMenuOpen(false)}
+            className="font-jost text-base text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+          >
             Ask Medbot
-          </p>
+          </Link>
         </nav>
       </div>
 
@@ -98,17 +109,21 @@ const NavBar = ({ scrolled }) => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-10 xl:gap-20 z-40">
-            {navItems.map((item) => (
-              <p
-                key={item}
+            {navItems.map(({ label, path }) => (
+              <Link
+                key={label}
+                to={path}
                 className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold"
               >
-                {item}
-              </p>
+                {label}
+              </Link>
             ))}
-            <p className="font-jost text-base  lg:text-lg xl:text-xl text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x">
+            <Link
+              to="/medbot"
+              className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+            >
               Ask Medbot
-            </p>
+            </Link>
           </div>
 
           {/* top right navigation icons*/}
