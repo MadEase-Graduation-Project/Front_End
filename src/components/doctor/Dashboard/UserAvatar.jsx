@@ -1,41 +1,34 @@
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger, 
-  DropdownMenuSeparator 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { DollarSign, LogOut, PoundSterlingIcon, Settings, User } from "lucide-react";
-import DoctorAvatar from "@/assets/doctor-M.png";
+import { LogOut, Settings, User, PoundSterlingIcon } from "lucide-react";
+import MaleAvatar from "@/assets/doctor-M.png";
+import FemaleAvatar from "@/assets/doctor-F.png";
 
-export function UserAvatar({name , gender, email}) {
-  const navigate = useNavigate(); // Initialize navigate function
+export function UserAvatar({ name, gender, email }) {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     navigate("/register/login");
   };
-  if (gender === "Female") {
-    DoctorAvatar = "src\assets\doctor-F.png";
-  }
-  if (gender === "Male") {
-    DoctorAvatar = "src\assets\doctor-M.png";
-  }
 
-  console.log(DoctorAvatar);
-
+  const imageSrc = gender === "Female" ? FemaleAvatar : MaleAvatar;
 
   return (
     <DropdownMenu>
-      {/* Avatar (Trigger) */}
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src={DoctorAvatar} alt="Doctor Avatar" />
+          <AvatarImage src={imageSrc} alt="Doctor Avatar" />
           <AvatarFallback>Doc</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
-      {/* Dropdown Content */}
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuItem className="flex items-center gap-2">
           <div className="text-start">
@@ -43,24 +36,31 @@ export function UserAvatar({name , gender, email}) {
             <span className="text-xs block text-gray-500">{email}</span>
           </div>
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem className="flex items-center gap-2">
           <User size={16} /> Profile
         </DropdownMenuItem>
+
         <DropdownMenuItem className="flex items-center gap-2">
           <PoundSterlingIcon size={16} /> Billing
         </DropdownMenuItem>
-        {/* ✅ Navigate to Settings Page */}
-        <DropdownMenuItem 
+
+        <DropdownMenuItem
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate("settings")} // Navigate when clicked
+          onClick={() => navigate("settings")}
         >
           <Settings size={16} /> Settings
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem >
-          {/* ✅ Handle Logout */}
-          <button onClick={handleLogout} className="flex items-center gap-2 text-red-500">
+
+        <DropdownMenuItem className="cursor-pointer">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-red-500"
+          >
             <LogOut size={16} /> Log Out
           </button>
         </DropdownMenuItem>
