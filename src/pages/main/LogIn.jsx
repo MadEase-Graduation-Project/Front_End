@@ -102,7 +102,7 @@ export default function LogIn() {
     try {
       await dispatch(login(data)).unwrap();
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.message);
       setHasLoginError(true);
       setActivePopup(true);
     }
@@ -111,7 +111,7 @@ export default function LogIn() {
   return (
     <form
       className="w-full h-auto flex items-center justify-center relative"
-      // onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-3/4 flex flex-col justify-start gap-[5px]">
         <TopReg

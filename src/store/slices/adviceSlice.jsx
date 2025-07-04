@@ -74,7 +74,7 @@ const initialState = {
   totalAdvices: 0,
   // handling
   loading: false,
-  error: null,
+  error: false,
 };
 
 //* note that here we take the data of advices nonDirect from payload
@@ -86,7 +86,7 @@ const adviceSlice = createSlice({
     clearSelectedAdvice: (state) => {
       state.selectedAdvice = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
@@ -95,8 +95,9 @@ const adviceSlice = createSlice({
       .addCase(fetchAllAdvices.pending, pendingHandler())
       .addCase(fetchAllAdvices.fulfilled, (state, action) => {
         state.loading = false;
-        state.advices = action.payload.data;
-        state.totalAdvices = action.payload.totalAdvices;
+        state.error = false;
+        state.advices = action.payload?.data;
+        state.totalAdvices = action.payload?.totalAdvices;
       })
       .addCase(fetchAllAdvices.rejected, rejectedHandler())
 

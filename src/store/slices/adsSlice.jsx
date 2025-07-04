@@ -57,7 +57,7 @@ const initialState = {
   loadingMore: false,
   // handling
   loading: false,
-  error: null,
+  error: false,
 };
 
 //* note that here we take the data of ads nonDirect from payload
@@ -69,7 +69,7 @@ const adsSlice = createSlice({
     clearSelectedAd: (state) => {
       state.selectedAd = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {

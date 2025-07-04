@@ -4,11 +4,7 @@ import {
   showPatients,
   showPatientById,
 } from "@/services/patientApi";
-import {
-  fulfilledHandler,
-  pendingHandler,
-  rejectedHandler,
-} from "@/utils/casesHandlersUtils";
+import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
 
 export const fetchAllPatients = createAsyncThunk(
   "patients/fetchPatients",
@@ -40,7 +36,7 @@ const initialState = {
   selectedPatient: null,
   // handling
   loading: false,
-  error: null,
+  error: false,
 };
 
 const patientSlice = createSlice({
@@ -50,31 +46,34 @@ const patientSlice = createSlice({
     clearSelectedPatient: (state) => {
       state.selectedPatient = null;
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPatients.pending, pendingHandler())
       .addCase(fetchAllPatients.fulfilled, (state, action) => {
-        state.patients = action.payload;
         state.loading = false;
+        state.error = false;
+        state.patients = action.payload;
       })
       .addCase(fetchAllPatients.rejected, rejectedHandler())
 
       // showPatients
       .addCase(fetchShowPatients.pending, pendingHandler())
       .addCase(fetchShowPatients.fulfilled, (state, action) => {
-        state.showPatients = action.payload?.patients;
         state.loading = false;
+        state.error = false;
+        state.showPatients = action.payload?.patients;
       })
       .addCase(fetchShowPatients.rejected, rejectedHandler())
 
       // showPatientById
       .addCase(fetchShowPatientById.pending, pendingHandler())
       .addCase(fetchShowPatientById.fulfilled, (state, action) => {
-        state.selectedPatient = action.payload;
         state.loading = false;
+        state.error = false;
+        state.selectedPatient = action.payload;
       })
       .addCase(fetchShowPatientById.rejected, rejectedHandler());
   },

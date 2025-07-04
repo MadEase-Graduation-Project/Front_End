@@ -73,27 +73,24 @@ const userSlice = createSlice({
     // loading
     loading: false,
     // error
-    error: null,
+    error: false,
   },
   reducers: {
     clearSelectedUser: (state) => {
       state.userDetails = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
     clearMyDetails: (state) => {
       state.myDetails = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
     builder
       // fetch all users
-      .addCase(fetchAllUsers.pending, (state) => {
-        state.loadingMore = true;
-        state.error = null;
-      })
+      .addCase(fetchAllUsers.pending, pendingHandler())
       .addCase(fetchAllUsers.fulfilled, (state, action) => {
         const {
           data,
@@ -106,18 +103,16 @@ const userSlice = createSlice({
         } = action.payload;
 
         state.users = data;
-        state.loading = false;
         state.totalUsers = totalUsers;
         state.totalAdmin = totalAdmin;
         state.totalDoctors = totalDoctors;
         state.totalPatients = totalPatients;
         state.totalNurses = totalNurses;
         state.totalHospitals = totalHospitals;
-      })
-      .addCase(fetchAllUsers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = false;
       })
+      .addCase(fetchAllUsers.rejected, rejectedHandler())
       // fetch user by id
       .addCase(fetchUserById.pending, pendingHandler())
       .addCase(

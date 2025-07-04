@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/advices";
  * @returns {Promise<Array>} List of advices
  */
 export async function getAllAdvices() {
-  try {
-    const response = await api.get(BASE_ENDPOINT);
-    return handleApiResponse(response, "No advices found");
-  } catch (error) {
-    return handleApiError(error, "fetching advices");
-  }
+  const response = await api.get(BASE_ENDPOINT);
+  return handleApiResponse(response, "No advices found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllAdvices() {
  * @returns {Promise<Object>} Advice details
  */
 export async function showAdvice(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, `Advice with id ${id} not found`);
-  } catch (error) {
-    return handleApiError(error, `fetching advice ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Advice with id ${id} not found`);
 }
 
 /**
@@ -42,12 +34,8 @@ export async function showAdvice(id) {
  * @returns {Promise<Object>} Created advice
  */
 export async function addAdvice(adviceData) {
-  try {
-    const response = await api.post(BASE_ENDPOINT, adviceData);
-    return handleApiResponse(response, "Failed to create advice");
-  } catch (error) {
-    return handleApiError(error, "adding advice");
-  }
+  const response = await api.post(BASE_ENDPOINT, adviceData);
+  return handleApiResponse(response, "Failed to create advice");
 }
 
 /**
@@ -57,12 +45,8 @@ export async function addAdvice(adviceData) {
  * @returns {Promise<Object>} Updated advice
  */
 export async function editAdvice(id, adviceData) {
-  try {
-    const response = await api.put(`${BASE_ENDPOINT}/${id}`, adviceData);
-    return handleApiResponse(response, `Failed to update advice ${id}`);
-  } catch (error) {
-    return handleApiError(error, `editing advice ${id}`);
-  }
+  const response = await api.put(`${BASE_ENDPOINT}/${id}`, adviceData);
+  return handleApiResponse(response, `Failed to update advice ${id}`);
 }
 
 /**
@@ -71,30 +55,18 @@ export async function editAdvice(id, adviceData) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteAdvice(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, `Failed to delete advice ${id}`);
-  } catch (error) {
-    return handleApiError(error, `deleting advice ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Failed to delete advice ${id}`);
 }
 
 // advice like
 export async function addAdviceLike(adviceId) {
-  try {
-    const response = await api.post(`/advice/${adviceId}/like`);
-    return handleApiResponse(response, "Failed to like advice");
-  } catch (error) {
-    return handleApiError(error, "liking advice");
-  }
+  const response = await api.post(`/advice/${adviceId}/like`);
+  return handleApiResponse(response, "Failed to like advice");
 }
 
 // advice dislike
 export async function addAdviceDislike(adviceId) {
-  try {
-    const response = await api.post(`/advice/${adviceId}/dislike`);
-    return handleApiResponse(response, "Failed to dislike advice");
-  } catch (error) {
-    return handleApiError(error, "disliking advice");
-  }
+  const response = await api.post(`/advice/${adviceId}/dislike`);
+  return handleApiResponse(response, "Failed to dislike advice");
 }
