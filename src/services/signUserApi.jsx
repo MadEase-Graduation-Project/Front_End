@@ -1,5 +1,5 @@
 import api from "../lib/axios";
-import { handleApiResponse, handleApiError } from "../lib/apiUtils";
+import { handleApiResponse } from "../lib/apiUtils";
 
 /**
  * Users API Service
@@ -15,13 +15,8 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Object>} Login response with token
  */
 export async function loginUser(credentials) {
-  try {
-    const response = await api.post(`${BASE_ENDPOINT}/login`, credentials);
-    return handleApiResponse(response, "Failed to login user");
-  } catch (error) {
-    console.error("Error logging in user:", error);
-    return { token: null };
-  }
+  const response = await api.post(`${BASE_ENDPOINT}/login`, credentials);
+  return handleApiResponse(response, "Failed to login user");
 }
 
 /**
@@ -30,12 +25,8 @@ export async function loginUser(credentials) {
  * @returns {Promise<Object>} Registration response
  */
 export async function registerUser(userData) {
-  try {
-    const response = await api.post(`${BASE_ENDPOINT}/register`, userData);
-    return handleApiResponse(response, "Failed to register user");
-  } catch (error) {
-    return handleApiError(error, "registering user");
-  }
+  const response = await api.post(`${BASE_ENDPOINT}/register`, userData);
+  return handleApiResponse(response, "Failed to register user");
 }
 
 /**
@@ -43,10 +34,6 @@ export async function registerUser(userData) {
  * @returns {Promise<Object>} Logout response
  */
 export async function logoutUser() {
-  try {
-    const response = await api.post(`${BASE_ENDPOINT}/logout`);
-    return handleApiResponse(response, "Failed to logout user");
-  } catch (error) {
-    return handleApiError(error, "logging out user");
-  }
+  const response = await api.post(`${BASE_ENDPOINT}/logout`);
+  return handleApiResponse(response, "Failed to logout user");
 }

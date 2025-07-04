@@ -4,12 +4,17 @@ import {
   registerUser,
   logoutUser,
 } from "../../services/signUserApi";
+import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
 
 // Async thunks
-export const login = createAsyncThunk("sign/login", async (credentials) => {
-  const response = await loginUser(credentials);
-  return response;
-});
+export const login = createAsyncThunk(
+  "sign/login",
+  async (credentials, { dispatch }) => {
+    dispatch(resetSignState());
+    const response = await loginUser(credentials);
+    return response;
+  }
+);
 
 export const register = createAsyncThunk("sign/register", async (userData) => {
   const response = await registerUser(userData);
@@ -25,7 +30,7 @@ const initialState = {
   user: null,
   role: null,
   loading: false,
-  error: null,
+  error: false,
 };
 
 const signSlice = createSlice({
@@ -36,52 +41,34 @@ const signSlice = createSlice({
       state.user = null;
       state.role = null;
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
     builder
       // Login
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(login.pending, pendingHandler())
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = false;
         state.role = action.payload?.Role;
-        state.error = null;
       })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(login.rejected, rejectedHandler())
       // Register
-      .addCase(register.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(register.pending, pendingHandler())
       .addCase(register.fulfilled, (state) => {
         state.loading = false;
-        state.error = null;
+        state.error = false;
       })
-      .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      .addCase(register.rejected, rejectedHandler())
       // Logout
-      .addCase(logout.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(logout.pending, pendingHandler())
       .addCase(logout.fulfilled, (state) => {
         state.loading = false;
-        state.user = null;
-        state.error = null;
+        state.error = false;
+        state.role = null;
       })
-      .addCase(logout.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+      .addCase(logout.rejected, rejectedHandler());
   },
 });
 

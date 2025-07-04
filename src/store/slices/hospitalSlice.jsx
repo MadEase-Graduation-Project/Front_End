@@ -41,7 +41,7 @@ const initialState = {
   loading: false,
   loadingMore: false,
   // error
-  error: null,
+  error: false,
 };
 
 const hospitalSlice = createSlice({
@@ -51,7 +51,7 @@ const hospitalSlice = createSlice({
     resetHospitalState: (state) => {
       state.hospital = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {

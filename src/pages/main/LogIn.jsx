@@ -102,7 +102,7 @@ export default function LogIn() {
     try {
       await dispatch(login(data)).unwrap();
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.message);
       setHasLoginError(true);
       setActivePopup(true);
     }

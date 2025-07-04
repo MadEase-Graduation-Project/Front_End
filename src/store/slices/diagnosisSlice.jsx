@@ -63,7 +63,7 @@ const initialState = {
   hasMore: true,
   loading: false,
   loadingMore: false,
-  error: null,
+  error: false,
 };
 
 const diagnosisSlice = createSlice({
@@ -73,7 +73,7 @@ const diagnosisSlice = createSlice({
     clearSelectedDiagnosis: (state) => {
       state.selectedDiagnosis = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {

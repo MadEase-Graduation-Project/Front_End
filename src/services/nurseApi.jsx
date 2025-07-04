@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Array>} List of nurses
  */
 export async function getAllNurses() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/`);
-    const data = handleApiResponse(response, "No Nurses found");
-    const nurses = data?.data.filter((user) => user.role === "Nurse");
-    return nurses;
-  } catch (error) {
-    return handleApiError(error, "fetching nurses");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/`);
+  const data = handleApiResponse(response, "No Nurses found");
+  const nurses = data?.data.filter((user) => user.role === "Nurse");
+  return nurses;
 }

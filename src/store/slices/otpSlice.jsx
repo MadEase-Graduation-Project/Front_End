@@ -32,7 +32,7 @@ const otpSlice = createSlice({
   reducers: {
     resetOtpState: (state) => {
       state.loading = false;
-      state.error = null;
+      state.error = false;
       state.otpVerified = false;
       state.otpGenerated = false;
       state.passwordReset = false;
@@ -45,28 +45,30 @@ const otpSlice = createSlice({
       // Generate OTP
       .addCase(generateOtp.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
         state.otpGenerated = false;
       })
       .addCase(generateOtp.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = false;
         state.otpGenerated = action.payload?.success;
         state.msg = action.payload?.message;
         state.error = null;
       })
-      .addCase(generateOtp.rejected, (state, action) => {
+      .addCase(generateOtp.rejected, (state) => {
         state.loading = false;
         state.otpGenerated = false;
-        state.error = action.error.message;
+        state.error = true;
       })
       // Verify OTP
       .addCase(verifyOtp.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
         state.otpVerified = false;
       })
       .addCase(verifyOtp.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = false;
         state.otpVerified = action.payload?.success;
         state.msg = action.payload?.message;
         state.resetToken = action.payload?.data;
@@ -75,24 +77,24 @@ const otpSlice = createSlice({
       .addCase(verifyOtp.rejected, (state, action) => {
         state.loading = false;
         state.otpVerified = false;
-        state.error = action.error.message;
+        state.error = true;
       })
       // Reset Password
       .addCase(resetPasswordOTP.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
         state.passwordReset = false;
       })
       .addCase(resetPasswordOTP.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = false;
         state.passwordReset = !!action.payload?.success;
         state.msg = action.payload?.message;
-        state.error = null;
       })
       .addCase(resetPasswordOTP.rejected, (state, action) => {
         state.loading = false;
         state.passwordReset = false;
-        state.error = action.error.message;
+        state.error = true;
       });
   },
 });

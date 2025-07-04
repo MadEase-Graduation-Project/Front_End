@@ -54,7 +54,7 @@ const initialState = {
   loading: false,
   loadingMore: false,
   // error state
-  error: null,
+  error: false,
 };
 
 const doctorSlice = createSlice({
@@ -64,7 +64,7 @@ const doctorSlice = createSlice({
     clearSelectedDoctor: (state) => {
       state.doctorDetails = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
@@ -72,8 +72,9 @@ const doctorSlice = createSlice({
       // fetch all doctors
       .addCase(fetchAllDoctors.pending, pendingHandler())
       .addCase(fetchAllDoctors.fulfilled, (state, action) => {
-        state.doctors = action.payload;
         state.loading = false;
+        state.error = false;
+        state.doctors = action.payload;
       })
       .addCase(fetchAllDoctors.rejected, rejectedHandler())
 
