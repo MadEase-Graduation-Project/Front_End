@@ -1,5 +1,5 @@
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
-import UnderLined from "../../components/patientComps/register/UnderLined";
+import UnderLined from "../../../components/patientComps/register/UnderLined";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 

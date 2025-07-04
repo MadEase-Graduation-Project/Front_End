@@ -16,18 +16,22 @@ import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
 
 import ResetPass_Layout from "@/layouts/ResetPass_Layout";
-import ResetPass from "@/pages/main/ResetPass";
-import NewPass from "@/pages/main/NewPass";
-import Otp from "@/pages/main/Otp";
+import ResetPass from "@/pages/main/resetpass/ResetPass";
+import NewPass from "@/pages/main/resetpass/NewPass";
+import Otp from "@/pages/main/resetpass/Otp";
 
 import SettingPage from "@/pages/admin/SettingPage/SettingPage";
 
 import Community from "@/pages/main/Community/Community";
+import Doctors from "@/pages/patient/Doctors/Doctors";
+import MedBot from "@/pages/patient/MedBot/MedBot";
+import Settings from "@/pages/patient/Settings/Settings";
+import Messenger from "@/pages/patient/Messenger/Messenger";
 
-import SignUp from "@/pages/main/SignUp";
-import LogIn from "@/pages/main/LogIn";
+import SignUp from "@/pages/main/register/SignUp";
+import LogIn from "@/pages/main/register/LogIn";
 import Landing_Layout from "@/layouts/Landing_Layout";
-import Home from "@/pages/main/Home";
+import Home from "@/pages/main/Home/Home";
 import Test from "@/pages/general/Test";
 import Register_Layout from "@/layouts/Register_Layout";
 
@@ -44,6 +48,12 @@ function App() {
         <Route index element={<Home />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
+        <Route path="doctors" element={<Doctors />} />
+        {/* <Route path="doctors/" element={</>} /> */}
+        <Route path="medbot" element={<MedBot />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="messenger" element={<Messenger />} />
+        {/* <Route path="location" element={< />} /> */}
       </Route>
 
       {/* Register layout */}
