@@ -1,37 +1,55 @@
-import React, { useState } from "react"
-import { addDiagnosis } from "@/services/diagnosisApi"
+import React, { useEffect, useState } from "react";
+import { addDiagnosis } from "@/services/diagnosisApi";
 
-export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }) => {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [symptomInput, setSymptomInput] = useState("")
-  const [symptoms, setSymptoms] = useState([])
-  const [medications, setMedications] = useState([])
-  const [recommendations, setRecommendations] = useState("")
-  const [followUp, setFollowUp] = useState("")
-  const [notes, setNotes] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
+export const AddDiagnosisForm = ({
+  doctorId,
+  selectedPatient = {},
+  patients = [],
+  medicationOptions = [],
+}) => {
+  const [selectedPatientId, setSelectedPatientId] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [symptomInput, setSymptomInput] = useState("");
+  const [symptoms, setSymptoms] = useState([]);
+  const [medications, setMedications] = useState([]);
+  const [recommendations, setRecommendations] = useState("");
+  const [followUp, setFollowUp] = useState("");
+  const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Auto-select pre-passed patient
+  useEffect(() => {
+    if (selectedPatient?._id) {
+      setSelectedPatientId(selectedPatient._id);
+    }
+  }, [selectedPatient]);
 
   const handleAddSymptom = () => {
     if (symptomInput.trim()) {
-      setSymptoms([...symptoms, symptomInput.trim()])
-      setSymptomInput("")
+      setSymptoms([...symptoms, symptomInput.trim()]);
+      setSymptomInput("");
     }
-  }
+  };
 
   const handleMedicationChange = (e) => {
-    const selected = Array.from(e.target.selectedOptions, (option) => option.value)
-    setMedications(selected)
-  }
+    const selected = Array.from(e.target.selectedOptions, (option) => option.value);
+    setMedications(selected);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setMessage("")
+    e.preventDefault();
+    if (!selectedPatientId) {
+      setMessage("Please select a patient.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
 
     const payload = {
-      patientId,
+      patientId: selectedPatientId,
       doctorId,
       title,
       description,
@@ -40,35 +58,56 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
       recommendations,
       followUp,
       notes,
-    }
+    };
 
     try {
-      const response = await addDiagnosis(payload)
+      const response = await addDiagnosis(payload);
 
       if (response?.success) {
-        setMessage("Diagnosis added successfully.")
-        setTitle("")
-        setDescription("")
-        setSymptoms([])
-        setMedications([])
-        setRecommendations("")
-        setFollowUp("")
-        setNotes("")
+        setMessage("Diagnosis added successfully.");
+        setTitle("");
+        setDescription("");
+        setSymptoms([]);
+        setMedications([]);
+        setRecommendations("");
+        setFollowUp("");
+        setNotes("");
+        setSelectedPatientId("");
       } else {
-        setMessage("Failed to add diagnosis.")
+        setMessage("Failed to add diagnosis.");
       }
     } catch (err) {
-      setMessage("Error: " + (err?.response?.data?.message || "Something went wrong."))
+      setMessage("Error: " + (err?.response?.data?.message || "Something went wrong."));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="w-full p-6 bg-white shadow-lg rounded-lg col-span-12">
       <h2 className="text-2xl font-semibold mb-4">Add Diagnosis</h2>
       {message && <p className="text-sm text-gray-700 mb-3">{message}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Patient Dropdown */}
+        <div>
+          <label className="font-medium">Select Patient</label>
+          <select
+            value={selectedPatientId}
+            onChange={(e) => setSelectedPatientId(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          >
+            <option value="">-- Select Patient --</option>
+            {(Array.isArray(patients) ? patients : []).map((patient) => (
+              <option key={patient._id} value={patient._id}>
+                {patient.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Title */}
         <div>
           <label className="font-medium">Title</label>
           <input
@@ -81,6 +120,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           />
         </div>
 
+        {/* Description */}
         <div>
           <label className="font-medium">Description</label>
           <textarea
@@ -92,6 +132,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           />
         </div>
 
+        {/* Symptoms */}
         <div>
           <label className="font-medium">Symptoms</label>
           <div className="flex gap-2">
@@ -119,6 +160,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           )}
         </div>
 
+        {/* Medications */}
         <div>
           <label className="font-medium">Medications</label>
           <select
@@ -127,7 +169,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
             onChange={handleMedicationChange}
             className="w-full px-3 py-2 border rounded-lg"
           >
-            {medicationOptions.map((med) => (
+            {(medicationOptions || []).map((med) => (
               <option key={med._id} value={med._id}>
                 {med.name}
               </option>
@@ -135,6 +177,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           </select>
         </div>
 
+        {/* Recommendations */}
         <div>
           <label className="font-medium">Recommendations</label>
           <input
@@ -146,6 +189,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           />
         </div>
 
+        {/* Follow-Up */}
         <div>
           <label className="font-medium">Follow-Up</label>
           <input
@@ -157,6 +201,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           />
         </div>
 
+        {/* Notes */}
         <div>
           <label className="font-medium">Notes</label>
           <textarea
@@ -167,6 +212,7 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
           />
         </div>
 
+        {/* Submit Button */}
         <div className="flex justify-end">
           <button
             type="submit"
@@ -180,5 +226,5 @@ export const AddDiagnosisForm = ({ patientId, doctorId, medicationOptions = [] }
         </div>
       </form>
     </div>
-  )
-}
+  );
+};

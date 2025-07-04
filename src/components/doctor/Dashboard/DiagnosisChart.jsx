@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useMemo } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
-import { getAllDiagnosis } from "@/services/diagnosisApi"
-import { fetchAllPatients } from "@/store/slices/patientSlice"
-import { selectAllPatients } from "@/store/selectors"
-import { isEmpty } from "@/utils/objectUtils"
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#37568d", "#007eb1", "#00a5ba", "#00c8a6", "#8be585"]
-const RADIAN = Math.PI / 180
+// Constants
+const COLORS = ["#37568d", "#007eb1", "#00a5ba", "#00c8a6", "#8be585"];
+const RADIAN = Math.PI / 180;
 
+// Label renderer
 const renderCustomizedLabel = ({
   cx,
   cy,
@@ -18,12 +16,12 @@ const renderCustomizedLabel = ({
   percent,
   name,
 }) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-  const x = cx + radius * Math.cos(-midAngle * RADIAN)
-  const y = cy + radius * Math.sin(-midAngle * RADIAN)
-  const outerRadiusLabel = outerRadius * 1.3
-  const outerX = cx + outerRadiusLabel * Math.cos(-midAngle * RADIAN)
-  const outerY = cy + outerRadiusLabel * Math.sin(-midAngle * RADIAN)
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const outerRadiusLabel = outerRadius * 1.3;
+  const outerX = cx + outerRadiusLabel * Math.cos(-midAngle * RADIAN);
+  const outerY = cy + outerRadiusLabel * Math.sin(-midAngle * RADIAN);
 
   return (
     <>
@@ -50,83 +48,42 @@ const renderCustomizedLabel = ({
         {name}
       </text>
     </>
-  )
-}
+  );
+};
 
-export const DiagnosisChart = () => {
-  const dispatch = useDispatch()
-  const patients = useSelector(selectAllPatients)
-  const [diagnosisData, setDiagnosisData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    if (isEmpty(patients)) {
-      dispatch(fetchAllPatients())
-    }
-  }, [dispatch, patients])
-
-  useEffect(() => {
-    const fetchDiagnosesForAll = async () => {
-      if (!Array.isArray(patients) || patients.length === 0) return
-
-      setLoading(true)
-      setError(null)
-
-      try {
-        let allDiagnoses = []
-
-        for (const patient of patients) {
-          const res = await getAllDiagnosis(patient._id)
-
-          if (res?.success && Array.isArray(res.diagnoses)) {
-            allDiagnoses = [...allDiagnoses, ...res.diagnoses]
-          } else if (res?.success === false && res.code === 404) {
-            console.log(`No diagnoses for patient ${patient._id}, skipping.`)
-          } else {
-            console.warn("Unexpected diagnosis response:", res)
-          }
-        }
-
-        setDiagnosisData(allDiagnoses)
-      } catch (e) {
-        setError(e.message || "Failed to fetch diagnoses.")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchDiagnosesForAll()
-  }, [patients])
+const DiagnosisChart = () => {
+  const diagnosis = useSelector((state) => state.diagnosis?.diagnosis || []);
+  const loading = useSelector((state) => state.diagnosis?.loading);
+  const error = useSelector((state) => state.diagnosis?.error);
 
   const chartData = useMemo(() => {
-    const counts = {}
-    diagnosisData.forEach((item) => {
-      const title = item?.title || "Unknown"
-      counts[title] = (counts[title] || 0) + 1
-    })
+    const counts = {};
+    diagnosis.forEach((item) => {
+      const title = item?.title || "Unknown";
+      counts[title] = (counts[title] || 0) + 1;
+    });
 
-    return Object.entries(counts).map(([name, value]) => ({ name, value }))
-  }, [diagnosisData])
+    return Object.entries(counts).map(([name, value]) => ({ name, value }));
+  }, [diagnosis]);
 
   if (loading) {
     return (
-      <div className="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-4 rounded-lg border border-gray-200 bg-white shadow-sm p-4">
+      <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-4 col-span-4">
         <p>Loading diagnoses...</p>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div className="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-4 rounded-lg border border-gray-200 bg-white shadow-sm p-4">
+      <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-4 col-span-4">
         <p className="text-red-500">Error: {error}</p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-4 rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm col-span-4">
       <div className="flex items-center justify-center mt-4">
         <h2 className="text-lg md:text-xl font-semibold">Average Diagnoses</h2>
       </div>
@@ -151,5 +108,7 @@ export const DiagnosisChart = () => {
         </PieChart>
       </ResponsiveContainer>
     </div>
-  )
-}
+  );
+};
+
+export default DiagnosisChart;

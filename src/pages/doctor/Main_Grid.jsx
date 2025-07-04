@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatCards } from '../../components/doctor/Dashboard/StatCards'
-import { DiagnosisChart } from '../../components/doctor/Dashboard/DiagnosisChart'
+import DiagnosisChart from '../../components/doctor/Dashboard/DiagnosisChart'
 import ChartAreaAgeGender from '../../components/doctor/Dashboard/ChartAreaAgeGender'
 import DoctorCard from '@/components/DoctorCard'
 
@@ -10,11 +10,6 @@ export const Main_Grid = () => {
         {/* <StatCards/>  */}
         <ChartAreaAgeGender/>
         <DiagnosisChart/>
-        <div className='grid grid-cols-3 gap-48 col-span-12'>
-          <DoctorCard/>
-          <DoctorCard/>
-          <DoctorCard/>
-        </div>
     </div>
   )
 }

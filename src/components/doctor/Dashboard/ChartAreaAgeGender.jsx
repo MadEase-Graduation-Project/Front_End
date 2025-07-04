@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import { TrendingUp } from "lucide-react"
 import { fetchAllPatients } from "@/store/slices/patientSlice"
 
 import {
@@ -18,7 +17,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card"
 import {
   ChartContainer,
@@ -79,11 +77,11 @@ export default function ChartAreaAgeGender() {
   const chartConfig = {
     male: {
       label: "Male",
-      color: "var(--chart-1)",
+      color: "#3b82f6", // blue
     },
     female: {
       label: "Female",
-      color: "var(--chart-2)",
+      color: "#ec4899", // pink
     },
   }
 
@@ -99,14 +97,11 @@ export default function ChartAreaAgeGender() {
   }
 
   return (
-    <div className="col-span-1 sm:col-span-2 md:col-span-5 lg:col-span-5 rounded-lg border border-gray-200 bg-white shadow-sm">
-      <div className="flex items-center justify-center mt-4">
-        <h2 className="text-lg md:text-xl font-semibold">Average Diagnoses</h2>
-      </div><Card>
+    <Card className="w-full border border-gray-200 bg-white shadow-sm">
       <CardHeader>
-        <CardTitle>Age & Gender Chart - Gradient</CardTitle>
+        <CardTitle>Age & Gender Chart</CardTitle>
         <CardDescription>
-          Showing patient demographics by age group
+          Patient demographics by age group
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -126,12 +121,12 @@ export default function ChartAreaAgeGender() {
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
               <linearGradient id="fillMale" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-male)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-male)" stopOpacity={0.1} />
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
               </linearGradient>
               <linearGradient id="fillFemale" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-female)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-female)" stopOpacity={0.1} />
+                <stop offset="5%" stopColor="#ec4899" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#ec4899" stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <Area
@@ -139,7 +134,7 @@ export default function ChartAreaAgeGender() {
               dataKey="male"
               stackId="a"
               fill="url(#fillMale)"
-              stroke="var(--color-male)"
+              stroke="#3b82f6"
               fillOpacity={0.4}
             />
             <Area
@@ -147,20 +142,12 @@ export default function ChartAreaAgeGender() {
               dataKey="female"
               stackId="a"
               fill="url(#fillFemale)"
-              stroke="var(--color-female)"
+              stroke="#ec4899"
               fillOpacity={0.4}
             />
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            
-          </div>
-        </div>
-      </CardFooter>
     </Card>
-    </div>
   )
 }
