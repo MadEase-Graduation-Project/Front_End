@@ -7,6 +7,7 @@ import NurseReport from "@/pages/nurse/NurseReport/NurseReport";
 import NurseHome from "@/pages/nurse/NurseHome/NurseHome";
 import NurseLayout from "./layouts/NurseLayout/NurseLayout";
 import Setting from "@/components/shared/Setting/Setting";
+import PatientDetails from "@/pages/nurse/PatientDetails/PatientDetails";
 
 
 const NurseApp = () => {
@@ -20,6 +21,7 @@ const NurseApp = () => {
         <Route path="medications" element={<Medications />} />
         <Route path="reports" element={<NurseReport />} />
         <Route path="profile" element={<Setting />} />
+        <Route path="patients/:id" element={<PatientDetails />} />
       </Route>
     </Routes>
   );

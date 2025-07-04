@@ -36,6 +36,7 @@
     "esbuild": "^0.25.0",
     "framer-motion": "^12.19.1",
     "fuse.js": "^7.1.0",
+    "html2pdf.js": "^0.10.3",
     "lucide-react": "^0.475.0",
     "postcss": "^8.5.2",
     "primeicons": "^7.0.0",
