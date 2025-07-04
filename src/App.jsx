@@ -39,6 +39,7 @@ import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";
 import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
+import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
 
 function App() {
   return (
@@ -67,7 +68,7 @@ function App() {
       <Route path="doctor" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
-        <Route path="diseases" element={<Diseases_doctor />} />
+        <Route path="diagnosis" element={<Diagnosis_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
       </Route>
