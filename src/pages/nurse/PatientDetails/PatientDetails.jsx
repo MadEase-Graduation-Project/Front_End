@@ -56,111 +56,112 @@ export default function PatientDetails() {
     // إخفاء الأزرار
     buttons.forEach((btn) => (btn.style.display = "none"));
 
-    const element = pdfRef.current;
-    html2pdf()
-      .set({
-        margin: 0.5,
-        filename: `patient_${patient.name}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-      })
-      .from(element)
-      .save()
-      .then(() => {
-        // إعادة إظهار الأزرار
-        buttons.forEach((btn) => (btn.style.display = ""));
-      });
-  };
+    //   const element = pdfRef.current;
+    //   html2pdf()
+    //     .set({
+    //       margin: 0.5,
+    //       filename: `patient_${patient.name}.pdf`,
+    //       html2canvas: { scale: 2 },
+    //       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    //     })
+    //     .from(element)
+    //     .save()
+    //     .then(() => {
+    //       // إعادة إظهار الأزرار
+    //       buttons.forEach((btn) => (btn.style.display = ""));
+    //     });
+    // };
 
-  if (!patient) return <p className="p-4">Loading...</p>;
+    if (!patient) return <p className="p-4">Loading...</p>;
 
-  return (
-    <div className="p-6 space-y-6" ref={pdfRef}>
-      <div className="flex items-center justify-between hide-on-pdf">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-          className="hide-on-pdf"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back
-        </Button>
-        <div className="flex gap-2">
-          <Button variant="outline" className="hide-on-pdf">
-            <Edit className="mr-2 h-4 w-4" /> Edit
-          </Button>
+    return (
+      <div className="p-6 space-y-6" ref={pdfRef}>
+        <div className="flex items-center justify-between hide-on-pdf">
           <Button
-            onClick={handleDownloadPDF}
-            className="bg-green-600 text-white hover:bg-green-700 hide-on-pdf"
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="hide-on-pdf"
           >
-            <Download className="mr-2 h-4 w-4" /> PDF
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back
           </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="hide-on-pdf">
+              <Edit className="mr-2 h-4 w-4" /> Edit
+            </Button>
+            <Button
+              onClick={handleDownloadPDF}
+              className="bg-green-600 text-white hover:bg-green-700 hide-on-pdf"
+            >
+              <Download className="mr-2 h-4 w-4" /> PDF
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <h1 className="text-2xl font-bold">Patient Details</h1>
+        <h1 className="text-2xl font-bold">Patient Details</h1>
 
-      <div className="flex items-center gap-6">
-        <Avatar className="w-20 h-20">
-          <AvatarImage src={patient.image} />
-          <AvatarFallback>{patient.name?.charAt(0)}</AvatarFallback>
-        </Avatar>
+        <div className="flex items-center gap-6">
+          <Avatar className="w-20 h-20">
+            <AvatarImage src={patient.image} />
+            <AvatarFallback>{patient.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <h2 className="text-xl font-semibold">{patient.name}</h2>
+            <p className="text-gray-600 text-sm">Email: {patient.email}</p>
+            <p className="text-gray-600 text-sm">ID: #{patient.id}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+          <p>
+            <strong>Age:</strong> {patient.age}
+          </p>
+          <p>
+            <strong>Disease:</strong> {patient.disease}
+          </p>
+          <p>
+            <strong>Last Visit:</strong> {patient.lastVisit}
+          </p>
+          <p>
+            <strong>Current Status:</strong> {patient.currentStatus}
+          </p>
+        </div>
+
         <div>
-          <h2 className="text-xl font-semibold">{patient.name}</h2>
-          <p className="text-gray-600 text-sm">Email: {patient.email}</p>
-          <p className="text-gray-600 text-sm">ID: #{patient.id}</p>
+          <h3 className="text-lg font-semibold mb-1">Medical History</h3>
+          <p className="text-gray-700 text-sm whitespace-pre-line">
+            {patient.history}
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-1">Treatment Plan</h3>
+          <p className="text-gray-700 text-sm whitespace-pre-line">
+            {patient.treatmentPlan}
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Previous Visits</h3>
+          <ul className="list-disc pl-5 text-sm text-gray-700">
+            {patient.previousVisits.map((visit, index) => (
+              <li key={index}>{visit}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Hospital Visits Chart</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={patient.visitHistory}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="visits" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-        <p>
-          <strong>Age:</strong> {patient.age}
-        </p>
-        <p>
-          <strong>Disease:</strong> {patient.disease}
-        </p>
-        <p>
-          <strong>Last Visit:</strong> {patient.lastVisit}
-        </p>
-        <p>
-          <strong>Current Status:</strong> {patient.currentStatus}
-        </p>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-1">Medical History</h3>
-        <p className="text-gray-700 text-sm whitespace-pre-line">
-          {patient.history}
-        </p>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-1">Treatment Plan</h3>
-        <p className="text-gray-700 text-sm whitespace-pre-line">
-          {patient.treatmentPlan}
-        </p>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Previous Visits</h3>
-        <ul className="list-disc pl-5 text-sm text-gray-700">
-          {patient.previousVisits.map((visit, index) => (
-            <li key={index}>{visit}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Hospital Visits Chart</h3>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={patient.visitHistory}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="visits" fill="#4F46E5" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
+    );
+  };
 }

@@ -81,7 +81,7 @@ export default function AdviceCard({
             >
               <Heart className="h-5 w-5 mr-1 text-pink-500 group-hover:scale-110 transition-transform" />
               <span className="font-medium text-gray-700">
-                {advice.likesCount}
+                {advice.likesCount || 0}
               </span>
             </button>
             <button
@@ -92,7 +92,7 @@ export default function AdviceCard({
             >
               <Frown className="h-5 w-5 mr-1 text-yellow-500 group-hover:scale-110 transition-transform" />
               <span className="font-medium text-gray-700">
-                {advice.dislikesCount}
+                {advice.dislikesCount || 0}
               </span>
             </button>
           </div>

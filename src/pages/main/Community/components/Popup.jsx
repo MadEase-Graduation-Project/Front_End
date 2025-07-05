@@ -8,7 +8,7 @@ export default function Popup({ open, onClose }) {
 
   const navigateToLogin = () => {
     onClose();
-    navigate("/login");
+    navigate("/register/login");
   };
 
   return (
