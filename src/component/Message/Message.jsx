@@ -1,18 +1,16 @@
-import React from 'react';
-import './Message.css';
+import React from "react";
 
-const Message = ({ own, text, imageUrl }) => {
-    return (
-        <div className={own ? 'message own' : 'message'}>
-            <div className="messageTop">
-                {imageUrl ? ( // Conditionally render the image if imageUrl is provided
-                    <img className='messageImg' src={imageUrl} alt="User " />
-                ) : null}
-                <p className='messageText'>{text}</p>
-            </div>
-            <div className="messageBottom">1 hour ago</div>
-        </div>
-    );
-}
+const Message = ({ own, text }) => {
+  return (
+    <div
+      className={`flex flex-col p-2.5 rounded-lg my-2 shadow-md max-w-[70%] ${
+        own ? "bg-[#dcf8c6] self-end" : "bg-[#f1f1f1] self-start"
+      }`}
+    >
+      <p className="text-[16px] text-[#333] leading-snug">{text}</p>
+      <div className="text-xs text-[#888] mt-1">Just now</div>
+    </div>
+  );
+};
 
 export default Message;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import { User, Mail, Menu } from "lucide-react";
 import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, useAnimationControls } from "framer-motion";
 const navItems = [
   { label: "Medical blogs", path: "/community" },
@@ -16,6 +16,8 @@ const NavBar = ({ scrolled }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -37,7 +39,7 @@ const NavBar = ({ scrolled }) => {
     <>
       {/* Dark Overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 cursor-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 0 0-1.41 1.41L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z%22/></svg>'), auto]" />
+        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 cursor-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 0 0-1.41 1.41L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z%22/></svg>'), auto]" />
       )}
 
       {/* Sidebar Menu */}
@@ -71,15 +73,22 @@ const NavBar = ({ scrolled }) => {
 
         <nav className="flex flex-col gap-10">
           {navItems.map(({ label, path }) => (
-            <Link
+            <button
               key={label}
-              to={path}
-              onClick={() => setMenuOpen(false)} // Close sidebar on click
-              className="font-jost text-base text-menavy font-semibold"
+              onClick={() => {
+                setMenuOpen(false);
+                if (location.pathname === path) {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  navigate(path);
+                }
+              }}
+              className="font-jost text-base text-menavy font-semibold text-left"
             >
               {label}
-            </Link>
+            </button>
           ))}
+
           <Link
             to="/medbot"
             onClick={() => setMenuOpen(false)}
@@ -101,23 +110,42 @@ const NavBar = ({ scrolled }) => {
             <Menu className="w-6 sm:w-7 text-menavy" />
           </button>
           {/* Logo */}
-          <img
-            src={Logo_navy}
-            alt="Logo"
-            className="h-12 xs:h-14 sm:h-16 object-contain z-40"
-          />
+          <Link
+            to="/"
+            onClick={(e) => {
+              e.preventDefault();
+              if (window.location.pathname === "/") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                navigate("/");
+              }
+            }}
+          >
+            <img
+              src={Logo_navy}
+              alt="Logo"
+              className="h-12 xs:h-14 sm:h-16 object-contain z-40"
+            />
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-10 xl:gap-20 z-40">
             {navItems.map(({ label, path }) => (
-              <Link
+              <button
                 key={label}
-                to={path}
+                onClick={() => {
+                  if (location.pathname === path) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    navigate(path);
+                  }
+                }}
                 className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold"
               >
                 {label}
-              </Link>
+              </button>
             ))}
+
             <Link
               to="/medbot"
               className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
