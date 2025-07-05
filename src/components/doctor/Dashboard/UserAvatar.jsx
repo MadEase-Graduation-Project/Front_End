@@ -39,17 +39,9 @@ export function UserAvatar({ name, gender, email }) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="flex items-center gap-2">
-          <User size={16} /> Profile
-        </DropdownMenuItem>
-
-        <DropdownMenuItem className="flex items-center gap-2">
-          <PoundSterlingIcon size={16} /> Billing
-        </DropdownMenuItem>
-
         <DropdownMenuItem
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate("settings")}
+          onClick={() => navigate("/doctor/settings")}
         >
           <Settings size={16} /> Settings
         </DropdownMenuItem>

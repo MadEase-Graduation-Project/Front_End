@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { fetchAllPatients } from "@/store/slices/patientSlice";
+import { fetchAllPatients, fetchShowPatients } from "@/store/slices/patientSlice";
 
 const fallbackPatients = [
   {
@@ -59,15 +59,10 @@ const fallbackPatients = [
 export const Patients_List = ({ onPatientSelect, sortBy }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const dispatch = useDispatch();
-
-  const {
-    items: patientsFromStore,
-    loading,
-    error,
-  } = useSelector((state) => state.patients);
+  const patientsFromStore = useSelector(selectShowPatients);
 
   useEffect(() => {
-    dispatch(fetchAllPatients(localStorage.getItem("doctorToken")));
+    dispatch(fetchShowPatients());
   }, [dispatch]);
 
 const handlePatientClick = (patient) => {

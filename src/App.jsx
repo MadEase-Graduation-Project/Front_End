@@ -36,6 +36,7 @@ import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";
 import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
+import { Settings } from "./pages/doctor/Settings";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
         <Route path="diagnosis" element={<Diagnosis_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* reset pass layout */}

@@ -138,4 +138,9 @@ export default {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+  variants: {
+    extend: {
+      backdropBlur: ['responsive'],
+    },
+  },
 };
