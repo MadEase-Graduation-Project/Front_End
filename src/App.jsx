@@ -1,5 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 
+//import HomePage from "@/pages/main/HomePage";
+import Main_Layout from "@/layouts/Main_Layout";
+import HomePage1 from "./pages/general/HomePage1";
+import LogInPage from "./pages/general/LogInPage";
+import SignUpPage from "./pages/general/SignUpPage";
+import ResetPassPage from "./pages/general/ResetPassPage";
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";
@@ -36,7 +42,6 @@ import Test from "@/pages/general/Test";
 import Register_Layout from "@/layouts/Register_Layout";
 
 import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
-import ProtectedRoute from "@/routes/protectedRoute";
 import NurseApp from "@/NurseApp";
 import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
