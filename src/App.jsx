@@ -40,6 +40,7 @@ import AdviceBlogPost from "@/pages/main/AdviceBlogPost";
 import NurseApp from "@/NurseApp";
 import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
+import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
 
 function App() {
   return (
@@ -94,6 +95,7 @@ function App() {
         <Route path="diseases" element={<DiseasesPage />} />
         <Route path="diseaseCategories" element={<DiseasesCategoriesPage />} />
         <Route path="advices" element={<AdvicesPage />} />
+        <Route path="treatments" element={<TreatmentsPage />} />
         <Route path="setting" element={<SettingPage />} />
       </Route>
 
