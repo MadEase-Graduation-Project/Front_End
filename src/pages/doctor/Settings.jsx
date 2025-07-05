@@ -10,7 +10,7 @@ import Appearance from "@/components/shared/Setting/Appearance";
 
 // Settingssss
 
-export const Settings = () => {
+export const SettingsDoctor = () => {
   const dispatch = useDispatch();
   const details = useSelector(selectMyDetails);
   const loading = useSelector(selectUsersLoading);
@@ -22,15 +22,15 @@ export const Settings = () => {
   return (
     <div className="px-2 sm:px-4">
       <Navigate
-              tabs={[
-                {
-                  label: "Profile Info",
-                  content: <ProfileInfo details={details} loading={loading} />,
-                },
-                { label: "Security", content: <Security details={details} /> },
-                { label: "Appearance", content: <Appearance /> },
-              ]}
-            />
+        tabs={[
+          {
+            label: "Profile Info",
+            content: <ProfileInfo details={details} loading={loading} />,
+          },
+          { label: "Security", content: <Security details={details} /> },
+          { label: "Appearance", content: <Appearance /> },
+        ]}
+      />
     </div>
     // <div className="px-2 sm:px-4">
     //   <Tabs defaultValue="profile" className="w-full mt-4">
