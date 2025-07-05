@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import { fetchAllPatients } from "@/store/slices/patientSlice"
+import { fetchAllPatients, fetchShowPatientById } from "@/store/slices/patientSlice"
 
 import {
   Card,
@@ -23,6 +23,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { selectAllAppointments, selectAllPatients, selectPatientsLoading, selectShowPatientById } from "@/store/selectors"
+import { fetchAppointments } from "@/store/slices/appointmentSlice"
 
 const calculateAge = (dob) => {
   const birthDate = new Date(dob)
@@ -44,35 +46,61 @@ const getAgeGroup = (age) => {
 }
 
 export default function ChartAreaAgeGender() {
-  const dispatch = useDispatch()
-  const patients = useSelector((state) => state.patients.patients) || []
-  const loading = useSelector((state) => state.patients.loading)
+const dispatch = useDispatch();
+const Appointments = useSelector(selectAllAppointments);
+const patientMap = useSelector(selectShowPatientById);
+const loading = useSelector(selectPatientsLoading);
 
-  useEffect(() => {
-    dispatch(fetchAllPatients())
-  }, [dispatch])
+// Memoize IDs
+const uniquePatientIds = useMemo(() => {
+  return [...new Set(Appointments.map(a => a.patientId))];
+}, [Appointments]);
 
-  const chartData = useMemo(() => {
-    const dataMap = {}
+// Fetch patients
+useEffect(() => {
+  if (uniquePatientIds.length > 0) {
+    uniquePatientIds.forEach(id => {
+      if (!patientMap[id]) dispatch(fetchShowPatientById(id));
+    });
+  }
+}, [dispatch, uniquePatientIds, patientMap]);
 
-    patients.forEach((patient) => {
-      const age = calculateAge(patient.dateOfBirth)
-      const ageGroup = getAgeGroup(age)
-      const gender = patient.gender?.toLowerCase()
+// Fetch appointments once
+useEffect(() => {
+  dispatch(fetchAppointments());
+}, [dispatch]);
 
-      if (!dataMap[ageGroup]) {
-        dataMap[ageGroup] = { male: 0, female: 0 }
-      }
+// Get patient list
+const patients = useMemo(() => {
+  return uniquePatientIds.map(id => patientMap[id]).filter(Boolean);
+}, [patientMap, uniquePatientIds]);
 
-      if (gender === "male") dataMap[ageGroup].male++
-      else if (gender === "female") dataMap[ageGroup].female++
-    })
+// Loading state
+const isLoading = uniquePatientIds.some(id => !patientMap[id]);
 
-    return Object.entries(dataMap).map(([ageGroup, counts]) => ({
-      ageGroup,
-      ...counts,
-    }))
-  }, [patients])
+// Chart Data
+const chartData = useMemo(() => {
+  const dataMap = {};
+
+  patients.forEach((patient) => {
+    const age = calculateAge(patient.dateOfBirth);
+    const ageGroup = getAgeGroup(age);
+    const gender = patient.gender?.toLowerCase();
+
+    if (!dataMap[ageGroup]) {
+      dataMap[ageGroup] = { male: 0, female: 0 };
+    }
+
+    if (gender === "male") dataMap[ageGroup].male++;
+    else if (gender === "female") dataMap[ageGroup].female++;
+  });
+
+  return Object.entries(dataMap).map(([ageGroup, counts]) => ({
+    ageGroup,
+    ...counts,
+  }));
+}, [patients]);
+
 
   const chartConfig = {
     male: {

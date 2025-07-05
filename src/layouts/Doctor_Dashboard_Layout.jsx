@@ -10,26 +10,29 @@ export default function Doctor_Dashboard_Layout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex gap-2 w-screen min-h-screen bg-gray-200">
-      {/* sidebar */}
-      <div className="text-white z-10">
+    <div className="flex w-screen min-h-screen bg-gray-200 overflow-hidden">
+      {/* Sidebar */}
+      <aside className="z-10">
         <Sidebar isCollapsed={isCollapsed} currentPath={currentPath} />
-      </div>
-      <div
-        className={`flex flex-col gap-2 pr-1 pb-1 w-full ${
-          isCollapsed ? "sm:ml-40 lg:ml-44" : "sm:ml-12 lg:ml-14"
-        } transition-all duration-300 ease-in-out`}
-      >
-        {/* Header */}
-        <div className="">
-          <Topbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        </div>
+      </aside>
 
-        {/* Main content */}
-        <div className="pages h-full">
+      {/* Main Area */}
+      <main
+        className={`flex flex-col w-full transition-all duration-300 ease-in-out ${
+          isCollapsed ? "sm:ml-40 lg:ml-44" : "sm:ml-12 lg:ml-14"
+        }`}
+      >
+        {/* Topbar */}
+       <header className="sticky top-0 z-30 backdrop-blur-md bg-white/60 shadow-sm">
+          <Topbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      </header>
+
+
+        {/* Page Content */}
+        <section className="flex-1 overflow-y-auto px-4 py-2">
           <Outlet />
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
