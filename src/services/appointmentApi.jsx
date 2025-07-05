@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/appointments";
  * @returns {Promise<Array>} List of appointments
  */
 export async function getAllAppointments() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/`);
-    return handleApiResponse(response, "No appointments found");
-  } catch (error) {
-    return handleApiError(error, "fetching appointments");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/`);
+  return handleApiResponse(response, "No appointments found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllAppointments() {
  * @returns {Promise<Object>} Appointment details
  */
 export async function showAppointment(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, `Appointment with id ${id} not found`);
-  } catch (error) {
-    return handleApiError(error, `fetching appointment ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Appointment with id ${id} not found`);
 }
 
 /**
@@ -42,15 +34,11 @@ export async function showAppointment(id) {
  * @returns {Promise<Object>} Created appointment
  */
 export async function addAppointment(doctorId, appointmentData) {
-  try {
-    const response = await api.post(
-      `${BASE_ENDPOINT}/doctor/${doctorId}`,
-      appointmentData
-    );
-    return handleApiResponse(response, "Failed to create appointment");
-  } catch (error) {
-    return handleApiError(error, "adding appointment");
-  }
+  const response = await api.post(
+    `${BASE_ENDPOINT}/doctor/${doctorId}`,
+    appointmentData
+  );
+  return handleApiResponse(response, "Failed to create appointment");
 }
 
 /**
@@ -60,12 +48,8 @@ export async function addAppointment(doctorId, appointmentData) {
  * @returns {Promise<Object>} Updated appointment
  */
 export async function editAppointment(id, appointmentData) {
-  try {
-    const response = await api.put(`${BASE_ENDPOINT}/${id}`, appointmentData);
-    return handleApiResponse(response, `Failed to update appointment ${id}`);
-  } catch (error) {
-    return handleApiError(error, `editing appointment ${id}`);
-  }
+  const response = await api.put(`${BASE_ENDPOINT}/${id}`, appointmentData);
+  return handleApiResponse(response, `Failed to update appointment ${id}`);
 }
 
 /**
@@ -74,12 +58,8 @@ export async function editAppointment(id, appointmentData) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteUserAppointment(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/user/${id}`);
-    return handleApiResponse(response, `Failed to delete appointment ${id}`);
-  } catch (error) {
-    return handleApiError(error, `deleting appointment ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/user/${id}`);
+  return handleApiResponse(response, `Failed to delete appointment ${id}`);
 }
 
 /**
@@ -88,10 +68,6 @@ export async function deleteUserAppointment(id) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteDoctorAppointment(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/doctor/${id}`);
-    return handleApiResponse(response, `Failed to delete appointment ${id}`);
-  } catch (error) {
-    return handleApiError(error, `deleting appointment ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/doctor/${id}`);
+  return handleApiResponse(response, `Failed to delete appointment ${id}`);
 }

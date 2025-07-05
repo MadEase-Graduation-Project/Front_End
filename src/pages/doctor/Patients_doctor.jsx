@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { Patients_Main } from "@/components/doctor/Patients/Patients_Main";
 import { Patients_Sidebar } from "@/components/doctor/Patients/Patients_Sidebar";
-import Patients_Sort_Bar from "@/components/doctor/Patients/Patients_Sort_Bar";
-import { FiSearch } from "react-icons/fi";
 
 export const Patients_doctor = () => {
-  const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null); // store the full object
   const [sortBy, setSortBy] = useState("newest");
 
-  const handlePatientSelect = (patientId) => {
-    setSelectedPatientId(patientId);
+  const handlePatientSelect = (patient) => {
+    setSelectedPatient(patient); // get full object from sidebar
   };
 
   const handleSortChange = (value) => {
@@ -24,7 +22,7 @@ export const Patients_doctor = () => {
         sortBy={sortBy}
       />
       <div className="col-span-9 overflow-y-auto">
-        <Patients_Main selectedPatientId={selectedPatientId} />
+        <Patients_Main selectedPatient={selectedPatient} />
       </div>
     </div>
   );

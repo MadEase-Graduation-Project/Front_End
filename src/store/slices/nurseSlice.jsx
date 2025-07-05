@@ -14,15 +14,16 @@ const nurseSlice = createSlice({
   initialState: {
     nurses: [],
     loading: false,
-    error: null,
+    error: false,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllNurses.pending, pendingHandler())
       .addCase(fetchAllNurses.fulfilled, (state, action) => {
-        state.nurses = action.payload;
         state.loading = false;
+        state.error = false;
+        state.nurses = action.payload;
       })
       .addCase(fetchAllNurses.rejected, rejectedHandler());
   },

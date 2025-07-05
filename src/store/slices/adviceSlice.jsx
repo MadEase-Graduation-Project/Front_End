@@ -5,6 +5,8 @@ import {
   addAdvice,
   editAdvice,
   deleteAdvice,
+  addAdviceLike,
+  addAdviceDislike,
 } from "@/services/adviceApi";
 import {
   fulfilledHandler,
@@ -48,6 +50,22 @@ export const removeAdvice = createAsyncThunk(
   }
 );
 
+// Add like advice thunk
+export const likeAdvice = createAsyncThunk(
+  "advices/likeAdvice",
+  async (adviceId) => {
+    return await addAdviceLike(adviceId);
+  }
+);
+
+// Add dislike advice thunk
+export const dislikeAdvice = createAsyncThunk(
+  "advices/dislikeAdvice",
+  async (adviceId) => {
+    return await addAdviceDislike(adviceId);
+  }
+);
+
 const initialState = {
   // data
   advices: [],
@@ -56,8 +74,10 @@ const initialState = {
   totalAdvices: 0,
   // handling
   loading: false,
-  error: null,
+  error: false,
 };
+
+//* note that here we take the data of advices nonDirect from payload
 
 const adviceSlice = createSlice({
   name: "advices",
@@ -66,7 +86,7 @@ const adviceSlice = createSlice({
     clearSelectedAdvice: (state) => {
       state.selectedAdvice = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
@@ -75,8 +95,9 @@ const adviceSlice = createSlice({
       .addCase(fetchAllAdvices.pending, pendingHandler())
       .addCase(fetchAllAdvices.fulfilled, (state, action) => {
         state.loading = false;
-        state.totalAdvices = action.payload?.total;
+        state.error = false;
         state.advices = action.payload?.data;
+        state.totalAdvices = action.payload?.totalAdvices;
       })
       .addCase(fetchAllAdvices.rejected, rejectedHandler())
 
@@ -101,7 +122,17 @@ const adviceSlice = createSlice({
       // Remove advice
       .addCase(removeAdvice.pending, pendingHandler())
       .addCase(removeAdvice.fulfilled, fulfilledHandler())
-      .addCase(removeAdvice.rejected, rejectedHandler());
+      .addCase(removeAdvice.rejected, rejectedHandler())
+
+      // Like advice
+      .addCase(likeAdvice.pending, pendingHandler())
+      .addCase(likeAdvice.fulfilled, fulfilledHandler())
+      .addCase(likeAdvice.rejected, rejectedHandler())
+
+      // Dislike advice
+      .addCase(dislikeAdvice.pending, pendingHandler())
+      .addCase(dislikeAdvice.fulfilled, fulfilledHandler())
+      .addCase(dislikeAdvice.rejected, rejectedHandler());
   },
 });
 

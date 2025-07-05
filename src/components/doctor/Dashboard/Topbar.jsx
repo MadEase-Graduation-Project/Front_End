@@ -4,34 +4,31 @@ import { FiSearch } from "react-icons/fi";
 import { UserAvatar } from "./UserAvatar";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
-import { fetchUserById } from "@/store/slices/userSlice";
+import { selectMyDetails } from "@/store/selectors";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchMYData } from "@/store/slices/userSlice";
 
 export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
-  console.log(details);
-  useEffect(() => {
-    dispatch(
-      fetchUserById({
-        id: "67ca34e0f2d6e1f39d3e1759",
-        token: localStorage.getItem("doctorToken"),
-      })
-    );
-  }, [dispatch]);
+  const navigate = useNavigate();
 
-  console.log(details);
+  const details = useSelector(selectMyDetails);
+
+  useEffect(() => {
+    dispatch(fetchMYData());
+  }, [dispatch, navigate]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    if (details[0]) {
-      setName(details[0].name || "");
-      setEmail(details[0].email || "");
+    if (details) {
+      setName(details.name || "");
+      setEmail(details.email || "");
     }
-  }, [details[0]]);
+  }, [details]);
 
   const getPageTitle = () => {
     const path = location.pathname;
@@ -40,8 +37,8 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
         return `Hello, Doctor ${name}!`;
       case "/doctor/chat":
         return "Chat";
-      case "/doctor/diseases":
-        return "Diseases";
+      case "/doctor/diagnosis":
+        return "Diagnosis";
       case "/doctor/advice":
         return "Advice";
       case "/doctor/patients":

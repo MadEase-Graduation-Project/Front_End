@@ -5,17 +5,26 @@ import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Settings } from "lucide-react";
 import FilterColumns from "@/components/role/admin/FilterColumns";
+import {
+  selectAllDiseases,
+  selectDiseasesError,
+  selectDiseasesLoading,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function DiseasesPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.diseases);
+
+  const data = useSelector(selectAllDiseases);
+  const loading = useSelector(selectDiseasesLoading);
+  const erro = useSelector(selectDiseasesError);
 
   // State for dialogs
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [diseaseToDelete, setDiseaseToDelete] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchAllDiseases());
+    if (isEmpty(data)) dispatch(fetchAllDiseases());
   }, [dispatch]);
 
   const handleRowClick = (item) => {

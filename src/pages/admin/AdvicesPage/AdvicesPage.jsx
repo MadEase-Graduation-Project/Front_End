@@ -4,13 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllAdvices } from "@/store/slices/adviceSlice";
 import { Settings } from "lucide-react";
 import FilterColumns from "@/components/role/admin/FilterColumns";
+import {
+  selectAdvicesError,
+  selectAdvicesLoading,
+  selectAllAdvices,
+} from "@/store/selectors";
+import { isEmpty } from "@/utils/objectUtils";
 
 export default function AdvicesPage() {
   const dispatch = useDispatch();
-  const { items: data, loading } = useSelector((state) => state.advices);
+
+  const data = useSelector(selectAllAdvices);
+  const loading = useSelector(selectAdvicesLoading);
+  const error = useSelector(selectAdvicesError);
 
   useEffect(() => {
-    dispatch(fetchAllAdvices());
+    if (isEmpty(data)) dispatch(fetchAllAdvices());
   }, [dispatch]);
 
   const handleRowClick = (item) => {

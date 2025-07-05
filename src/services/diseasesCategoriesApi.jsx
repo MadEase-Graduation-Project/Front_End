@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/diseasescategories";
  * @returns {Promise<Array>} List of disease categories
  */
 export async function getAllDiseaseCategories({ page = 1 } = {}) {
-  try {
-    const response = await api.get(BASE_ENDPOINT, { params: { page } });
-    return handleApiResponse(response, "No disease categories found");
-  } catch (error) {
-    return handleApiError(error, "fetching disease categories");
-  }
+  const response = await api.get(BASE_ENDPOINT, { params: { page } });
+  return handleApiResponse(response, "No disease categories found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllDiseaseCategories({ page = 1 } = {}) {
  * @returns {Promise<Object>} Disease category details
  */
 export async function showDiseaseCategory(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, "this category was not found");
-  } catch (error) {
-    return handleApiError(error, `fetching disease category ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, "this category was not found");
 }
 
 /**
@@ -42,12 +34,8 @@ export async function showDiseaseCategory(id) {
  * @returns {Promise<Object>} Created disease category
  */
 export async function addDiseaseCategory(categoryData) {
-  try {
-    const response = await api.post(BASE_ENDPOINT, categoryData);
-    return handleApiResponse(response, "Failed to create disease category");
-  } catch (error) {
-    return handleApiError(error, "adding disease category");
-  }
+  const response = await api.post(BASE_ENDPOINT, categoryData);
+  return handleApiResponse(response, "Failed to create disease category");
 }
 
 /**
@@ -57,15 +45,8 @@ export async function addDiseaseCategory(categoryData) {
  * @returns {Promise<Object>} Updated disease category
  */
 export async function editDiseaseCategory(id, categoryData) {
-  try {
-    const response = await api.put(`${BASE_ENDPOINT}/${id}`, categoryData);
-    return handleApiResponse(
-      response,
-      `Failed to update disease category ${id}`
-    );
-  } catch (error) {
-    return handleApiError(error, `editing disease category ${id}`);
-  }
+  const response = await api.put(`${BASE_ENDPOINT}/${id}`, categoryData);
+  return handleApiResponse(response, `Failed to update disease category ${id}`);
 }
 
 /**
@@ -74,13 +55,6 @@ export async function editDiseaseCategory(id, categoryData) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteDiseaseCategory(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(
-      response,
-      `Failed to delete disease category ${id}`
-    );
-  } catch (error) {
-    return handleApiError(error, `deleting disease category ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Failed to delete disease category ${id}`);
 }

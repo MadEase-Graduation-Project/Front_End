@@ -1,12 +1,19 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 // Basic selectors
+
 export const selectPatientsState = (state) => state.patients;
 export const selectAllPatients = (state) => selectPatientsState(state).patients;
 export const selectPatientsLoading = (state) =>
   selectPatientsState(state).loading;
 export const selectPatientsError = (state) => selectPatientsState(state).error;
-export const selectSelectedPatient = (state) =>
+
+// Selector for showPatients (basic data for doctors and nurses)
+export const selectShowPatients = (state) =>
+  selectPatientsState(state).showPatients;
+
+// Selector for patient by id (from showPatientById)
+export const selectShowPatientById = (state) =>
   selectPatientsState(state).selectedPatient;
 
 // // Memoized selectors

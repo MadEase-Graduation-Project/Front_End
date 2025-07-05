@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Array>} List of admins
  */
 export async function getAllAdmins() {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/`);
-    const data = handleApiResponse(response, "No users found");
-    const admins = data?.data.filter((user) => user.role === "Admin");
-    return admins;
-  } catch (error) {
-    return handleApiError(error, "fetching admins");
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/`);
+  const data = handleApiResponse(response, "No users found");
+  const admins = data?.data.filter((user) => user.role === "Admin");
+  return admins;
 }

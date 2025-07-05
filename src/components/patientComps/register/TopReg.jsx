@@ -1,8 +1,8 @@
 import TextTitle from "../TextTitle";
 import UnderLined from "./UnderLined";
 const TopReg = ({ regtitle, regnote, reg, dest }) => (
-  <div className="flex flex-col gap">
-    <h1 className="font-jost font-semibold text-2xl md:text-3xl xl:text-4xl 2xl:text-5xl text-menavy">
+  <div className="flex flex-col">
+    <h1 className="font-jost font-semibold text-2xl md:text-3xl xl:text-4xl 2xl:text-5xl text-menavy mb-2">
       {regtitle}
     </h1>
     <div className="flex items-center gap-[5px] flex-wrap">

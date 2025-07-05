@@ -2,15 +2,25 @@ import Card from "@/components/shared/Card";
 import { FaUsers, FaUserNurse, FaVirus, FaLightbulb } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { RiCalendarScheduleFill } from "react-icons/ri";
+import {
+  selectTotalNurses,
+  selectTotalPatients,
+  selectTotalDoctors,
+  selectUsersLoading,
+  selectUsersError,
+  selectAppointmentsLoading,
+  selectAppointmentsError,
+  selectAdviceCount,
+  selectAdvicesLoading,
+  selectAdvicesError,
+  selectAppointmentsCount,
+  selectTotalDiseases,
+  selectDiseasesLoading,
+  selectDiseasesError,
+} from "@/store/selectors";
+import { useSelector } from "react-redux";
 
-export default function TotalCards({
-  PatientsData,
-  DoctorsData,
-  AppointmentsData,
-  NursesData,
-  DiseasesData,
-  AdvicesData,
-}) {
+export default function TotalCards() {
   const loading = () => {
     return (
       <div className="flex items-center justify-center h-9">
@@ -19,13 +29,31 @@ export default function TotalCards({
     );
   };
 
+  const totalPatients = useSelector(selectTotalPatients);
+  const totalDoctors = useSelector(selectTotalDoctors);
+  const totalNurses = useSelector(selectTotalNurses);
+  const loadingData = useSelector(selectUsersLoading);
+  const errorData = useSelector(selectUsersError);
+
+  const totalAppointments = useSelector(selectAppointmentsCount);
+  const loadingAppointments = useSelector(selectAppointmentsLoading);
+  const errorAppointments = useSelector(selectAppointmentsError);
+
+  const totalDiseases = useSelector(selectTotalDiseases);
+  const loadingDiseases = useSelector(selectDiseasesLoading);
+  const errorDiseases = useSelector(selectDiseasesError);
+
+  const totalAdvices = useSelector(selectAdviceCount);
+  const loadingAdvices = useSelector(selectAdvicesLoading);
+  const errorAdvices = useSelector(selectAdvicesError);
+
   return (
     <div className="">
       <div className="grid grid-cols-1 sm:grid-cols-2  gap-3 auto-rows-fr">
         <Card
           to={"/admin/patients"}
           title="Total Patients"
-          value={PatientsData.loading ? loading() : PatientsData.items.length}
+          value={loadingData ? loading() : totalPatients || 0}
           period="Users"
         >
           <FaUsers className="text-xl text-green-500" />
@@ -33,7 +61,7 @@ export default function TotalCards({
         <Card
           to={"/admin/doctors"}
           title="Total Doctors"
-          value={DoctorsData.loading ? loading() : DoctorsData.items.length}
+          value={loadingData ? loading() : totalDoctors || 0}
           period="Users"
         >
           <FaUserDoctor className="text-xl text-blue-500" />
@@ -41,7 +69,7 @@ export default function TotalCards({
         <Card
           to={"/admin/nurses"}
           title="Total Nurses"
-          value={NursesData.loading ? loading() : NursesData.items.length}
+          value={loadingData ? loading() : totalNurses || 0}
           period="Users"
         >
           <FaUserNurse className="text-xl text-red-500" />
@@ -49,9 +77,7 @@ export default function TotalCards({
         <Card
           to={"/admin/appointments"}
           title="Total Appointments"
-          value={
-            AppointmentsData.loading ? loading() : AppointmentsData.items.length
-          }
+          value={loadingAppointments ? loading() : totalAppointments || 0}
           period="Schedules"
         >
           <RiCalendarScheduleFill className="text-xl text-yellow-500" />
@@ -59,9 +85,7 @@ export default function TotalCards({
         <Card
           to={"/admin/diseases"}
           title="Total Diseases"
-          value={
-            DiseasesData?.loading ? loading() : DiseasesData?.items?.length || 0
-          }
+          value={loadingDiseases ? loading() : totalDiseases || 0}
           period="Medical Data"
         >
           <FaVirus className="text-xl text-orange-500" />
@@ -69,9 +93,7 @@ export default function TotalCards({
         <Card
           to={"/admin/advices"}
           title="Total Advices"
-          value={
-            AdvicesData?.loading ? loading() : AdvicesData?.items?.length || 0
-          }
+          value={loadingAdvices ? loading() : totalAdvices || 0}
           period="Medical Data"
         >
           <FaLightbulb className="text-xl text-purple-500" />

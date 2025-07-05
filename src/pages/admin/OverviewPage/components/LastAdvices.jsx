@@ -1,22 +1,19 @@
-import { fetchAllAdvices } from "@/store/slices/adviceSlice";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaLightbulb } from "react-icons/fa";
 import { description } from "@/utils/stringUtils";
+import {
+  selectAdvicesError,
+  selectAdvicesLoading,
+  selectAllAdvices,
+  selectTotalDiseases,
+} from "@/store/selectors";
 
 export default function LastAdvices() {
-  const dispatch = useDispatch();
-  const { items: advices, loading } = useSelector((state) => state.advices);
-  const [maxItems, setMaxItems] = useState(5);
-
-  useEffect(() => {
-    dispatch(fetchAllAdvices());
-  }, [dispatch]);
-
-  const handleShowMore = () => {
-    setMaxItems((prev) => (prev === 5 ? advices.length : 5));
-  };
+  const advices = useSelector(selectAllAdvices);
+  const loading = useSelector(selectAdvicesLoading);
+  const advicesCount = useSelector(selectTotalDiseases);
+  const erro = useSelector(selectAdvicesError);
 
   if (loading) {
     return (
@@ -35,11 +32,11 @@ export default function LastAdvices() {
     <div className="flex flex-col gap-3 bg-white p-4 shadow-lg rounded-lg h-full">
       <h2 className="text-xl font-semibold mb-2">Recent Advices</h2>
 
-      {advices.length === 0 ? (
+      {advicesCount === 0 ? (
         <p className="text-gray-500 italic">No advices found</p>
       ) : (
         <>
-          {advices.slice(0, maxItems).map((advice) => (
+          {advices.slice(0, 5).map((advice) => (
             <div
               key={advice._id}
               className="flex gap-3 p-2 hover:bg-gray-50 rounded-md transition-colors"

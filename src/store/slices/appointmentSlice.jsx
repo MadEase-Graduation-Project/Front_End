@@ -60,10 +60,12 @@ const initialState = {
   // data
   appointments: [],
   selectedAppointment: {},
+  // counts
+  totalAppointments: 0,
   // loading
   loading: false,
   // error
-  error: null,
+  error: false,
 };
 
 const appointmentSlice = createSlice({
@@ -73,17 +75,19 @@ const appointmentSlice = createSlice({
     clearSelectedAppointment: (state) => {
       state.selectedAppointment = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {
     builder
       // Fetch all appointments
       .addCase(fetchAppointments.pending, pendingHandler())
-      .addCase(
-        fetchAppointments.fulfilled,
-        fulfilledHandler({ listKey: "appointments" })
-      )
+      .addCase(fetchAppointments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.appointments = action.payload?.data;
+        state.totalAppointments = action.payload?.totalAppointments;
+      })
       .addCase(fetchAppointments.rejected, rejectedHandler())
 
       // Fetch appointment by ID

@@ -1,25 +1,27 @@
 import { useState } from "react";
-import "./index.css";
+import "./index.css"; // keep your .active / .disActive rules
 
 export default function Navigate({ tabs }) {
   const [activeTab, setActiveTab] = useState(0);
+
   return (
-    <div className="">
-      <div className="flex items-center justify-start  p-1 border-b-2 border-gray-200 my-4">
+    <div>
+      {/* Tab strip */}
+      <div className="flex items-center justify-start gap-6 overflow-x-auto border-b-2 border-gray-200 my-4 px-1 ">
         {tabs.map((tab, index) => (
-          <div key={index} className=" relative text-nowrap w-28  p-3 ">
-            <span
-              className={`item ${
-                activeTab === index ? "active" : "disActive "
-              }`}
-              onClick={() => setActiveTab(index)}
-            >
-              {tab.label}
-            </span>
-          </div>
+          <button
+            key={index}
+            onClick={() => setActiveTab(index)}
+            className={`whitespace-nowrap px-2 py-3 cursor-pointer transition-colors 
+              ${activeTab === index ? "active" : "disActive"}`}
+          >
+            {tab.label}
+          </button>
         ))}
       </div>
-      <div className="p-4 bg-white rounded-md shadow-md">
+
+      {/* Active panel */}
+      <div className="p-4 bg-mewhite rounded-md shadow-md ">
         {tabs[activeTab].content}
       </div>
     </div>

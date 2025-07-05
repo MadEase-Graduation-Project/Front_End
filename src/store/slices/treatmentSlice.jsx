@@ -67,7 +67,7 @@ const initialState = {
   loading: false,
   loadingMore: false,
   // error
-  error: null,
+  error: false,
 };
 
 const treatmentSlice = createSlice({
@@ -77,7 +77,7 @@ const treatmentSlice = createSlice({
     clearSelectedTreatment: (state) => {
       state.selectedTreatment = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {

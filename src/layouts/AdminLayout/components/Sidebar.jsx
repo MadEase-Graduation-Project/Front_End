@@ -104,9 +104,14 @@ export default function Sidebar({ currentPath, isCollapsed }) {
           <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
         </NavItem>
         {/*  */}
-        <NavItem to={"/admin/chat"} isActive={currentPath === "/admin/chat"}>
-          <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
+        <NavItem
+          to={"/admin/diseaseCategories"}
+          isActive={currentPath === "/admin/diseaseCategories"}
+        >
+          <MdArticle className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>
+            DiseaseCategories
+          </span>
         </NavItem>
       </nav>
       {/*  */}

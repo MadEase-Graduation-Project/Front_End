@@ -4,7 +4,8 @@ export const pendingPaginationHandler = (
   pageParam = "page",
   firstPage = 1,
   loadingKey = "loading",
-  loadingMoreKey = "loadingMore"
+  loadingMoreKey = "loadingMore",
+  errorKey = "error"
 ) => {
   return (state, action) => {
     const requestedPage = action.meta?.arg?.[pageParam] ?? firstPage;
@@ -15,7 +16,7 @@ export const pendingPaginationHandler = (
       state[loadingMoreKey] = true;
     }
 
-    state.error = null;
+    state[errorKey] = false;
   };
 };
 
@@ -25,6 +26,7 @@ export const fulfilledPaginationHandler = ({
   listKey = "list",
   loadingKey = "loading",
   loadingMoreKey = "loadingMore",
+  errorKey = "error",
   totalsMap = {
     totalPages: "totalPages",
     currentPage: "currentPage",
@@ -54,6 +56,7 @@ export const fulfilledPaginationHandler = ({
     state[totalsMap.totalPages] = totalPages;
     state[totalsMap.currentPage] = currentPage;
     state.hasMore = currentPage < totalPages;
+    state[errorKey] = false;
   };
 };
 
@@ -64,9 +67,9 @@ export const rejectedPaginationHandler = ({
   loadingMoreKey = "loadingMore",
   errorKey = "error",
 } = {}) => {
-  return (state, action) => {
+  return (state) => {
     state[loadingKey] = false;
     state[loadingMoreKey] = false;
-    state[errorKey] = action.error?.message || "Unexpected error";
+    state[errorKey] = true;
   };
 };

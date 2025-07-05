@@ -8,9 +8,10 @@ export const selectDiseasesLoading = (state) =>
 export const selectDiseasesError = (state) => selectDiseasesState(state).error;
 export const selectSelectedDisease = (state) =>
   selectDiseasesState(state).selectedDisease;
+export const selectTotalDiseases = (state) =>
+  selectDiseasesState(state).totalDiseases;
 
 // selectDiseasesPagination
-
 export const selectDiseasesPagination = (state) => ({
   currentPage: selectDiseasesState(state).currentPage,
   totalPages: selectDiseasesState(state).totalPages,
@@ -104,4 +105,5 @@ export const selectDiseasesPagination = (state) => ({
 //       (disease) => disease.treatments && disease.treatments.length > 0
 //     );
 //   }
+// );
 // );

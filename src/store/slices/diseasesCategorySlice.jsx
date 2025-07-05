@@ -68,7 +68,7 @@ const initialState = {
   loading: false,
   loadingMore: false,
   // error
-  error: null,
+  error: false,
 };
 
 const diseaseCategorySlice = createSlice({
@@ -78,7 +78,7 @@ const diseaseCategorySlice = createSlice({
     clearSelectedDiseaseCategory: (state) => {
       state.selectedDiseaseCategory = {};
       state.loading = false;
-      state.error = null;
+      state.error = false;
     },
   },
   extraReducers: (builder) => {

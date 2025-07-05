@@ -7,6 +7,51 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      animation: {
+        "slide-up": "slide-up 0.4s ease-out",
+        "gradient-x": "gradient-x 5s ease infinite",
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      keyframes: {
+        "slide-up": {
+          "0%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            backgroundPosition: "left center",
+          },
+          "50%": {
+            backgroundPosition: "right center",
+          },
+        },
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
+      },
+      backgroundSize: {
+        "200%": "200% 200%",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -16,7 +61,6 @@ export default {
         xs: "500px",
       },
       colors: {
-        //Nosa
         mepale: "#36568D",
         menavy: "#0E2755",
         megreen: "#65DBC0",
@@ -28,7 +72,8 @@ export default {
         mewhite: "#FFFFFF",
         meblue: "rgba(244,244,248,255)",
         mebg: "rgba(240,247,252,255)",
-        //
+        meblue2: "#e2f2fd",
+        meblue3: "#5f9fff",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -11,9 +11,11 @@ import {
   CheckCircle,
   Send,
   Loader2,
+  Info,
 } from "lucide-react";
 
-export default function Security() {
+// Add details as a prop to get isVerified
+export default function Security({ details }) {
   const [formData, setFormData] = useState({
     verificationCode: "",
     newPassword: "",
@@ -46,6 +48,11 @@ export default function Security() {
   });
 
   const [isVerified, setIsVerified] = useState(false);
+
+  // New state for OTP input (for both verification and password change)
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpPurpose, setOtpPurpose] = useState(""); // "verify" or "password"
 
   // Password validation
   const validatePassword = (password) => {
@@ -118,6 +125,33 @@ export default function Security() {
       }));
     } finally {
       setIsLoading((prev) => ({ ...prev, verify: false }));
+    }
+  };
+
+  const handleSendOtp = async (purpose) => {
+    setIsLoading((prev) => ({ ...prev, resend: true }));
+    setOtpPurpose(purpose);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setOtpSent(true);
+      setNotifications((prev) => ({
+        ...prev,
+        verification: {
+          type: "success",
+          message: "OTP sent to your email!",
+        },
+      }));
+    } catch (error) {
+      setNotifications((prev) => ({
+        ...prev,
+        verification: {
+          type: "error",
+          message: "Failed to send OTP. Please try again.",
+        },
+      }));
+    } finally {
+      setIsLoading((prev) => ({ ...prev, resend: false }));
     }
   };
 
@@ -246,21 +280,46 @@ export default function Security() {
   );
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-8">
+      {/* 1. Show verify banner if not verified */}
+      {!details?.isVerified && (
+        <div className="flex items-center gap-3 mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+          <Info className="text-yellow-500" size={22} />
+          <div className="flex-1">
+            <span className="font-medium text-yellow-800">
+              Your account is not verified. Please verify your email to secure
+              your account.
+            </span>
+          </div>
+          <button
+            onClick={() => handleSendOtp("verify")}
+            disabled={isLoading.resend}
+            className="ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm flex items-center gap-1"
+          >
+            {isLoading.resend ? (
+              <Loader2 className="animate-spin" size={16} />
+            ) : (
+              <Send size={16} />
+            )}
+            {isLoading.resend ? "Sending..." : "Send OTP"}
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center gap-3 mb-8">
         <Shield className="text-blue-600" size={28} />
         <h1 className="text-2xl font-bold text-gray-800">Security Settings</h1>
       </div>
 
       <div className="space-y-8">
-        {/* Email Verification Section */}
+        {/* 2. Email Verification Section */}
         <div className="bg-gray-50 rounded-lg p-6">
           <div className="flex items-center gap-2 mb-4">
             <Mail className="text-blue-600" size={20} />
             <h2 className="text-lg font-semibold text-gray-800">
               Email Verification
             </h2>
-            {isVerified && (
+            {details?.isVerified && (
               <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
                 <CheckCircle size={16} />
                 Verified
@@ -275,49 +334,46 @@ export default function Security() {
             }
           />
 
-          <div className="mt-4">
-            <label
-              htmlFor="verify"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Verification Code
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                id="verify"
-                value={formData.verificationCode}
-                onChange={handleInputChange("verificationCode")}
-                className={`flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                  isVerified
-                    ? "bg-green-50 border-green-300"
-                    : "bg-white border-gray-300"
-                }`}
-                placeholder="Enter 6-digit code"
-                maxLength={6}
-                disabled={isVerified}
-              />
-              <button
-                onClick={handleVerifyEmail}
-                disabled={
-                  isLoading.verify ||
-                  formData.verificationCode.length !== 6 ||
-                  isVerified
-                }
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+          {/* OTP input for verification */}
+          {!details?.isVerified && otpPurpose === "verify" && otpSent && (
+            <div className="mt-4">
+              <label
+                htmlFor="otp-verify"
+                className="block mb-2 text-sm font-medium text-gray-700"
               >
-                {isLoading.verify ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <Check size={16} />
-                )}
-                {isLoading.verify ? "Verifying..." : "Verify"}
-              </button>
+                Enter OTP sent to your email
+              </label>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  id="otp-verify"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter OTP"
+                  maxLength={6}
+                />
+                <button
+                  onClick={handleVerifyEmail}
+                  disabled={isLoading.verify || otp.length !== 6}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                >
+                  {isLoading.verify ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <Check size={16} />
+                  )}
+                  {isLoading.verify ? "Verifying..." : "Verify"}
+                </button>
+              </div>
             </div>
+          )}
 
+          {/* Resend OTP for verification */}
+          {!details?.isVerified && (
             <button
-              onClick={handleResendCode}
-              disabled={isLoading.resend || isVerified}
+              onClick={() => handleSendOtp("verify")}
+              disabled={isLoading.resend}
               className="mt-3 text-blue-600 hover:text-blue-700 disabled:text-gray-400 text-sm font-medium flex items-center gap-1"
             >
               {isLoading.resend ? (
@@ -325,12 +381,12 @@ export default function Security() {
               ) : (
                 <Send size={14} />
               )}
-              {isLoading.resend ? "Sending..." : "Resend Code"}
+              {isLoading.resend ? "Sending..." : "Resend OTP"}
             </button>
-          </div>
+          )}
         </div>
 
-        {/* Password Update Section */}
+        {/* 3. Password Update Section */}
         <div className="bg-gray-50 rounded-lg p-6">
           <div className="flex items-center gap-2 mb-4">
             <Lock className="text-blue-600" size={20} />
@@ -345,6 +401,55 @@ export default function Security() {
               setNotifications((prev) => ({ ...prev, password: null }))
             }
           />
+
+          {/* OTP input for password change */}
+          {otpPurpose === "password" && otpSent && (
+            <div className="mb-4">
+              <label
+                htmlFor="otp-password"
+                className="block mb-2 text-sm font-medium text-gray-700"
+              >
+                Enter OTP sent to your email
+              </label>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  id="otp-password"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter OTP"
+                  maxLength={6}
+                />
+                <button
+                  onClick={handleVerifyEmail}
+                  disabled={isLoading.verify || otp.length !== 6}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                >
+                  {isLoading.verify ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <Check size={16} />
+                  )}
+                  {isLoading.verify ? "Verifying..." : "Verify"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Button to send OTP for password change */}
+          <button
+            onClick={() => handleSendOtp("password")}
+            disabled={isLoading.resend}
+            className="mb-4 text-blue-600 hover:text-blue-700 disabled:text-gray-400 text-sm font-medium flex items-center gap-1"
+          >
+            {isLoading.resend ? (
+              <Loader2 className="animate-spin" size={14} />
+            ) : (
+              <Send size={14} />
+            )}
+            {isLoading.resend ? "Sending..." : "Send OTP to change password"}
+          </button>
 
           <div className="space-y-4 mt-4">
             {/* New Password */}
@@ -486,3 +591,5 @@ export default function Security() {
     </div>
   );
 }
+
+// ...existing code for NotificationBanner and PasswordRequirement...

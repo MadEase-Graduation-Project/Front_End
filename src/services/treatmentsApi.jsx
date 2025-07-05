@@ -14,12 +14,8 @@ const BASE_ENDPOINT = "/treatments";
  * @returns {Promise<Array>} List of treatments
  */
 export async function getAllTreatments({ page = 1 } = {}) {
-  try {
-    const response = await api.get(BASE_ENDPOINT, { params: { page } });
-    return handleApiResponse(response, "No treatments found");
-  } catch (error) {
-    return handleApiError(error, "fetching treatments");
-  }
+  const response = await api.get(BASE_ENDPOINT, { params: { page } });
+  return handleApiResponse(response, "No treatments found");
 }
 
 /**
@@ -28,12 +24,8 @@ export async function getAllTreatments({ page = 1 } = {}) {
  * @returns {Promise<Object>} Treatment details
  */
 export async function showTreatment(id) {
-  try {
-    const response = await api.get(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, "this treatment not found");
-  } catch (error) {
-    return handleApiError(error, `fetching treatment ${id}`);
-  }
+  const response = await api.get(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, "this treatment not found");
 }
 
 /**
@@ -42,12 +34,8 @@ export async function showTreatment(id) {
  * @returns {Promise<Object>} Created treatment
  */
 export async function addTreatment(treatmentData) {
-  try {
-    const response = await api.post(BASE_ENDPOINT, treatmentData);
-    return handleApiResponse(response, "Failed to create treatment");
-  } catch (error) {
-    return handleApiError(error, "adding treatment");
-  }
+  const response = await api.post(BASE_ENDPOINT, treatmentData);
+  return handleApiResponse(response, "Failed to create treatment");
 }
 
 /**
@@ -57,12 +45,8 @@ export async function addTreatment(treatmentData) {
  * @returns {Promise<Object>} Updated treatment
  */
 export async function editTreatment(id, treatmentData) {
-  try {
-    const response = await api.put(`${BASE_ENDPOINT}/${id}`, treatmentData);
-    return handleApiResponse(response, `Failed to update treatment ${id}`);
-  } catch (error) {
-    return handleApiError(error, `editing treatment ${id}`);
-  }
+  const response = await api.put(`${BASE_ENDPOINT}/${id}`, treatmentData);
+  return handleApiResponse(response, `Failed to update treatment ${id}`);
 }
 
 /**
@@ -71,10 +55,6 @@ export async function editTreatment(id, treatmentData) {
  * @returns {Promise<Object>} Deletion result
  */
 export async function deleteTreatment(id) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
-    return handleApiResponse(response, `Failed to delete treatment ${id}`);
-  } catch (error) {
-    return handleApiError(error, `deleting treatment ${id}`);
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/${id}`);
+  return handleApiResponse(response, `Failed to delete treatment ${id}`);
 }

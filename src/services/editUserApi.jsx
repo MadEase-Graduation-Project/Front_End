@@ -15,13 +15,9 @@ const BASE_ENDPOINT = "/users";
  * @returns {Promise<Object>} Updated user data
  */
 export async function updateUserData(userData) {
-  try {
-    const response = await api.patch(`${BASE_ENDPOINT}`, userData);
-    const data = handleApiResponse(response, "Failed to update user data");
-    return data?.data;
-  } catch (error) {
-    return handleApiError(error, "updating user data");
-  }
+  const response = await api.patch(`${BASE_ENDPOINT}`, userData);
+  const data = handleApiResponse(response, "Failed to update user data");
+  return data?.data;
 }
 
 /**
@@ -30,33 +26,21 @@ export async function updateUserData(userData) {
  * @returns {Promise<Object>} Delete response
  */
 export async function deleteUser(userId) {
-  try {
-    const response = await api.delete(`${BASE_ENDPOINT}/${userId}`);
-    const data = handleApiResponse(response, "Failed to delete user");
-    return data?.data;
-  } catch (error) {
-    return handleApiError(error, "deleting user");
-  }
+  const response = await api.delete(`${BASE_ENDPOINT}/${userId}`);
+  const data = handleApiResponse(response, "Failed to delete user");
+  return data?.data;
 }
 
 // to change any user role
 export async function changeUserRole(userId, { newRole }) {
-  try {
-    const response = await api.patch(`${BASE_ENDPOINT}/role/${userId}`, {
-      newRole,
-    });
-    return handleApiResponse(response, "Failed to update user avatar");
-  } catch (error) {
-    return handleApiError(error, "updating user avatar");
-  }
+  const response = await api.patch(`${BASE_ENDPOINT}/role/${userId}`, {
+    newRole,
+  });
+  return handleApiResponse(response, "Failed to update user avatar");
 }
 
 // to rate hospital or doctor 1 - 5
 export async function rateUser({ userId, rating }) {
-  try {
-    const response = await api.patch(`/rate`, { userId, rating });
-    return handleApiResponse(response, "Failed to update user rating");
-  } catch (error) {
-    return handleApiError(error, "updating user rating");
-  }
+  const response = await api.patch(`/rate`, { userId, rating });
+  return handleApiResponse(response, "Failed to update user rating");
 }

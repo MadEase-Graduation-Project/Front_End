@@ -9,6 +9,7 @@ import {
 import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
 import { FaUserDoctor, FaUserShield, FaDisease } from "react-icons/fa6";
 import { cn } from "@/utils/cnUtils";
+import { FaDiagnoses } from "react-icons/fa";
 
 //* links classes
 const linkStyles = cn(
@@ -54,11 +55,11 @@ export default function Sidebar({ currentPath, isCollapsed }) {
         {/*  */}
 
         <NavItem
-          to={"/doctor/diseases"}
-          isActive={currentPath === "/doctor/diseases"}
+          to={"/doctor/diagnosis"}
+          isActive={currentPath === "/doctor/diagnosis"}
         >
-          <FaDisease className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Diseases</span>
+          <FaDiagnoses className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Diagnosis</span>
         </NavItem>
         {/*  */}
         <NavItem

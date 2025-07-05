@@ -13,7 +13,7 @@ export default function SharedSetting({ details, loading }) {
             label: "Profile Info",
             content: <ProfileInfo details={details} loading={loading} />,
           },
-          { label: "Security", content: <Security /> },
+          { label: "Security", content: <Security details={details} /> },
           { label: "Appearance", content: <Appearance /> },
         ]}
       />
