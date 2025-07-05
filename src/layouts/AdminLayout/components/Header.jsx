@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { selectMyDetails } from "@/store/selectors";
+import { logout } from "@/store/slices/signSlice";
 
 export default function Header({ isCollapsed, setIsCollapsed }) {
   const dispatch = useDispatch();
@@ -25,6 +26,12 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
   useEffect(() => {
     dispatch(fetchMYData());
   }, [dispatch, navigate]);
+
+  function handleLogOut() {
+    dispatch(logout());
+    navigate("/register/login");
+  }
+
   return (
     <header className="flex items-center gap-2 h-12 lg:h-14 px-2">
       <button
@@ -73,7 +80,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
               <DropdownMenuItem
                 className="cursor-pointer text-red-600 focus:text-red-600"
                 onClick={() => {
-                  navigate("/register/login");
+                  handleLogOut();
                 }}
               >
                 <FiLogOut className="mr-2" />

@@ -1,10 +1,10 @@
-import TopReg from "../../components/patientComps/register/TopReg";
+import TopReg from "../../../components/patientComps/register/TopReg";
 import BottomBtn from "@/components/patientComps/register/BottomBtn";
-import google from "../../assets/images/google.svg";
-import apple from "../../assets/images/apple.svg";
-import DividerText from "../../components/patientComps/register/DividerText";
+import google from "@/assets/images/google.svg";
+import apple from "@/assets/images/apple.svg";
+import DividerText from "../../../components/patientComps/register/DividerText";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
-import UnderLined from "../../components/patientComps/register/UnderLined";
+import UnderLined from "../../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useEffect } from "react";
@@ -50,7 +50,7 @@ export default function LogIn() {
     if (!role) return;
     switch (role) {
       case "Patient":
-        navigate("/home");
+        navigate("/test");
         break;
       case "Admin":
         navigate("/admin/overview");
@@ -60,9 +60,6 @@ export default function LogIn() {
         break;
       case "Doctor":
         navigate("/doctor");
-        break;
-      default:
-        navigate("/");
         break;
     }
   }, [role, navigate]);

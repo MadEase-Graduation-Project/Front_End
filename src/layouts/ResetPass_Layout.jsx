@@ -5,7 +5,7 @@ const ResetPassLayout = () => {
   return (
     <div className="w-full bg-mewhite min-h-screen flex items-center justify-center p-5">
       <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-meblue rounded-[20px] flex flex-col justify-center items-center gap-[15px] p-10 lg:p-20 h-auto">
-        <Link to="/home">
+        <Link to="/">
           <img
             src={Logo_navy}
             alt="Logo"

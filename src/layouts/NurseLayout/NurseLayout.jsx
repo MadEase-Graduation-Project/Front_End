@@ -5,7 +5,7 @@ import Header from "@/layouts/NurseLayout/components/Header";
 const NURSE_PATHS = [
    "/nurse", 
   "/nurse/dashboard",
-  "/nurse/patients",
+  "/nurse/patients/",
   "/nurse/reports",
   "/nurse/chat",
   "/nurse/profile",

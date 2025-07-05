@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import TopReg from "../../components/patientComps/register/TopReg";
-import DividerText from "../../components/patientComps/register/DividerText";
+import TopReg from "../../../components/patientComps/register/TopReg";
+import DividerText from "../../../components/patientComps/register/DividerText";
 import BottomBtn from "@/components/patientComps/register/BottomBtn";
-import google from "../../assets/images/google.svg";
-import apple from "../../assets/images/apple.svg";
-import FloatingInput from "../../components/patientComps/register/FloatingInput";
+import google from "@/assets/images/google.svg";
+import apple from "@/assets/images/apple.svg";
+import FloatingInput from "../../../components/patientComps/register/FloatingInput";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";

@@ -21,7 +21,8 @@ export const register = createAsyncThunk("sign/register", async (userData) => {
   return response;
 });
 
-export const logout = createAsyncThunk("sign/logout", async () => {
+export const logout = createAsyncThunk("sign/logout", async ({ dispatch }) => {
+  dispatch(resetSignState());
   const response = await logoutUser();
   return response;
 });

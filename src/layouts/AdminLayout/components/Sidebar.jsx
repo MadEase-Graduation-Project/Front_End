@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { GoHomeFill } from "react-icons/go";
 import { MdDateRange, MdArticle, MdSettingsSuggest } from "react-icons/md";
-import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
+import { GiMedicines } from "react-icons/gi";
+import { TbCategoryFilled } from "react-icons/tb";
+import { HiUsers } from "react-icons/hi2";
 import { FaUserDoctor, FaUserShield } from "react-icons/fa6";
 import { FaVirus } from "react-icons/fa";
 import { cn } from "@/utils/cnUtils";
@@ -34,17 +36,12 @@ export default function Sidebar({ currentPath, isCollapsed }) {
           : "hidden lg:w-14 sm:flex sm:w-12"
       } transition-all duration-300 ease-in-out lg:p-2 overflow-hidden z-20`}
     >
-      {/* Logo and brand */}
-      <div className="w-full mb-auto flex items-center gap-3 h-16 text-white p-2">
-        <img
-          src="/logo.png"
-          alt="logo"
-          className="w-10 h-10 object-contain self-center"
-        />
-        {/* {isCollapsed && (
-          <span className="text-xl font-semibold tracking-wide">MadEase</span>
-        )} */}
+      {/*  */}
+      <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
+        <img src="/logo.png" alt="logo" className="w-10 self-center" />
+        {isCollapsed && <span className="text-xl">MadEase</span>}
       </div>
+      {/*  */}
 
       {/* Navigation links */}
       <nav className="flex flex-col items-start justify-center gap-3 w-full py-2">
@@ -97,6 +94,14 @@ export default function Sidebar({ currentPath, isCollapsed }) {
         </NavItem>
         {/*  */}
         <NavItem
+          to={"/admin/diseaseCategories"}
+          isActive={currentPath === "/admin/diseaseCategories"}
+        >
+          <TbCategoryFilled className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>DCategories</span>
+        </NavItem>
+        {/*  */}
+        <NavItem
           to={"/admin/advices"}
           isActive={currentPath === "/admin/advices"}
         >
@@ -105,13 +110,11 @@ export default function Sidebar({ currentPath, isCollapsed }) {
         </NavItem>
         {/*  */}
         <NavItem
-          to={"/admin/diseaseCategories"}
-          isActive={currentPath === "/admin/diseaseCategories"}
+          to={"/admin/treatments"}
+          isActive={currentPath === "/admin/treatments"}
         >
-          <MdArticle className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>
-            DiseaseCategories
-          </span>
+          <GiMedicines className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Treatments</span>
         </NavItem>
       </nav>
       {/*  */}

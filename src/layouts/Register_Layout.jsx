@@ -10,7 +10,7 @@ const Register_Layout = () => {
     <div className="w-full bg-mewhite min-h-screen flex items-center justify-center relative">
       <div className="absolute w-4/5 h-auto lg:h-[90vh] flex flex-col lg:flex-row items-stretch p-5">
         <div className="hidden lg:flex flex-col w-1/2 bg-menavy rounded-tl-[40px] rounded-bl-[40px] h-full items-center justify-center gap-10">
-          <Link to="/home">
+          <Link to="/">
             <img
               src={Logo_white}
               alt="Logo"
@@ -37,7 +37,7 @@ const Register_Layout = () => {
         )}
 
         <div className="w-full lg:w-1/2 bg-meblue rounded-[20px] lg:rounded-tr-[40px] lg:rounded-br-[40px] lg:rounded-tl-none lg:rounded-bl-none flex flex-col justify-center items-center gap-[15px] p-5 h-full">
-          <Link to="/home">
+          <Link to="/">
             <img
               src={Logo_navy}
               alt="Logo"

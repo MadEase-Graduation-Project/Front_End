@@ -1,52 +1,41 @@
 /** navigate component */
-.item {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.item.active {
-  color: black;
+.active {
+  position: relative;
+  color: #0e2755;
   font-weight: 600;
+  transition: all 0.2s ease;
 }
 
-.item.disActive {
+.disActive {
+  position: relative;
   color: #999;
+  transition: all 0.2s ease;
 }
 
-.item.disActive:hover {
+.disActive:hover {
   color: gray;
 }
 
-.item.active::after {
+.active::after,
+.disActive::after {
   content: "";
   display: block;
   width: 100%;
   height: 3px;
   border-radius: 9999px;
-  background-color: blue;
+  background-color: #5f9fff;
   position: absolute;
-  bottom: -6px;
+  bottom: 0; /* underline appears under text */
+  left: 0;
   transition: all 0.3s ease-out;
+  transform-origin: center;
+}
+
+.active::after {
   transform: scaleX(1);
-  transform-origin: center;
 }
 
-.item.disActive::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 3px;
-  border-radius: 9999px;
-  background-color: blue;
-  position: absolute;
-  bottom: -6px;
-  transition: all 0.2s ease-out;
+.disActive::after {
   transform: scaleX(0);
-  transform-origin: center;
 }
-
 /* end of navigate component */
