@@ -43,7 +43,7 @@ import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
 
 import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
 
-import { Settings } from "./pages/doctor/Settings";
+import { SettingsDoctor } from "./pages/doctor/Settings";
 
 function App() {
   return (
@@ -75,7 +75,7 @@ function App() {
         <Route path="diagnosis" element={<Diagnosis_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<SettingsDoctor />} />
       </Route>
 
       {/* reset pass layout */}
