@@ -50,7 +50,7 @@ export default function LogIn() {
     if (!role) return;
     switch (role) {
       case "Patient":
-        navigate("/");
+        navigate("/test");
         break;
       case "Admin":
         navigate("/admin/overview");

@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import html2pdf from "html2pdf.js";
+// import html2pdf from "html2pdf.js";
 
 export default function PatientDetails() {
   const { id } = useParams();
@@ -43,12 +43,7 @@ export default function PatientDetails() {
         { date: "2024-05", visits: 1 },
         { date: "2024-06", visits: 2 },
       ],
-      previousVisits: [
-        "2025-06-15",
-        "2025-05-01",
-        "2025-03-20",
-        "2025-01-08",
-      ],
+      previousVisits: ["2025-06-15", "2025-05-01", "2025-03-20", "2025-01-08"],
     };
 
     const timeout = setTimeout(() => setPatient(mockPatient), 500);
@@ -82,7 +77,11 @@ export default function PatientDetails() {
   return (
     <div className="p-6 space-y-6" ref={pdfRef}>
       <div className="flex items-center justify-between hide-on-pdf">
-        <Button variant="outline" onClick={() => navigate(-1)} className="hide-on-pdf">
+        <Button
+          variant="outline"
+          onClick={() => navigate(-1)}
+          className="hide-on-pdf"
+        >
           <ArrowLeft className="mr-2 h-4 w-4" /> Back
         </Button>
         <div className="flex gap-2">
