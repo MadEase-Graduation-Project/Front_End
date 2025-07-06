@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   AreaChart,
@@ -46,37 +46,59 @@ const getAgeGroup = (age) => {
 }
 
 export default function ChartAreaAgeGender() {
+const [fetchedPatients, setFetchedPatients] = useState({});
 const dispatch = useDispatch();
 const Appointments = useSelector(selectAllAppointments);
-const patientMap = useSelector(selectShowPatientById);
+const currentPatient = useSelector(selectShowPatientById); // This is a single patient object
 const loading = useSelector(selectPatientsLoading);
 
-// Memoize IDs
+// Memoize unique patient IDs from appointments (adjusted for API structure)
 const uniquePatientIds = useMemo(() => {
-  return [...new Set(Appointments.map(a => a.patientId))];
+  return [...new Set(
+    Appointments
+      .map(a => a.patientId?._id || a.patientId) // Handle both object and string formats
+      .filter(Boolean) // Remove null/undefined values
+  )];
 }, [Appointments]);
 
-// Fetch patients
+// Store the current patient when it's fetched
+useEffect(() => {
+  if (currentPatient && currentPatient._id) {
+    setFetchedPatients(prev => ({
+      ...prev,
+      [currentPatient._id]: currentPatient
+    }));
+  }
+}, [currentPatient]);
+
+// Fetch patients individually based on appointment data
 useEffect(() => {
   if (uniquePatientIds.length > 0) {
     uniquePatientIds.forEach(id => {
-      if (!patientMap[id]) dispatch(fetchShowPatientById(id));
+      if (!fetchedPatients[id]) {
+        dispatch(fetchShowPatientById(id));
+      }
     });
   }
-}, [dispatch, uniquePatientIds, patientMap]);
+}, [dispatch, uniquePatientIds, fetchedPatients]);
 
 // Fetch appointments once
 useEffect(() => {
   dispatch(fetchAppointments());
 }, [dispatch]);
 
-// Get patient list
+// Get patient list from the fetchedPatients
 const patients = useMemo(() => {
-  return uniquePatientIds.map(id => patientMap[id]).filter(Boolean);
-}, [patientMap, uniquePatientIds]);
+  console.log('Chart - fetchedPatients content:', fetchedPatients);
+  console.log('Chart - uniquePatientIds:', uniquePatientIds);
+  
+  const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
+  console.log('Chart - Patients result:', result);
+  return result;
+}, [fetchedPatients, uniquePatientIds]);
 
-// Loading state
-const isLoading = uniquePatientIds.some(id => !patientMap[id]);
+// Check if we're still loading any patients
+const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
 
 // Chart Data
 const chartData = useMemo(() => {
@@ -101,7 +123,6 @@ const chartData = useMemo(() => {
   }));
 }, [patients]);
 
-
   const chartConfig = {
     male: {
       label: "Male",
@@ -113,27 +134,27 @@ const chartData = useMemo(() => {
     },
   }
 
-  if (loading) {
+  if (isLoading && patients.length === 0 && uniquePatientIds.length > 0) {
     return (
       <Card>
         <CardHeader>
           <CardTitle>Patient Age & Gender Distribution</CardTitle>
         </CardHeader>
-        <CardContent>Loading...</CardContent>
+        <CardContent>Loading patients... ({uniquePatientIds.length} patients to fetch)</CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="w-full border border-gray-200 bg-white shadow-sm">
+    <Card className="w-full border border-gray-200 bg-white shadow-sm sm:col-span-1 md:col-span-4 lg:col-span-8">
       <CardHeader>
         <CardTitle>Age & Gender Chart</CardTitle>
         <CardDescription>
-          Patient demographics by age group
+          Patient demographics by age group ({patients.length} patients)
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="h-[50%]">
           <AreaChart
             data={chartData}
             margin={{ left: 12, right: 12 }}

@@ -4,10 +4,13 @@ import { Button } from '@/components/ui/button';
 import DoctorImage from '@/assets/doctor-M.png';
 // import { Link } from 'react-router-dom';
 
-const DoctorCard = ({ doctor }) => {
+const DoctorCard = ({ doctor, onBook }) => {
   const handleBookAppointment = () => {
-    console.log(`Booking appointment with ${doctor?.name || 'the doctor'}...`);
-  };
+  if (onBook) {
+    onBook(doctor);
+  }
+};
+
 
   const cardVariants = {
     rest: {
@@ -27,11 +30,11 @@ const DoctorCard = ({ doctor }) => {
   };
 
   const {
-    name = 'Dr. Tasneem',
-    specialty = 'Cardiologist',
-    description = 'Expert in heart health and patient care with years of experience.',
-    rating = 5,
-    imageUrl,
+    name = 'Dr. Unknown',
+    specialization = doctor?.specialization || 'Doctor',
+    description = doctor?.description || 'No description available.',
+    rating = doctor?.rate || 5,
+    imageUrl = doctor?.ImgUrl || DoctorImage,
   } = doctor || {};
 
   const renderRatingStars = () => {
@@ -51,7 +54,7 @@ const DoctorCard = ({ doctor }) => {
       initial="rest"
       whileHover="hover"
       animate="rest"
-      className="bg-white border border-gray-200 rounded-2xl overflow-hidden group cursor-pointer flex flex-col h-full transition-all duration-300"
+      className="bg-white border w-64 border-gray-200 rounded-2xl overflow-hidden group cursor-pointer flex flex-col h-full transition-all duration-300"
     >
       <div className="relative flex flex-col h-full">
         <div className="relative overflow-hidden aspect-[4/3]">
@@ -69,7 +72,7 @@ const DoctorCard = ({ doctor }) => {
 
         <div className="p-6 flex flex-col flex-grow">
           <span className="text-xs font-semibold uppercase tracking-widest text-cyan-600 mb-2 bg-cyan-50 px-2 py-1 rounded-full w-fit">
-            {specialty}
+            {specialization}
           </span>
 
           <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-cyan-700 transition-colors duration-300 truncate">
