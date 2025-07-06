@@ -1,387 +1,291 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { updateData } from "@/store/slices/userSlice";
-import { useState, useEffect } from "react";
-import {
-  Edit2,
-  Check,
-  X,
-  Camera,
-  User,
-  Phone,
-  MapPin,
-  Loader2,
-} from "lucide-react";
-import { useDispatch } from "react-redux";
+"use client";
 
-// Enhanced InputText Component
-function InputText({
-  type = "text",
-  label,
-  value,
-  onChange,
-  placeholder = "",
-  required = false,
-  className = "",
-  disabled = false,
-  icon: Icon,
-  ...props
-}) {
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Camera } from "lucide-react";
+import { isEmpty } from "@/utils/objectUtils";
+import { formatDateShort } from "@/utils/formatDateUtils";
+import { useDispatch } from "react-redux";
+import { updateData } from "@/store/slices/userSlice";
+import { getMyData } from "@/services/userApi";
+
+export default function ProfilePage({ details }) {
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [tempValue, setTempValue] = useState(value);
+  const [showAvatarDialog, setShowAvatarDialog] = useState(false);
+  const [profile, setProfile] = useState({
+    fullname: "",
+    dateOfBirth: "",
+    gender: "",
+    phone: "",
+    city: "",
+    country: "",
+    avatar: "",
+  });
 
   useEffect(() => {
-    setTempValue(value);
-  }, [value]);
-
-  const handleEditClick = () => {
-    if (!disabled) {
-      setIsEditing(true);
-      setTempValue(value);
+    if (!isEmpty(details)) {
+      setProfile({
+        fullname: details.name,
+        dateOfBirth: details.dateOfBirth,
+        gender: details.gender,
+        phone: details.phone,
+        city: details.city,
+        country: details.country,
+        avatar: details.ImgUrl,
+      });
     }
-  };
+  }, [details]);
 
   const handleSave = () => {
-    onChange({ target: { value: tempValue } });
     setIsEditing(false);
+    try {
+      dispatch(
+        updateData({
+          name: profile.fullname,
+          dateOfBirth: profile.dateOfBirth,
+          gender: profile.gender,
+          phone: profile.phone,
+          city: profile.city,
+          country: profile.country,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    dispatch(getMyData());
   };
 
   const handleCancel = () => {
-    setTempValue(value);
     setIsEditing(false);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSave();
-    } else if (e.key === "Escape") {
-      handleCancel();
-    }
+  const handleChangeAvatar = () => {
+    dispatch(updateData({ ImgUrl: profile.avatar })); //* the back want url not .png
+    setShowAvatarDialog(false);
+    dispatch(getMyData());
   };
 
-  const inputId = `input-${label?.toLowerCase().replace(/\s+/g, "-")}`;
-
   return (
-    <div className={`mb-6 ${className}`}>
-      {label && (
-        <label
-          className="block text-sm font-semibold text-gray-700 mb-2 capitalize"
-          htmlFor={inputId}
-        >
-          <span className="flex items-center gap-2">
-            {Icon && <Icon size={16} className="text-gray-500" />}
-            {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
-          </span>
-        </label>
-      )}
-
-      <div className="relative group">
-        <input
-          id={inputId}
-          type={type}
-          value={isEditing ? tempValue : value}
-          onChange={(e) => {
-            if (isEditing) {
-              setTempValue(e.target.value);
-            }
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          disabled={!isEditing || disabled}
-          className={`
-            w-full px-4 py-3 pr-14
-            border border-gray-200 rounded-lg
-            text-gray-900 placeholder-gray-400
-            transition-all duration-200 ease-in-out
-            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-            disabled:bg-gray-50 disabled:text-gray-600 disabled:cursor-not-allowed
-            ${
-              isEditing
-                ? "shadow-lg border-blue-300 bg-white"
-                : "hover:border-gray-300 bg-gray-50"
-            }
-            ${disabled ? "opacity-70" : ""}
-          `}
-          {...props}
-        />
-
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-1">
-          {isEditing ? (
-            <>
-              <button
-                type="button"
-                onClick={handleSave}
-                className="p-1.5 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors"
-                title="Save changes"
-                disabled={disabled}
-              >
-                <Check size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
-                title="Cancel changes"
-                disabled={disabled}
-              >
-                <X size={16} />
-              </button>
-            </>
-          ) : (
-            <button
-              type="button"
-              onClick={handleEditClick}
-              className={`
-                p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200
-                ${
-                  disabled
-                    ? "opacity-50 cursor-not-allowed"
-                    : "opacity-0 group-hover:opacity-100"
-                }
-              `}
-              title="Edit field"
-              disabled={disabled}
-            >
-              <Edit2 size={16} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {isEditing && (
-        <div className="mt-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-          Press Enter to save, Escape to cancel
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Enhanced Modal Component
-function ImageModal({ isOpen, onClose, imageUrl, onImageUrlChange, onSave }) {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden">
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Camera size={24} className="text-blue-600" />
-            Profile Image
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="p-6 space-y-6">
-          <div className="flex justify-center">
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Profile Preview"
-                className="max-h-80 max-w-full object-contain rounded-lg shadow-md"
-                onError={(e) => {
-                  e.target.style.display = "none";
-                }}
+    <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile Information</CardTitle>
+          <CardDescription>
+            Update your profile information and how others see you.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Avatar Section */}
+          <div className="flex items-center gap-4">
+            <Avatar className="h-20 w-20">
+              <AvatarImage
+                src={profile.avatar || "/placeholder.svg"}
+                alt={profile.fullname}
               />
-            ) : (
-              <div className="w-80 h-64 bg-gray-100 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
-                <div className="text-center">
-                  <Camera size={48} className="text-gray-400 mx-auto mb-2" />
-                  <span className="text-gray-500">No image available</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Image URL
-            </label>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={onImageUrlChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                onSave();
-                onClose();
-              }}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-md hover:shadow-lg"
-            >
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Main ProfileInfo Component
-export default function ProfileInfo({ details, loading }) {
-  const dispatch = useDispatch();
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [editedValues, setEditedValues] = useState({
-    ImgUrl: "",
-    name: "",
-    phone: "",
-    city: "",
-  });
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    setEditedValues({
-      ImgUrl: details?.ImgUrl || "",
-      name: details?.name || "",
-      phone: details?.phone || "",
-      city: details?.city || "",
-    });
-  }, [details]);
-
-  const handleUpdate = async () => {
-    setIsSaving(true);
-    try {
-      await dispatch(updateData(editedValues));
-      // Optional: Add success notification here
-    } catch (error) {
-      // Optional: Add error notification here
-      console.error("Update failed:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleInputChange = (field) => (e) => {
-    setEditedValues((prev) => ({
-      ...prev,
-      [field]: e.target.value,
-    }));
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="flex items-center space-x-2 text-blue-600">
-          <Loader2 className="animate-spin" size={24} />
-          <span className="text-lg font-medium">Loading profile...</span>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-lg px-4 py-6 sm:p-8 flex flex-col gap-8">
-      {/* Profile Avatar Section */}
-      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
-        <div className="flex-shrink-0 flex flex-col items-center">
-          <button
-            className="relative group"
-            onClick={() => setShowImageModal(true)}
-            aria-label="Edit profile image"
-          >
-            <Avatar className="w-28 h-28 sm:w-32 sm:h-32 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300">
-              <AvatarImage src={editedValues.ImgUrl} alt="User avatar" />
-              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-2xl font-bold">
-                {editedValues.name?.charAt(0)?.toUpperCase() || "U"}
+              <AvatarFallback>
+                {profile.fullname
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-full transition-all duration-300 flex items-center justify-center">
-              <Camera
-                size={28}
-                className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            <div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 bg-transparent"
+                onClick={() => setShowAvatarDialog(true)}
+              >
+                <Camera className="h-4 w-4" />
+                Change Avatar
+              </Button>
+              <p className="text-sm text-muted-foreground mt-1">
+                JPG, GIF or PNG. Max size of 2MB.
+              </p>
+            </div>
+          </div>
+
+          {/* Profile Form */}
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="fullname">Full Name</Label>
+              <Input
+                id="fullname"
+                value={profile.fullname}
+                onChange={(e) =>
+                  setProfile({ ...profile, fullname: e.target.value })
+                }
+                disabled={!isEditing}
+                placeholder="Enter your full name"
               />
             </div>
-          </button>
-          <span className="mt-2 text-xs text-gray-400">Click to change</span>
-        </div>
-        <div className="flex-1 w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <InputText
-              type="text"
-              label="Full Name"
-              value={editedValues.name}
-              onChange={handleInputChange("name")}
-              placeholder="Enter your full name"
-              icon={User}
-              required
-              className="mb-0"
-            />
 
-            <InputText
-              type="tel"
-              label="Phone Number"
-              value={editedValues.phone}
-              onChange={handleInputChange("phone")}
-              placeholder="Enter your phone number"
-              icon={Phone}
-              className="mb-0"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="dateOfBirth">Date of Birth</Label>
+              <Input
+                id="dateOfBirth"
+                type="date"
+                value={formatDateShort(profile.dateOfBirth)}
+                onChange={(e) =>
+                  setProfile({ ...profile, dateOfBirth: e.target.value })
+                }
+                disabled={!isEditing}
+              />
+            </div>
 
-            <InputText
-              type="text"
-              label="City"
-              value={editedValues.city}
-              onChange={handleInputChange("city")}
-              placeholder="Enter your city"
-              icon={MapPin}
-              className="sm:col-span-2 mb-0"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gender">Gender</Label>
+                <select
+                  id="gender"
+                  value={profile.gender}
+                  onChange={(e) =>
+                    setProfile({ ...profile, gender: e.target.value })
+                  }
+                  disabled={!isEditing}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="">Prefer not to say</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={profile.phone}
+                  onChange={(e) =>
+                    setProfile({ ...profile, phone: e.target.value })
+                  }
+                  disabled={!isEditing}
+                  placeholder="+1 (555) 123-4567"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  value={profile.city}
+                  onChange={(e) =>
+                    setProfile({ ...profile, city: e.target.value })
+                  }
+                  disabled={!isEditing}
+                  placeholder="Enter your city"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="country">Country</Label>
+                <Input
+                  id="country"
+                  value={profile.country}
+                  onChange={(e) =>
+                    setProfile({ ...profile, country: e.target.value })
+                  }
+                  disabled={!isEditing}
+                  placeholder="Enter your country"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Action Button */}
-      <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-4 mt-4">
-        <button
-          className={`
-            w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg
-            ${
-              isSaving
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-            }
-          `}
-          onClick={handleUpdate}
-          disabled={isSaving}
-        >
-          {isSaving ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="animate-spin" size={18} />
-              Updating...
-            </span>
-          ) : (
-            "Update Profile"
-          )}
-        </button>
-      </div>
+          {/* Action Buttons */}
+          <div className="flex gap-2 pt-4">
+            {!isEditing ? (
+              <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+            ) : (
+              <>
+                <Button onClick={handleSave}>Save Changes</Button>
+                <Button variant="outline" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Image Modal */}
-      <ImageModal
-        isOpen={showImageModal}
-        onClose={() => setShowImageModal(false)}
-        imageUrl={editedValues.ImgUrl}
-        onImageUrlChange={(e) => handleInputChange("ImgUrl")(e)}
-        onSave={() => {
-          // Image URL is already updated through onImageUrlChange
-        }}
-      />
+      {/* Change Avatar Dialog */}
+      <Dialog open={showAvatarDialog} onOpenChange={setShowAvatarDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Change Avatar</DialogTitle>
+            <DialogDescription>
+              Upload a new profile picture. Recommended size is 400x400 pixels.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center justify-center">
+              <Avatar className="h-24 w-24">
+                <AvatarImage
+                  src={profile.avatar || "/placeholder.svg"}
+                  alt={profile.fullname}
+                />
+                <AvatarFallback>
+                  {profile.fullname
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="avatar-upload">Choose Image</Label>
+              <Input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      setProfile({ ...profile, avatar: e.target?.result });
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+              <p className="text-sm text-muted-foreground">
+                JPG, PNG or GIF. Max size 2MB.
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowAvatarDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleChangeAvatar}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

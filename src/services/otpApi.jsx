@@ -16,19 +16,12 @@ export const generateOTP = async (email) => {
   return handleApiResponse(response, "can't generate OTP");
 };
 
-export const verifyOTP = async ({ email, otp }) => {
-  const response = await api.post(`${BASE_ENDPOINT}/verification`, {
-    email,
-    otp,
-  });
+export const verifyOTP = async (body) => {
+  const response = await api.post(`${BASE_ENDPOINT}/verification`, body);
   return handleApiResponse(response, "can't verify OTP");
 };
 
-export const resetPassword = async ({ email, otp, password }) => {
-  const response = await api.post(`${BASE_ENDPOINT}/reset`, {
-    email,
-    otp,
-    password,
-  });
+export const resetPassword = async (body) => {
+  const response = await api.patch(`${BASE_ENDPOINT}/password`, body);
   return handleApiResponse(response, "can't reset password");
 };
