@@ -68,7 +68,7 @@ const NavBar = ({ scrolled }) => {
 
   /* Where the user‑icon should send the user                       */
   const userTarget =
-    isLoggedIn && currentRole === "Doctor" ? "/settings" : "/register";
+    isLoggedIn && currentRole === "Patient" ? "/settings" : "/register";
   /* -------------------------------------------------------------- */
   return (
     <>
