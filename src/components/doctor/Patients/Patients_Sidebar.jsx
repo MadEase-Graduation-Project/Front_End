@@ -3,7 +3,7 @@ import { FiSearch } from 'react-icons/fi'
 import Patients_Sort_Bar from './Patients_Sort_Bar'
 import { Patients_List } from './Patients_List'
 
-export const Patients_Sidebar = ({ onPatientSelect, onSortChange, sortBy }) => {
+export const Patients_Sidebar = ({ onPatientSelect, onSortChange, sortBy, onPatientsLoaded }) => {
   return (
     <aside className="p-4 col-span-3 bg-gray-100 rounded-lg h-[calc(100vh_-_130px)] flex flex-col w-full">
         <h2 className="text-2xl font-semibold mb-4">Patient Queue</h2>
@@ -17,8 +17,11 @@ export const Patients_Sidebar = ({ onPatientSelect, onSortChange, sortBy }) => {
         </div>
         <Patients_Sort_Bar onSortChange={onSortChange} />
         <div className="overflow-y-auto">
-        <Patients_List onPatientSelect={onPatientSelect} sortBy={sortBy} />
-        </div>
+<Patients_List
+      onPatientSelect={onPatientSelect}
+      sortBy={sortBy}
+      onPatientsLoaded={onPatientsLoaded}
+    />        </div>
     </aside>
   )
 }

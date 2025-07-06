@@ -10,7 +10,7 @@ import Appearance from "@/components/shared/Setting/Appearance";
 
 // Settingssss
 
-export const Settings = () => {
+export const Settingss = () => {
   const dispatch = useDispatch();
   const details = useSelector(selectMyDetails);
   const loading = useSelector(selectUsersLoading);
