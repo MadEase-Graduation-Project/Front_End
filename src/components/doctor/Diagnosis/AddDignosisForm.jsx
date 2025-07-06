@@ -160,22 +160,32 @@ export const AddDiagnosisForm = ({
           )}
         </div>
 
-        {/* Medications */}
-        <div>
-          <label className="font-medium">Medications</label>
-          <select
-            multiple
-            value={medications}
-            onChange={handleMedicationChange}
-            className="w-full px-3 py-2 border rounded-lg"
-          >
-            {(medicationOptions || []).map((med) => (
-              <option key={med._id} value={med._id}>
-                {med.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Medications as Checkboxes */}
+<div>
+  <label className="font-medium block mb-2">Medications</label>
+  <div className="space-y-2">
+    {(medicationOptions || []).map((med) => (
+      <label key={med._id} className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          value={med._id}
+          checked={medications.includes(med._id)}
+          onChange={(e) => {
+            const isChecked = e.target.checked;
+            const value = e.target.value;
+            setMedications((prev) =>
+              isChecked
+                ? [...prev, value]
+                : prev.filter((id) => id !== value)
+            );
+          }}
+        />
+        <span>{med.name}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
 
         {/* Recommendations */}
         <div>

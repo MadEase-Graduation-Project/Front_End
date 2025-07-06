@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import TodayDate from "../TodayDate";
 import { FiSearch } from "react-icons/fi";
 import { UserAvatar } from "./UserAvatar";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { selectMyDetails } from "@/store/selectors";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMYData } from "@/store/slices/userSlice";
 import SearchBar from "./SearchBar";
+import { handleNameRoute } from "@/utils/urlHelpers";
 
 export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
@@ -19,7 +19,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
 
   useEffect(() => {
     dispatch(fetchMYData());
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,20 +31,27 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
     }
   }, [details]);
 
+  const doctorSlug = useMemo(() => {
+    return details?.name ? handleNameRoute(details.name) : "";
+  }, [details]);
+
+  const path = location.pathname;
+
   const getPageTitle = () => {
-    const path = location.pathname;
+    if (!doctorSlug) return "";
+
     switch (path) {
-      case "/doctor":
-        return `Hello, Doctor ${name}!`;
-      case "/doctor/chat":
+      case `/${doctorSlug}`:
+        return `Hello, Doctor ${details?.name || ""}!`;
+      case `/${doctorSlug}/chat`:
         return "Chat";
-      case "/doctor/diagnosis":
+      case `/${doctorSlug}/diagnosis`:
         return "Diagnosis";
-      case "/doctor/advice":
+      case `/${doctorSlug}/advice`:
         return "Advice";
-      case "/doctor/patients":
+      case `/${doctorSlug}/patients`:
         return "Patients";
-      case "/doctor/settings":
+      case `/${doctorSlug}/settings`:
         return "Settings";
       default:
         return "Dashboard";
