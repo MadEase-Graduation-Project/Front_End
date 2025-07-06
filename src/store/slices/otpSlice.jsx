@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { verifyOTP, generateOTP, resetPassword } from "../../services/otpApi";
 
-export const generateOtp = createAsyncThunk("otp/generate", async (email) => {
-  return await generateOTP(email);
-});
+export const generateOtp = createAsyncThunk(
+  "otp/generate",
+  async (email, { dispatch }) => {
+    dispatch(resetOtpState());
+    return await generateOTP(email);
+  }
+);
 
 export const verifyOtp = createAsyncThunk("otp/verify", async (params) => {
   return await verifyOTP(params);
@@ -74,7 +78,7 @@ const otpSlice = createSlice({
         state.resetToken = action.payload?.data;
         state.error = null;
       })
-      .addCase(verifyOtp.rejected, (state, action) => {
+      .addCase(verifyOtp.rejected, (state) => {
         state.loading = false;
         state.otpVerified = false;
         state.error = true;
@@ -91,7 +95,7 @@ const otpSlice = createSlice({
         state.passwordReset = !!action.payload?.success;
         state.msg = action.payload?.message;
       })
-      .addCase(resetPasswordOTP.rejected, (state, action) => {
+      .addCase(resetPasswordOTP.rejected, (state) => {
         state.loading = false;
         state.passwordReset = false;
         state.error = true;

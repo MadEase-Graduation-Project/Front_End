@@ -40,7 +40,7 @@ export default function Messenger() {
   const [receiverId, setReceiverId] = useState(null);
   const [incoming, setIncoming] = useState(null);
 
-  /* Redux — doctors list & my profile */
+  /* Redux— doctors list & my profile */
   const dispatch = useDispatch();
   const doctors = useSelector(selectPublicDoctors);
   const loadingDoctors = useSelector(selectDoctorsLoading);
@@ -337,4 +337,3 @@ export default function Messenger() {
     </div>
   );
 }
-// ──────────────────────────────────────
