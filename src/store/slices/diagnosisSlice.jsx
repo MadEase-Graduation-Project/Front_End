@@ -6,11 +6,7 @@ import {
   updateDiagnosis,
   deleteDiagnosis,
 } from "@/services/diagnosisApi";
-import {
-  fulfilledPaginationHandler,
-  pendingPaginationHandler,
-  rejectedPaginationHandler,
-} from "@/utils/paginationCasesHandlersUtils";
+
 import {
   fulfilledHandler,
   pendingHandler,
@@ -20,16 +16,16 @@ import {
 // Thunks with pagination support
 export const fetchAllDiagnosis = createAsyncThunk(
   "diagnosis/fetchAllDiagnosis",
-  async ({ page = 1 } = {}) => {
-    return await getAllDiagnosis({ page });
+  async (patient_id) => {
+    return await getAllDiagnosis(patient_id);
   }
 );
 
 export const fetchDiagnosisById = createAsyncThunk(
   "diagnosis/fetchDiagnosisById",
-  async (id, { dispatch }) => {
+  async (patient_id, diagnosis_id, { dispatch }) => {
     dispatch(clearSelectedDiagnosis());
-    return await getDiagnosisById(id);
+    return await getDiagnosisById(patient_id, diagnosis_id);
   }
 );
 
@@ -42,15 +38,15 @@ export const createDiagnosis = createAsyncThunk(
 
 export const editDiagnosis = createAsyncThunk(
   "diagnosis/editDiagnosis",
-  async ({ id, diagnosisData }) => {
-    return await updateDiagnosis(id, diagnosisData);
+  async (patient_id, diagnose_id, diagnosisData) => {
+    return await updateDiagnosis(patient_id, diagnose_id, diagnosisData);
   }
 );
 
 export const removeDiagnosis = createAsyncThunk(
   "diagnosis/removeDiagnosis",
-  async (id) => {
-    return await deleteDiagnosis(id);
+  async (patient_id, diagnose_id) => {
+    return await deleteDiagnosis(patient_id, diagnose_id);
   }
 );
 
@@ -58,11 +54,9 @@ const initialState = {
   diagnosis: [],
   selectedDiagnosis: {},
   totalDiagnosis: 0,
-  totalPages: 1,
-  currentPage: 1,
-  hasMore: true,
+
   loading: false,
-  loadingMore: false,
+
   error: false,
 };
 
@@ -79,24 +73,21 @@ const diagnosisSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all diagnosis
-      .addCase(fetchAllDiagnosis.pending, pendingPaginationHandler())
-      .addCase(
-        fetchAllDiagnosis.fulfilled,
-        fulfilledPaginationHandler({
-          listKey: "diagnosis",
-          totalsMap: {
-            totalItems: "totalDiagnosis",
-          },
-        })
-      )
-      .addCase(fetchAllDiagnosis.rejected, rejectedPaginationHandler())
+      .addCase(fetchAllDiagnosis.pending, pendingHandler())
+      .addCase(fetchAllDiagnosis.fulfilled, (state, action) => {
+        (state.loading = false),
+          (state.error = false),
+          (state.totalDiagnosis = action.payload?.diagnoses);
+      })
+      .addCase(fetchAllDiagnosis.rejected, rejectedHandler())
 
       // Fetch diagnosis by ID
       .addCase(fetchDiagnosisById.pending, pendingHandler())
-      .addCase(
-        fetchDiagnosisById.fulfilled,
-        fulfilledHandler({ detailsKey: "selectedDiagnosis" })
-      )
+      .addCase(fetchDiagnosisById.fulfilled, (state, action) => {
+        (state.loading = false),
+          (state.error = false),
+          (state.selectedDiagnosis = action.payload?.diagnosis);
+      })
       .addCase(fetchDiagnosisById.rejected, rejectedHandler())
 
       // Create diagnosis
