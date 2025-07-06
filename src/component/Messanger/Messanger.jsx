@@ -6,11 +6,12 @@
 // either opens the existing thread or creates one.
 //------------------------------------------------
 
+import { io } from "socket.io-client";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Conversation from "../Conversation/Conversation";
 import Message from "../Message/Message";
-import socket from "@/socket";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { fetchPublicDoctors } from "@/store/slices/doctorSlice";
@@ -22,6 +23,10 @@ import {
 import { selectMyDetails } from "@/store/selectors/userSelectors";
 
 import { Menu, X } from "lucide-react";
+
+const socket = io("http://localhost:8080", {
+  withCredentials: true,
+});
 
 /* ───────────────────────────────────── component */
 export default function Messenger() {
