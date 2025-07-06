@@ -1,10 +1,21 @@
+// NavBar.jsx
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import { User, Mail, Menu } from "lucide-react";
 import { IoClose } from "react-icons/io5";
-import { useLocation, useNavigate } from "react-router-dom";
-import { motion, useAnimationControls } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { fetchMYData } from "@/store/slices/userSlice";
+
+// ↳ selectors coming from the sign slice
+import {
+  selectSignUser,
+  selectSignRole,
+} from "@/store/selectors/signSelectors";
+
+/* ------------------------------------------------------------------ */
+/* Links shown in both desktop and mobile menus                       */
 const navItems = [
   { label: "Medical blogs", path: "/community" },
   { label: "Location", path: "/location" },
@@ -13,56 +24,76 @@ const navItems = [
 ];
 
 const NavBar = ({ scrolled }) => {
+  /* --- side‑menu state & refs ------------------------------------ */
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+
+  /* --- router helpers ------------------------------------------- */
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Close menu on outside click
+  /* --- auth state (Redux) --------------------------------------- */
+  const currentUser = useSelector(selectSignUser); // null if not logged in
+  const currentRole = useSelector(selectSignRole); // e.g. 'patient' | 'doctor'
+  const isLoggedIn = Boolean(currentUser);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
-      }
-    };
-
-    if (menuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+    if (currentRole) {
+      dispatch(fetchMYData());
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+  }, [dispatch, currentRole]);
+  /* --- close side‑menu on outside click ------------------------- */
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setMenuOpen(false);
     };
+    if (menuOpen) document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
   }, [menuOpen]);
 
+  /* -------------------------------------------------------------- */
+  /* Convenience helpers                                            */
+  /* -------------------------------------------------------------- */
+  const goTo = (path) => {
+    setMenuOpen(false);
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate(path);
+    }
+  };
+
+  /* Where the user‑icon should send the user                       */
+  const userTarget =
+    isLoggedIn && currentRole === "Patient" ? "/settings" : "/register";
+  /* -------------------------------------------------------------- */
   return (
     <>
-      {/* Dark Overlay */}
+      {/* ── dark overlay behind mobile menu ─────────────────────── */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 cursor-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 0 0-1.41 1.41L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z%22/></svg>'), auto]" />
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity"
+          onClick={() => setMenuOpen(false)}
+        />
       )}
 
-      {/* Sidebar Menu */}
+      {/* ── mobile side‑drawer ──────────────────────────────────── */}
       <div
         ref={menuRef}
         className={`
-          fixed z-50 bg-mewhite shadow-xl px-6 pt-6 transition-transform duration-300 ease-in-out
+          fixed z-50 bg-mewhite shadow-xl px-6 pt-6 transition-transform duration-300
           lg:hidden
-   ${
-     menuOpen
-       ? "opacity-100 pointer-events-auto"
-       : "opacity-0 pointer-events-none"
-   }
+          ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}
           ${
             menuOpen
-              ? "translate-y-0 sm:translate-x-0 sm:translate-y-0"
-              : "translate-y-full sm:translate-x-[-100%] sm:translate-y-0"
+              ? "translate-y-0 sm:translate-x-0"
+              : "translate-y-full sm:-translate-x-full sm:translate-y-0"
           }
-
-          w-full sm:w-[300px]
-          bottom-0 sm:top-0 left-0
-          h-[80%] sm:h-full
-          rounded-t-[20px] sm:rounded-tl-none sm sm:rounded-r-[20px]
+           w-full sm:w-[300px] bottom-0 sm:top-0 left-0 h-[80%] sm:h-full
+          rounded-t-[20px] sm:rounded-tl-none sm:rounded-br-[20px] sm:rounded-r-[20px]
         `}
       >
         <div className="flex justify-end mb-6">
@@ -75,14 +106,7 @@ const NavBar = ({ scrolled }) => {
           {navItems.map(({ label, path }) => (
             <button
               key={label}
-              onClick={() => {
-                setMenuOpen(false);
-                if (location.pathname === path) {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                } else {
-                  navigate(path);
-                }
-              }}
+              onClick={() => goTo(path)}
               className="font-jost text-base text-menavy font-semibold text-left"
             >
               {label}
@@ -99,26 +123,27 @@ const NavBar = ({ scrolled }) => {
         </nav>
       </div>
 
-      {/* Top Navbar */}
+      {/* ── main (top) navbar ───────────────────────────────────── */}
       <nav
-        className={`w-full h-[80px] sm:h-[100px] bg-mewhite px-4 sm:px-8 py-4 fixed top-0 left-0 z-30 
-        transition-all duration-200 ${scrolled ? "shadow-2xl" : "shadow-md"}`}
+        className={`w-full h-[80px] sm:h-[100px] bg-mewhite px-4 sm:px-8 py-4 fixed top-0 left-0 z-30
+        transition-shadow duration-200 ${
+          scrolled ? "shadow-2xl" : "shadow-md"
+        }`}
       >
         <div className="relative w-full h-full flex items-center justify-between">
-          {/* Hamburger */}
+          {/* hamburger (mobile) */}
           <button className="lg:hidden z-40" onClick={() => setMenuOpen(true)}>
             <Menu className="w-6 sm:w-7 text-menavy" />
           </button>
-          {/* Logo */}
+
+          {/* logo (click to top) */}
           <Link
             to="/"
             onClick={(e) => {
               e.preventDefault();
-              if (window.location.pathname === "/") {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              } else {
-                navigate("/");
-              }
+              location.pathname === "/"
+                ? window.scrollTo({ top: 0, behavior: "smooth" })
+                : navigate("/");
             }}
           >
             <img
@@ -128,18 +153,12 @@ const NavBar = ({ scrolled }) => {
             />
           </Link>
 
-          {/* Desktop Menu */}
+          {/* desktop nav links */}
           <div className="hidden lg:flex items-center gap-10 xl:gap-20 z-40">
             {navItems.map(({ label, path }) => (
               <button
                 key={label}
-                onClick={() => {
-                  if (location.pathname === path) {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  } else {
-                    navigate(path);
-                  }
-                }}
+                onClick={() => goTo(path)}
                 className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold"
               >
                 {label}
@@ -154,14 +173,19 @@ const NavBar = ({ scrolled }) => {
             </Link>
           </div>
 
-          {/* top right navigation icons*/}
+          {/* right‑hand icons */}
+          <div className="flex gap-2 sm:gap-3 md:gap-5 items-center text-menavy">
+            {/* mail icon shows ONLY when logged in  */}
+            {isLoggedIn && (
+              <button onClick={() => navigate("/test")} className="relative">
+                <Mail className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7" />
+              </button>
+            )}
 
-          <div className="flex gap-2 sm:gap-3 md:gap-5 items-center justify-center text-menavy ">
-            <Mail className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7 " />
+            {/* user icon   */}
             <button
-              onClick={() => navigate("/register")} // <-- useNavigate from react-router-dom
-              className="z-40  transition duration-300 
-    flex items-center justify-center"
+              onClick={() => navigate(userTarget)}
+              className="flex items-center justify-center z-40 transition"
             >
               <User className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7 text-menavy" />
             </button>

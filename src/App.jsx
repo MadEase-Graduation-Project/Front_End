@@ -27,7 +27,6 @@ import Community from "@/pages/main/Community/Community";
 import Doctors from "@/pages/patient/Doctors/Doctors";
 import MedBot from "@/pages/patient/MedBot/MedBot";
 import Settings from "@/pages/patient/Settings/Settings";
-import Messenger from "@/pages/patient/Messenger/Messenger";
 
 import SignUp from "@/pages/main/register/SignUp";
 import LogIn from "@/pages/main/register/LogIn";
@@ -57,7 +56,6 @@ function App() {
         {/* <Route path="doctors/" element={</>} /> */}
         <Route path="medbot" element={<MedBot />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="messenger" element={<Messenger />} />
         {/* <Route path="location" element={< />} /> */}
       </Route>
 
