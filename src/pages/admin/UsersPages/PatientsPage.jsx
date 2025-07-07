@@ -11,6 +11,7 @@ import {
   selectPatientsLoading,
 } from "@/store/selectors";
 import { isEmpty } from "@/utils/objectUtils";
+import ViewTable from "@/components/role/admin/ViewTable";
 
 export default function PatientsPage() {
   const dispatch = useDispatch();
@@ -116,7 +117,7 @@ export default function PatientsPage() {
       />
 
       {/* Data table */}
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -125,7 +126,7 @@ export default function PatientsPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
 
       {/* <ConfirmationDialog

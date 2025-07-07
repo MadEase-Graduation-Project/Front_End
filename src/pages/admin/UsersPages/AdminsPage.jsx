@@ -10,6 +10,7 @@ import {
 import { isEmpty } from "@/utils/objectUtils";
 import FilterColumns from "@/components/role/admin/FilterColumns";
 import { Settings } from "lucide-react";
+import ViewTable from "@/components/role/admin/ViewTable";
 
 export default function AdminsPage() {
   const dispatch = useDispatch();
@@ -81,7 +82,7 @@ export default function AdminsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      <DataTable
+      <ViewTable
         columns={allColumns}
         data={data}
         loading={loading}
@@ -90,7 +91,7 @@ export default function AdminsPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
     </div>
   );

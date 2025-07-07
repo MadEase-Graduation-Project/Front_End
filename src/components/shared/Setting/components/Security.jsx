@@ -26,10 +26,10 @@ import { Mail, Lock, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { isEmpty } from "@/utils/objectUtils";
 import ResetPassword from "./ResetPassword";
 import ChangeEmail from "./ChangeEmail";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deleteUser } from "@/services/editUserApi";
 import { useNavigate } from "react-router-dom";
-import { generateOtp } from "@/store/slices/otpSlice";
+import { updateData } from "@/store/slices/userSlice";
 
 export default function SecurityPage({ details }) {
   const dispatch = useDispatch();
@@ -56,10 +56,6 @@ export default function SecurityPage({ details }) {
   // to show changEmail and resetpassword dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [showEmailDialog, setShowEmailDialog] = useState(false);
-
-  const handleResendVerification = () => {
-    dispatch(generateOtp(securityData.email));
-  };
 
   //! danger ya waaaaaaaaaaaaaaaald
   const handleDeleteAccount = () => {
@@ -105,15 +101,6 @@ export default function SecurityPage({ details }) {
               </div>
             </div>
             <div className="flex gap-2">
-              {!emailVerified && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleResendVerification}
-                >
-                  Resend Verification
-                </Button>
-              )}
               <Button
                 variant="outline"
                 size="sm"

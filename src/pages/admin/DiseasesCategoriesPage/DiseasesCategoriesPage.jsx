@@ -10,6 +10,7 @@ import {
 } from "@/store/selectors";
 import { isEmpty } from "@/utils/objectUtils";
 import { fetchAllDiseasesCategories } from "@/store/slices/diseasesCategorySlice";
+import ViewTable from "@/components/role/admin/ViewTable";
 
 export default function DiseasesCategoriesPage() {
   const dispatch = useDispatch();
@@ -91,7 +92,7 @@ export default function DiseasesCategoriesPage() {
       />
 
       {/* Data table */}
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -100,7 +101,7 @@ export default function DiseasesCategoriesPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
     </div>
   );

@@ -10,6 +10,7 @@ import {
   selectDoctorsLoading,
 } from "@/store/selectors";
 import { isEmpty } from "@/utils/objectUtils";
+import ViewTable from "@/components/role/admin/ViewTable";
 
 export default function DoctorsPage() {
   const dispatch = useDispatch();
@@ -96,7 +97,7 @@ export default function DoctorsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -105,7 +106,7 @@ export default function DoctorsPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
     </div>
   );
