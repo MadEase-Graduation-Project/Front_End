@@ -10,7 +10,7 @@ import NurseAppointments from "./pages/nurse/NurseAppointments/NurseAppointments
 import NursePrescriptions from "@/pages/nurse/NursePrescriptions/NursePrescriptions";
 import NurseLabResults from "@/pages/nurse/NurseLabResults/NurseLabResults";
 import NurseEmergencies from "@/pages/nurse/NurseEmergencies/NurseEmergencies";
-import Setting from "@/components/shared/Setting/Setting";
+import {NurseSetting} from "@/pages/nurse/NurseSetting/NurseSetting";
 import NurseHome from "@/pages/nurse/NurseHome/NurseHome";
 
 // Layout
@@ -30,7 +30,8 @@ const NurseApp = () => {
         <Route path="reports" element={<NurseReport />} />
         <Route path="medications" element={<Medications />} />
         <Route path="chat" element={<ChatDoctors />} />
-        <Route path="settings" element={<Setting />} />
+        <Route path="settings" element={<NurseSetting />} />
+
       </Route>
     </Routes>
   );
