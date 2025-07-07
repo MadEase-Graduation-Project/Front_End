@@ -44,12 +44,13 @@ import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
 import { Settingss } from "./pages/doctor/Settingss";
 import About from "./pages/main/About";
 
-import { SettingsDoctor } from "./pages/doctor/Settings";
+
 import ShowProfile from "./pages/admin/UsersPages/components/ShowProfile";
 import ShowTreatment from "./pages/admin/TreatmentsPage/components/ShowTreatment";
 import ShowAppointment from "./pages/admin/AppointmentsPage/components/ShowAppointment";
 import ShowDisease from "./pages/admin/DiseasesPage/components/ShowDisease";
 import ShowDiseaseCategory from "./pages/admin/DiseasesCategoriesPage/components/ShowDiseaseCategory";
+import Messenger from "./pages/patient/Messenger/Messenger";
 
 function App() {
   return (
