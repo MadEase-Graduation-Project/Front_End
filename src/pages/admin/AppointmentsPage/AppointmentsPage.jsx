@@ -256,7 +256,7 @@ export default function AppointmentsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -265,7 +265,7 @@ export default function AppointmentsPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
 
       <ConfirmationDialog

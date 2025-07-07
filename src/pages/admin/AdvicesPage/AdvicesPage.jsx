@@ -224,7 +224,7 @@ export default function AdvicesPage() {
       />
 
       {/* Data table */}
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -233,7 +233,7 @@ export default function AdvicesPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
     </div>
   );

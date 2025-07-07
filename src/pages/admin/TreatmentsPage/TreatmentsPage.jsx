@@ -247,7 +247,7 @@ export default function TreatmentsPage() {
       />
 
       {/* Data table */}
-      <DataTable
+      <ViewTable
         columns={columns}
         data={data}
         loading={loading}
@@ -256,7 +256,7 @@ export default function TreatmentsPage() {
         onRowClick={handleRowClick}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        pageSize={5}
+        pageSize={10}
       />
     </div>
   );

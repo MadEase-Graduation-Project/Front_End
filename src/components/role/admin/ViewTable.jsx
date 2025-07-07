@@ -6,12 +6,12 @@ import {
   ArrowUp,
   ArrowDown,
   Search,
-  Edit,
   Trash2,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,6 @@ export default function ViewTable({
   data = [],
   loading = false,
   selectable = false,
-  onRowClick,
   onEdit,
   onDelete,
   showActions = false,
@@ -311,12 +310,11 @@ export default function ViewTable({
             {paginatedData.map((item, rowIndex) => (
               <TableRow
                 key={item._id || item.id || rowIndex}
-                className={`${onRowClick ? "cursor-pointer" : ""} ${
+                className={` ${
                   selectedRows.includes(item._id || item.id)
                     ? "bg-muted/50"
                     : ""
                 }`}
-                onClick={() => onRowClick && onRowClick(item)}
               >
                 {selectable && (
                   <TableCell>
@@ -357,7 +355,7 @@ export default function ViewTable({
                             onEdit(item);
                           }}
                         >
-                          <Edit className="h-4 w-4" />
+                          <Eye className="h-4 w-4" />
                           <span className="sr-only">Edit</span>
                         </Button>
                       )}
