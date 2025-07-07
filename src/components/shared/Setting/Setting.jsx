@@ -1,7 +1,7 @@
-import ProfileInfo from "@/components/shared/Setting/ProfileInfo";
-import Security from "@/components/shared/Setting/Security";
+import ProfileInfo from "@/components/shared/Setting/components/ProfileInfo";
+import Security from "@/components/shared/Setting/components/Security";
 import Navigate from "@/components/ui/Navigate";
-import Appearance from "./Appearance";
+import Appearance from "./components/Appearance";
 
 export default function SharedSetting({ details, loading }) {
   return (
