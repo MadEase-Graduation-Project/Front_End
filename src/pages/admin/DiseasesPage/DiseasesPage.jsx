@@ -1,9 +1,14 @@
-import DataTable from "@/components/role/admin/DataTable";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { fetchAllDiseases, removeDisease } from "@/store/slices/diseaseSlice";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Settings } from "lucide-react";
+import {
+  Settings,
+  Grid3X3,
+  Table,
+  Filter,
+  Activity,
+  BarChart3,
+} from "lucide-react";
 import FilterColumns from "@/components/role/admin/FilterColumns";
 import {
   selectAllDiseases,
@@ -12,48 +17,54 @@ import {
 } from "@/store/selectors";
 import { isEmpty } from "@/utils/objectUtils";
 import ViewTable from "@/components/role/admin/ViewTable";
+import ViewCards from "@/components/role/admin/ViewCards";
+import { DeleteConfirmationDialog } from "@/components/role/admin/DeleteConfirm";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function DiseasesPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const data = useSelector(selectAllDiseases);
   const loading = useSelector(selectDiseasesLoading);
-  const erro = useSelector(selectDiseasesError);
+  const error = useSelector(selectDiseasesError);
+
+  // View mode state (table or cards)
+  const [viewMode, setViewMode] = useState("table");
 
   // State for dialogs
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [diseaseToDelete, setDiseaseToDelete] = useState(null);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const [disease, setDisease] = useState({ id: "", name: "" });
 
   useEffect(() => {
     if (isEmpty(data)) dispatch(fetchAllDiseases());
   }, [dispatch]);
 
-  const handleRowClick = (item) => {
-    console.log("Row clicked:", item);
-  };
-
   const handleEdit = (item) => {
-    console.log("Edit item:", item);
+    navigate(`/admin/disease/${item._id}`);
   };
 
-  // Open confirmation dialog when delete is clicked
   const handleDelete = (item) => {
-    setDiseaseToDelete(item);
-    setDeleteDialogOpen(true);
+    setDisease({ id: item._id, name: item.name });
+    setOpenDeleteDialog(true);
   };
 
-  // Actual delete function when confirmed
-  const confirmDelete = () => {
-    if (diseaseToDelete) {
-      dispatch(removeDisease(diseaseToDelete._id));
-      console.log("Deleting Disease:", diseaseToDelete);
-      // Close the dialog after deletion
-      setDeleteDialogOpen(false);
-    }
+  const handleConfirmDelete = () => {
+    dispatch(removeDisease(disease.id));
+    setOpenDeleteDialog(false);
   };
 
   //* Column definitions
-  // All available columns
   const allColumns = useMemo(
     () => [
       { key: "name", label: "Name", sortable: true },
@@ -86,19 +97,135 @@ export default function DiseasesPage() {
   const columns = useMemo(() => {
     return allColumns.filter((col) => selectedColumnKeys.includes(col.key));
   }, [selectedColumnKeys, allColumns]);
-  //* End of column definitions
+
+  // Calculate statistics
+  const totalDiseases = data?.length || 0;
+  const categorizedDiseases =
+    data?.filter((disease) => disease.diseaseCategoryName)?.length || 0;
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Diseases</h1>
-        <button
-          onClick={() => setShowColumnSelector(true)}
-          className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors"
-        >
-          <Settings size={18} />
-          <span>Customize Columns</span>
-        </button>
+    <div className="p-6 space-y-6">
+      {/* Enhanced Header */}
+      <div className="space-y-4">
+        {/* Title and Stats Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Diseases Database
+            </h1>
+            <p className="text-sm text-gray-500">
+              Comprehensive medical conditions database with categorization and
+              detailed information
+            </p>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg">
+              <BarChart3 className="h-4 w-4 text-blue-600" />
+              <div className="text-sm">
+                <span className="font-semibold text-blue-900">
+                  {totalDiseases}
+                </span>
+                <span className="text-blue-600 ml-1">Total</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg">
+              <Activity className="h-4 w-4 text-purple-600" />
+              <div className="text-sm">
+                <span className="font-semibold text-purple-900">
+                  {categorizedDiseases}
+                </span>
+                <span className="text-purple-600 ml-1">Categorized</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Controls Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* Left side - View Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">View:</span>
+            <div className="flex items-center bg-gray-100 rounded-lg p-1">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={viewMode === "table" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setViewMode("table")}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Table className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Table View</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={viewMode === "cards" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setViewMode("cards")}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Grid3X3 className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Cards View</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
+
+          {/* Right side - Actions */}
+          <div className="flex items-center gap-3">
+            {/* Status Filter */}
+            <Button variant="outline" size="sm" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Filter
+              <Badge variant="secondary" className="ml-1">
+                All
+              </Badge>
+            </Button>
+
+            {/* Enhanced Customize Columns Button */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowColumnSelector(true)}
+                    className="gap-2 bg-white hover:bg-gray-50 border-gray-200 shadow-sm"
+                  >
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden sm:inline">Customize</span>
+                    <Badge variant="outline" className="ml-1 text-xs">
+                      {selectedColumnKeys.length}/{allColumns.length}
+                    </Badge>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    Customize visible columns ({selectedColumnKeys.length} of{" "}
+                    {allColumns.length} selected)
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
       </div>
 
       {/* Column selector dialog */}
@@ -111,31 +238,36 @@ export default function DiseasesPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      {/* Data table */}
-      <ViewTable
-        columns={columns}
-        data={data}
-        loading={loading}
-        selectable={true}
-        showActions={true}
-        onRowClick={handleRowClick}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        pageSize={10}
-      />
+      {/* Data Display */}
+      {viewMode === "table" ? (
+        <ViewTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={10}
+        />
+      ) : (
+        <ViewCards
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={9}
+        />
+      )}
 
-      {/* Confirmation dialog */}
-      <ConfirmationDialog
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={confirmDelete}
-        title="Delete Disease"
-        message={`Are you sure you want to delete the disease " ${
-          diseaseToDelete?.name || "this disease"
-        }?`}
-        confirmText="Delete"
-        cancelText="Cancel"
-        confirmButtonClass="bg-red-600 hover:bg-red-700"
+      <DeleteConfirmationDialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        description={`Are you sure you want to delete disease "${disease.name}"?`}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );
