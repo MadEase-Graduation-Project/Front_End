@@ -13,15 +13,15 @@ export const fetchChatbotSymptoms = createAsyncThunk(
   }
 );
 
-export const fetchChatbotSession = createAsyncThunk(
+export const startChatBotSession = createAsyncThunk(
   "chatbot/startSession",
-  async ({ dispatch }) => {
+  async (_, { dispatch }) => {
     dispatch(clearChatbotSession());
     return await startSession();
   }
 );
 
-export const fetchChatbotMessage = createAsyncThunk(
+export const sendChatBotMsg = createAsyncThunk(
   "chatbot/sendMsg",
   async (body) => {
     return await sendMsg(body);
@@ -30,7 +30,8 @@ export const fetchChatbotMessage = createAsyncThunk(
 
 const initialState = {
   session: null,
-  messages: [],
+  sessionStart: false,
+  message: {},
   symptoms: [],
   loading: false,
   error: false,
@@ -42,7 +43,8 @@ const chatbotSlice = createSlice({
   reducers: {
     clearChatbotSession: (state) => {
       state.session = null;
-      state.messages = [];
+      state.sessionStart = false;
+      state.message = {};
       state.loading = false;
       state.error = false;
     },
@@ -59,18 +61,23 @@ const chatbotSlice = createSlice({
       .addCase(fetchChatbotSymptoms.rejected, rejectedHandler())
 
       // Start session
-      .addCase(fetchChatbotSession.pending, pendingHandler())
-      .addCase(fetchChatbotSession.fulfilled, (state, action) => {
+      .addCase(startChatBotSession.pending, pendingHandler())
+      .addCase(startChatBotSession.fulfilled, (state, action) => {
         state.loading = false;
-        state.session = action.payload?.data;
         state.error = false;
+        state.session = action.payload?.data;
+        state.sessionStart = action.payload?.success || true;
       })
-      .addCase(fetchChatbotSession.rejected, rejectedHandler())
+      .addCase(startChatBotSession.rejected, rejectedHandler())
 
       // Send message
-      .addCase(fetchChatbotMessage.pending, pendingHandler())
-      .addCase(fetchChatbotMessage.fulfilled, fulfilledHandler())
-      .addCase(fetchChatbotMessage.rejected, rejectedHandler());
+      .addCase(sendChatBotMsg.pending, pendingHandler())
+      .addCase(sendChatBotMsg.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.message = action.payload?.data;
+      })
+      .addCase(sendChatBotMsg.rejected, rejectedHandler());
   },
 });
 

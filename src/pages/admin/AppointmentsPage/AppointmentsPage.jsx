@@ -32,7 +32,7 @@ export default function AppointmentsPage() {
 
   // // Open create appointment dialog
   // const handleCreateAppointment = () => {
-  //   setIsCreateMode(true);
+  //   setIsCreateMode(true);s
   //   setAppointmentToEdit(null);
   //   setAppointmentDialogOpen(true);
   // };

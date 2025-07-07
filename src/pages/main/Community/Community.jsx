@@ -15,7 +15,7 @@ import {
   sortedAdvices,
   selectFilteredAdvices,
 } from "@/store/selectors/index";
-import Popup from "./components/Popup";
+import Popup from "../../../components/shared/Popup";
 
 export default function Community() {
   const dispatch = useDispatch();
