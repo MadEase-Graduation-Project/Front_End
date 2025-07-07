@@ -223,32 +223,18 @@ export default function AdvicesPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      {/* Data Display */}
-      {viewMode === "table" ? (
-        <ViewTable
-          columns={columns}
-          data={data}
-          loading={loading}
-          selectable={true}
-          showActions={true}
-          onRowClick={handleRowClick}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          pageSize={10}
-        />
-      ) : (
-        <ViewCards
-          columns={columns}
-          data={data}
-          loading={loading}
-          selectable={true}
-          showActions={true}
-          onRowClick={handleRowClick}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          pageSize={9}
-        />
-      )}
+      {/* Data table */}
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        selectable={true}
+        showActions={true}
+        onRowClick={handleRowClick}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        pageSize={5}
+      />
     </div>
   );
 }

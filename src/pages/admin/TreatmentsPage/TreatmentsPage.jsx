@@ -246,36 +246,17 @@ export default function TreatmentsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-      {/* Data Display */}
-      {viewMode === "table" ? (
-        <ViewTable
-          columns={columns}
-          data={data}
-          loading={loading}
-          selectable={true}
-          showActions={true}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          pageSize={10}
-        />
-      ) : (
-        <ViewCards
-          columns={columns}
-          data={data}
-          loading={loading}
-          selectable={true}
-          showActions={true}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          pageSize={9}
-        />
-      )}
-
-      <DeleteConfirmationDialog
-        open={openDeleteDialog}
-        onClose={() => setOpenDeleteDialog(false)}
-        description={`Are you sure you want to delete treatment "${treatment.name}"?`}
-        onConfirm={handleConfirmDelete}
+      {/* Data table */}
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        selectable={true}
+        showActions={true}
+        onRowClick={handleRowClick}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        pageSize={5}
       />
     </div>
   );
