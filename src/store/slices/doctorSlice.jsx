@@ -34,7 +34,7 @@ export const fetchDoctorDetails = createAsyncThunk(
 // public fetches don't need validation
 export const fetchPublicDoctors = createAsyncThunk(
   "doctors/fetchDoctorsPublic",
-  async ({ page = 1 }) => {
+  async ({ page = 1 } = {}) => {
     return await getAllDoctorsPublic({ page });
   }
 );
