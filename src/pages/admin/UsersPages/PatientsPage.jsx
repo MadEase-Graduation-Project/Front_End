@@ -242,6 +242,7 @@ export default function PatientsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
+<<<<<<< HEAD
       {/* Data table */}
       <ViewTable
         columns={columns}
@@ -254,19 +255,39 @@ export default function PatientsPage() {
         onDelete={handleDelete}
         pageSize={10}
       />
+=======
+      {/* Data Display */}
+      {viewMode === "table" ? (
+        <ViewTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={10}
+        />
+      ) : (
+        <ViewCards
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={9}
+        />
+      )}
+>>>>>>> origin/main
 
-      {/* <ConfirmationDialog
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={confirmDelete}
-        title="Delete Patient"
-        message={`Are you sure you want to delete the data of patient ${
-          patientToDelete?.name || "this patient"
-        }?`}
-        confirmText="Delete"
-        cancelText="Cancel"
-        confirmButtonClass="bg-red-600 hover:bg-red-700"
-      /> */}
+      <DeleteConfirmationDialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        description={`Are you sure you want to delete patient ${patient.name}'s account?`}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

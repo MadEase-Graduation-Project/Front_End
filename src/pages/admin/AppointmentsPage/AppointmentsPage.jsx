@@ -256,6 +256,7 @@ export default function AppointmentsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
+<<<<<<< HEAD
       <ViewTable
         columns={columns}
         data={data}
@@ -281,6 +282,35 @@ export default function AppointmentsPage() {
         confirmButtonClass="bg-red-600 hover:bg-red-700"
       />
 
+=======
+      {/* Data Display */}
+      {viewMode === "table" ? (
+        <ViewTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onRowClick={handleRowClick}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={10}
+        />
+      ) : (
+        <ViewCards
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onRowClick={handleRowClick}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={9}
+        />
+      )}
+
+>>>>>>> origin/main
       <DeleteConfirmationDialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}

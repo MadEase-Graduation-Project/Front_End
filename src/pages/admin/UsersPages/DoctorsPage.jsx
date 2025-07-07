@@ -246,6 +246,7 @@ export default function DoctorsPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
+<<<<<<< HEAD
       <ViewTable
         columns={columns}
         data={data}
@@ -256,6 +257,38 @@ export default function DoctorsPage() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         pageSize={10}
+=======
+      {/* Data Display */}
+      {viewMode === "table" ? (
+        <ViewTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={10}
+        />
+      ) : (
+        <ViewCards
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={9}
+        />
+      )}
+
+      <DeleteConfirmationDialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        description={`Are you sure you want to delete Dr. ${doctor.name}'s account?`}
+        onConfirm={handleConfirmDelete}
+>>>>>>> origin/main
       />
     </div>
   );
