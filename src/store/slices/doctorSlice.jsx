@@ -62,6 +62,7 @@ const doctorSlice = createSlice({
   initialState,
   reducers: {
     clearSelectedDoctor: (state) => {
+      state.doctors = [];
       state.doctorDetails = {};
       state.loading = false;
       state.error = false;

@@ -43,6 +43,11 @@ import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
 import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
 
 import { SettingsDoctor } from "./pages/doctor/Settings";
+import ShowProfile from "./pages/admin/UsersPages/components/ShowProfile";
+import ShowTreatment from "./pages/admin/TreatmentsPage/components/ShowTreatment";
+import ShowAppointment from "./pages/admin/AppointmentsPage/components/ShowAppointment";
+import ShowDisease from "./pages/admin/DiseasesPage/components/ShowDisease";
+import ShowDiseaseCategory from "./pages/admin/DiseasesCategoriesPage/components/ShowDiseaseCategory";
 
 function App() {
   return (
@@ -90,14 +95,26 @@ function App() {
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />
+        {/* for appointment pages */}
         <Route path="appointments" element={<AppointmentsPage />} />
+        <Route path="appointment/:id" element={<ShowAppointment />} />
+        {/* for users and their pages -----------------------------*/}
         <Route path="patients" element={<PatientsPage />} />
         <Route path="doctors" element={<DoctorsPage />} />
         <Route path="admins" element={<AdminsPage />} />
+        <Route path="profile/:id" element={<ShowProfile />} />
+        {/* for disease pages ------------------------------ */}
         <Route path="diseases" element={<DiseasesPage />} />
+        <Route path="disease/:id" element={<ShowDisease />} />
+        {/* for diseaseCategory pages ------------------------------ */}
         <Route path="diseaseCategories" element={<DiseasesCategoriesPage />} />
+        <Route path="diseaseCategory/:id" element={<ShowDiseaseCategory />} />
+        {/* for advice pages ------------------------------ */}
         <Route path="advices" element={<AdvicesPage />} />
+        {/* for treatment and its pages -----------------------*/}
         <Route path="treatments" element={<TreatmentsPage />} />
+        <Route path="treatment/:id" element={<ShowTreatment />} />
+        {/* ---------------------------------------------------- */}
         <Route path="setting" element={<SettingPage />} />
       </Route>
 
