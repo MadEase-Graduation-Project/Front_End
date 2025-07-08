@@ -9,7 +9,7 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Default timeout in milliseconds
-const DEFAULT_TIMEOUT = 10000;
+const DEFAULT_TIMEOUT = 25000;
 
 // Create axios instance with configuration
 const api = axios.create({
