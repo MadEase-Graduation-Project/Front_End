@@ -3,9 +3,9 @@ import { fetchMYData } from "@/store/slices/userSlice";
 import { selectMyDetails, selectUsersLoading } from "@/store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import Navigate from "@/components/ui/Navigate";
-import ProfileInfo from "@/components/shared/Setting/ProfileInfo";
-import Security from "@/components/shared/Setting/Security";
-import Appearance from "@/components/shared/Setting/Appearance";
+import ProfileInfo from "@/components/shared/Setting/components/ProfileInfo";
+import Security from "@/components/shared/Setting/components/Security";
+import Appearance from "@/components/shared/Setting/components/Appearance";
 
 // Settingssss
 
