@@ -1,5 +1,5 @@
 import api from "../lib/axios";
-import { handleApiResponse, handleApiError } from "../lib/apiUtils";
+import { handleApiResponse } from "../lib/apiUtils";
 
 /**
  * Ads API Service
@@ -21,17 +21,13 @@ export const getAdById = async (id) => {
 
 // Add new ad
 export const addAd = async (adData) => {
-  const response = await api.post(BASE_ENDPOINT, adData, {
-    headers: {
-      "Content-Type": "multipart/form-data", // ✅ Correct for FormData
-    },
-  });
+  const response = await api.post(BASE_ENDPOINT, adData);
   return handleApiResponse(response, "Failed to add ad");
 };
 
 // Update ad
 export const updateAd = async (id, adData) => {
-  const response = await api.put(`${BASE_ENDPOINT}/${id}`, adData);
+  const response = await api.patch(`${BASE_ENDPOINT}/${id}`, adData);
   return handleApiResponse(response, "Failed to update ad");
 };
 
