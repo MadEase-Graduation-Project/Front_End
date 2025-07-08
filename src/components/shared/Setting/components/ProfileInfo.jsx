@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +38,7 @@ export default function ProfilePage({ details }) {
     phone: "",
     city: "",
     country: "",
-    avatar: "",
+    avatar: null,
   });
 
   useEffect(() => {
@@ -76,10 +78,10 @@ export default function ProfilePage({ details }) {
     setIsEditing(false);
   };
 
-  const handleChangeAvatar = () => {
-    dispatch(updateData({ ImgUrl: profile.avatar })); //* the back want url not .png
-    setShowAvatarDialog(false);
-    dispatch(getMyData());
+  const handleChangeAvatar = async () => {
+    if (!profile.avatar) return;
+
+    return alert("خالد مش مظبطها");
   };
 
   return (
@@ -258,14 +260,10 @@ export default function ProfilePage({ details }) {
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                      setProfile({ ...profile, avatar: e.target?.result });
-                    };
-                    reader.readAsDataURL(file);
-                  }
+                  setProfile({
+                    ...profile,
+                    avatar: e.target.files?.[0] || null,
+                  });
                 }}
               />
               <p className="text-sm text-muted-foreground">
