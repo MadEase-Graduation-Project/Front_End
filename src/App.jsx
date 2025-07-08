@@ -11,7 +11,7 @@ import AdminsPage from "@/pages/admin/UsersPages/AdminsPage";
 import AdvicesPage from "@/pages/admin/AdvicesPage/AdvicesPage";
 import Doctor_Dashboard_Layout from "@/layouts/Doctor_Dashboard_Layout";
 import { Main_Grid } from "@/pages/doctor/Main_Grid";
-import { Messages } from "@/pages/doctor/Messages";
+import Messages from "@/pages/doctor/Messages";
 import { Diseases_doctor } from "@/pages/doctor/Diseases_doctor";
 import { Patients_doctor } from "@/pages/doctor/Patients_doctor";
 import { Advice } from "@/pages/doctor/Advice";
