@@ -1,41 +1,43 @@
 import React from "react";
 
-const Conversation = ({
-  conversation,
-  currentUserId,
-  doctors = [],
-  patients = [],
-  onClick,
-}) => {
-  // نحاول نعرف الـ ID التاني في المحادثة (مش المستخدم الحالي)
-  const otherUserId = conversation.members.find((id) => id !== currentUserId);
+const Conversation = ({ conversation, currentUserId, onClick }) => {
+  const { otherUser, lastMessage } = conversation;
 
-  // نحاول نجيب معلومات الشخص التاني (دكتور أو مريض)
-  const doctor = doctors.find((doc) => doc._id === otherUserId);
-  const patient = patients.find((pat) => pat._id === otherUserId);
+  if (!otherUser) {
+    console.error("Missing otherUser in conversation:", conversation);
+    return null;
+  }
+  console.log(lastMessage)
+  const name =
+    otherUser.role === "doctor" ? `Dr. ${otherUser.name}` : otherUser.name;
+  const imageUrl = otherUser.ImgUrl || "/default-avatar.png";
 
-  // نحدّد الاسم والصورة حسب اللي قدرنا نلقاه
-  const name = doctor
-    ? `Dr. ${doctor.name}`
-    : patient
-    ? patient.name
-    : "Unknown User";
-
-  const imageUrl = doctor?.ImgUrl || patient?.ImgUrl || null;
+  const isPatientSender = lastMessage?.sender !== currentUserId;
 
   return (
     <div
       onClick={onClick}
-      className="flex items-center p-2.5 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-[#f0f2f5]"
+      className="flex flex-col items-start p-2.5 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-[#f0f2f5]"
     >
-      {imageUrl && (
+      <div className="flex items-center w-full">
         <img
           src={imageUrl}
           alt={name}
           className="w-10 h-10 rounded-full object-cover mr-2.5"
         />
-      )}
-      <span className="text-[16px] font-medium text-[#333]">{name}</span>
+        <div className="flex-1">
+          <div className="text-[16px] font-medium text-[#333]">{name}</div>
+          {lastMessage?.text && (
+            <div
+              className={`text-sm truncate ${
+                isPatientSender ? "font-bold text-black" : "text-gray-500"
+              }`}
+            >
+              {lastMessage.text}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 
 // Connect to your backend Socket.IO server
-const socket = io("http://localhost:8080", {
+const socket = io("ws://localhost:8080", {
   withCredentials: true,
 });
 
