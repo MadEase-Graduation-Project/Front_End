@@ -1,5 +1,5 @@
 import api from "../lib/axios";
-import { handleApiResponse, handleApiError } from "../lib/apiUtils";
+import { handleApiResponse } from "../lib/apiUtils";
 
 /**
  * Doctors API Service

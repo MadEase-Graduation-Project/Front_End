@@ -8,6 +8,7 @@ import { selectMyDetails } from "@/store/selectors";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMYData } from "@/store/slices/userSlice";
+import SearchBar from "./SearchBar";
 
 export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
@@ -51,7 +52,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
   };
 
   return (
-    <div className="px-2 md:px-4 mt-2 md:mt-4 pb-2 md:pb-3 border-gray-200">
+    <div className="px-2 md:px-4 pt-2 md:pt-4 pb-2 md:pb-3 bg-gray-50 border-gray-200">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
         <div className="flex items-center gap-2">
           <button
@@ -74,14 +75,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
         </div>
 
         <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-2">
-          <div className="relative bg-white rounded-lg flex items-center px-2 text-sm border-1 border-gray-200 h-8 w-full md:w-64 md:mx-8">
-            <FiSearch className="mr-2 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent w-full placeholder:text-gray-500 focus:outline-none"
-            />
-          </div>
+          <SearchBar />
           <div>
             <UserAvatar name={name} email={email} />
           </div>

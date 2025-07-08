@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Lock, User, X } from "lucide-react";
+import { Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Popup({ open, onClose }) {
@@ -8,7 +8,7 @@ export default function Popup({ open, onClose }) {
 
   const navigateToLogin = () => {
     onClose();
-    navigate("/login");
+    navigate("/register/login");
   };
 
   return (

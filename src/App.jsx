@@ -27,7 +27,6 @@ import Community from "@/pages/main/Community/Community";
 import Doctors from "@/pages/patient/Doctors/Doctors";
 import MedBot from "@/pages/patient/MedBot/MedBot";
 import Settings from "@/pages/patient/Settings/Settings";
-import Messenger from "@/pages/patient/Messenger/Messenger";
 
 import SignUp from "@/pages/main/register/SignUp";
 import LogIn from "@/pages/main/register/LogIn";
@@ -41,6 +40,15 @@ import NurseApp from "@/NurseApp";
 import DiseasesCategoriesPage from "./pages/admin/DiseasesCategoriesPage/DiseasesCategoriesPage";
 import Diagnosis_doctor from "./pages/doctor/Diagnosis_doctor";
 
+import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
+
+import { SettingsDoctor } from "./pages/doctor/Settings";
+import ShowProfile from "./pages/admin/UsersPages/components/ShowProfile";
+import ShowTreatment from "./pages/admin/TreatmentsPage/components/ShowTreatment";
+import ShowAppointment from "./pages/admin/AppointmentsPage/components/ShowAppointment";
+import ShowDisease from "./pages/admin/DiseasesPage/components/ShowDisease";
+import ShowDiseaseCategory from "./pages/admin/DiseasesCategoriesPage/components/ShowDiseaseCategory";
+
 function App() {
   return (
     <Routes>
@@ -53,7 +61,6 @@ function App() {
         {/* <Route path="doctors/" element={</>} /> */}
         <Route path="medbot" element={<MedBot />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="messenger" element={<Messenger />} />
         {/* <Route path="location" element={< />} /> */}
       </Route>
 
@@ -71,6 +78,7 @@ function App() {
         <Route path="diagnosis" element={<Diagnosis_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
+        <Route path="settings" element={<SettingsDoctor />} />
       </Route>
 
       {/* reset pass layout */}
@@ -87,13 +95,26 @@ function App() {
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />
+        {/* for appointment pages */}
         <Route path="appointments" element={<AppointmentsPage />} />
+        <Route path="appointment/:id" element={<ShowAppointment />} />
+        {/* for users and their pages -----------------------------*/}
         <Route path="patients" element={<PatientsPage />} />
         <Route path="doctors" element={<DoctorsPage />} />
         <Route path="admins" element={<AdminsPage />} />
+        <Route path="profile/:id" element={<ShowProfile />} />
+        {/* for disease pages ------------------------------ */}
         <Route path="diseases" element={<DiseasesPage />} />
+        <Route path="disease/:id" element={<ShowDisease />} />
+        {/* for diseaseCategory pages ------------------------------ */}
         <Route path="diseaseCategories" element={<DiseasesCategoriesPage />} />
+        <Route path="diseaseCategory/:id" element={<ShowDiseaseCategory />} />
+        {/* for advice pages ------------------------------ */}
         <Route path="advices" element={<AdvicesPage />} />
+        {/* for treatment and its pages -----------------------*/}
+        <Route path="treatments" element={<TreatmentsPage />} />
+        <Route path="treatment/:id" element={<ShowTreatment />} />
+        {/* ---------------------------------------------------- */}
         <Route path="setting" element={<SettingPage />} />
       </Route>
 

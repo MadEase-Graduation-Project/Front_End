@@ -1,41 +1,71 @@
-import { Input } from "@/components/ui/input";
-import { Bell } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import TodayDate from "@/components/doctor/TodayDate";
+import { FiSearch } from "react-icons/fi";
+import { UserAvatar } from "@/components/doctor/Dashboard/UserAvatar";
+import { TbLayoutSidebarFilled } from "react-icons/tb";
+import { useLocation } from "react-router-dom";
 
-export default function Header({ search = "", setSearch = () => {} }) {
+const Header = ({ isCollapsed, setIsCollapsed }) => {
+  const location = useLocation();
+
+  // بيانات ثابتة
+  const [name] = useState("Nurse Sarah");
+  const [email] = useState("snurse@gmail.com");
+
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path === "/nurse") return `Hello, ${name}!`;
+    if (path.startsWith("/nurse/patients")) return "Patients";
+    if (path.startsWith("/nurse/appointments")) return "Appointments";
+    if (path.startsWith("/nurse/reports")) return "Reports";
+    if (path.startsWith("/nurse/prescriptions")) return "Prescriptions";
+    if (path.startsWith("/nurse/lab-results")) return "Lab Results";
+    if (path.startsWith("/nurse/emergencies")) return "Emergencies";
+    if (path.startsWith("/nurse/settings")) return "Settings";
+    return "Nurse Panel";
+  };
+
   return (
-    <div className="w-full flex items-center justify-between p-4 border-b bg-white shadow-sm sticky top-0 z-50">
-
-      {/* Left: (Removed Logo and Title) */}
-      <div />
-
-      {/* Middle: Search Bar */}
-      <div className="w-[200px] sm:w-[250px] md:w-[300px]">
-        <Input
-          type="text"
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Right: Notifications and User */}
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <Bell className="w-5 h-5 text-gray-600 cursor-pointer" />
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
-            3
-          </span>
+    <div className="px-2 md:px-4 mt-2 md:mt-4 pb-2 md:pb-3 border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
+        {/* Left Side: Title & Date */}
+        <div className="flex items-center gap-2">
+          <button
+            className="z-10 h-fit my-auto text-[#142139]"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            <TbLayoutSidebarFilled
+              className={`${isCollapsed ? "text-[#1e3356]" : "text-[#142139]"}`}
+              size={isCollapsed ? 17 : 20}
+            />
+          </button>
+          <div>
+            <span className="text-xl md:text-3xl font-semibold block">
+              {getPageTitle()}
+            </span>
+            <span className="text-xs md:text-sm block text-gray-500">
+              <TodayDate />
+            </span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Avatar>
-            <AvatarImage src="https://i.pravatar.cc/300" alt="User" />
-            <AvatarFallback>NU</AvatarFallback>
-          </Avatar>
-          <span className="text-sm font-medium text-gray-700 hidden sm:block">User</span>
+        {/* Right Side: Search & Avatar */}
+        <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-2">
+          <div className="relative bg-white rounded-lg flex items-center px-2 text-sm border border-gray-200 h-8 w-full md:w-64 md:mx-8">
+            <FiSearch className="mr-2 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="bg-transparent w-full placeholder:text-gray-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <UserAvatar name={name} email={email} />
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Header;
