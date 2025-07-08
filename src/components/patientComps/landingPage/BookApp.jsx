@@ -1,7 +1,7 @@
 import about from "@/assets/images/about.png";
 const BookApp = () => {
   return (
-    <div className="w-full py-12 px-16 md:px-28 lg:px-20">
+    <div className="w-full px-16 md:px-28 lg:px-20">
       <div className="bg-meblue2 flex flex-col-reverse lg:flex-row items-center lg:items-stretch justify-between gap-5 lg:gap-10 rounded-3xl overflow-hidden">
         {/* Text Content (Bottom on small, Left on lg+) */}
         <div className="flex-1 gap-5 max-w-xl w-full px-4 sm:px-8 pb-10 lg:pb-0 lg:pl-16 flex flex-col justify-center items-center lg:items-start">

@@ -20,7 +20,7 @@ export default function Settings() {
     dispatch(fetchMYData());
   }, [dispatch]);
   return (
-    <div className="w-full h-full p-4">
+    <div className="w-full bg-meblue h-full p-4">
       <Navigate
         tabs={[
           {

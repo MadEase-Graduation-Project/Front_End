@@ -13,7 +13,8 @@ import hospitalReducer from "@/store/slices/hospitalSlice";
 import signReducer from "@/store/slices/signSlice";
 import otpReducer from "@/store/slices/otpSlice";
 import chatBotReducer from "@/store/slices/chatbotSlice";
-
+import diagnosisReducer from "@/store/slices/diagnosisSlice";
+// import adsReducer from "@/store/slices/adsSlice";
 export const store = configureStore({
   reducer: {
     //* system users
@@ -32,5 +33,7 @@ export const store = configureStore({
     treatments: treatmentReducer,
     appointments: appointmentReducer,
     chatbot: chatBotReducer,
+    diagnosis: diagnosisReducer,
+    // ads: adsReducer,
   },
 });

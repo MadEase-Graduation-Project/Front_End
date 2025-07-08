@@ -28,7 +28,7 @@ const itemVariants = {
 
 const MedicalCasesSection = () => {
   return (
-    <section className="w-full bg-white py-16">
+    <section className="w-full bg-white">
       <div className="text-center mb-12">
         <h2 className="text-menavy text-2xl sm:text-3xl font-jost font-bold">
           Explore Medical Cases

@@ -24,7 +24,14 @@ export default function SignUp() {
   } = useForm({ mode: "onTouched" });
 
   const [showPassword, setShowPassword] = useState(false);
-  const fieldOrder = ["name", "phone", "email", "password"];
+  const fieldOrder = [
+    "name",
+    "phone",
+    "email",
+    "city",
+    "dateOfBirth",
+    "password",
+  ];
 
   const handleKeyDown = async (e, name) => {
     if (e.key === "Enter") {
@@ -51,13 +58,11 @@ export default function SignUp() {
       const regRes = await registerUser(payload);
       console.log("Registered:", regRes);
 
-      // 👇 Check if backend returned errors
       if (regRes?.error) {
         showPopup(regRes.error || "Registration failed", "error");
         return;
       }
 
-      // ✅ Auto-login
       const loginRes = await loginUser({
         email: data.email,
         password: data.password,
@@ -93,12 +98,13 @@ export default function SignUp() {
         <Controller
           name="name"
           control={control}
-          rules={{ required: "Name is required" }}
+          rules={{ required: true }}
           render={({ field }) => (
             <FloatingInput
               {...field}
               label="Name"
               id="name"
+              hasError={!!errors.name}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("name");
@@ -107,26 +113,18 @@ export default function SignUp() {
             />
           )}
         />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-        )}
 
         {/* Phone Number */}
         <Controller
           name="phone"
           control={control}
           rules={{
-            required: "Phone number is required",
+            required: true,
             validate: (value) => {
               const digitsOnly = (value || "").replace(/\D/g, "");
-
-              if (/\D/.test(value)) return "Only numbers are allowed";
-              if (!/^01[0125]/.test(digitsOnly))
-                return "Phone number must start with 010, 011, 012, or 015";
-              if (digitsOnly.length < 11)
-                return "Phone number must be exactly 11 digits";
-              if (digitsOnly.length > 11)
-                return "Phone number can't exceed 11 digits";
+              if (/\D/.test(value)) return false;
+              if (!/^01[0125]/.test(digitsOnly)) return false;
+              if (digitsOnly.length !== 11) return false;
               return true;
             },
           }}
@@ -136,6 +134,7 @@ export default function SignUp() {
               label="Phone Number"
               id="phone"
               type="tel"
+              hasError={!!errors.phone}
               value={field.value || ""}
               onChange={(e) => {
                 field.onChange(e);
@@ -145,20 +144,14 @@ export default function SignUp() {
             />
           )}
         />
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-        )}
 
         {/* Email */}
         <Controller
           name="email"
           control={control}
           rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Invalid email address",
-            },
+            required: true,
+            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
           }}
           render={({ field }) => (
             <FloatingInput
@@ -166,6 +159,7 @@ export default function SignUp() {
               label="E-mail"
               id="email"
               type="email"
+              hasError={!!errors.email}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("email");
@@ -174,28 +168,126 @@ export default function SignUp() {
             />
           )}
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-        )}
+
+        {/* Gender & Country */}
+        <div className="flex gap-4">
+          <div className="w-1/2">
+            <Controller
+              name="gender"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  id="gender"
+                  className={`peer w-full h-[30px] sm:h-[48px] rounded-[5px]  text-menavy bg-transparent px-4 border ${
+                    errors.gender
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-menavyoff focus:ring-menavy"
+                  } focus:ring-2 outline-none`}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("gender");
+                  }}
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              )}
+            />
+          </div>
+
+          <div className="w-1/2">
+            <Controller
+              name="country"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  id="country"
+                  className={`peer w-full h-[30px] sm:h-[48px] rounded-[5px]  text-menavy bg-transparent px-4 border ${
+                    errors.country
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-menavyoff focus:ring-menavy"
+                  } focus:ring-2 outline-none`}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("country");
+                  }}
+                >
+                  <option value="">Select country</option>
+                  <option value="Egypt">Egypt</option>
+                </select>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4">
+          {/* City */}
+          <div className="w-1/2">
+            <Controller
+              name="city"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <FloatingInput
+                  {...field}
+                  label="City"
+                  id="city"
+                  hasError={!!errors.city}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("city");
+                  }}
+                  onKeyDown={(e) => handleKeyDown(e, "city")}
+                />
+              )}
+            />
+          </div>
+
+          {/* Date of Birth */}
+          <div className="w-1/2">
+            <Controller
+              name="dateOfBirth"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  id="dateOfBirth"
+                  type="date"
+                  value={field.value || ""}
+                  className={`peer w-full h-[30px] sm:h-[48px] rounded-[5px] text-menavy bg-transparent px-4 border ${
+                    errors.dateOfBirth
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-menavyoff focus:ring-menavy"
+                  } focus:ring-2 outline-none`}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("dateOfBirth");
+                  }}
+                />
+              )}
+            />
+          </div>
+        </div>
 
         {/* Password */}
         <div className="relative">
           <Controller
             name="password"
             control={control}
-            rules={{
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
-            }}
+            rules={{ required: true, minLength: 6 }}
             render={({ field }) => (
               <FloatingInput
                 {...field}
                 label="Password"
                 id="password"
                 type={showPassword ? "text" : "password"}
+                hasError={!!errors.password}
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("password");
@@ -211,11 +303,6 @@ export default function SignUp() {
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
-          )}
         </div>
 
         <button
@@ -224,12 +311,6 @@ export default function SignUp() {
         >
           Sign up
         </button>
-
-        <DividerText reg="or signup with" />
-        <div className="flex gap-[12px]">
-          <BottomBtn source={google} btn="Google" />
-          <BottomBtn source={apple} btn="Apple" />
-        </div>
       </div>
     </form>
   );
