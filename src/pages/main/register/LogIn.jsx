@@ -7,10 +7,9 @@ import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "../../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
 
 import { usePopup } from "@/contexts/PopupContext";
 import { login } from "@/store/slices/signSlice";
@@ -38,7 +37,6 @@ export default function LogIn() {
     handleSubmit,
     formState: { errors },
     trigger,
-
     clearErrors,
   } = useForm({ mode: "onTouched" });
 
@@ -89,8 +87,8 @@ export default function LogIn() {
     if (isActivePopup) {
       const timer = setTimeout(() => {
         setActivePopup(false);
-      }, 8000); // Auto-close after 3 seconds
-      return () => clearTimeout(timer); // Cleanup
+      }, 8000);
+      return () => clearTimeout(timer);
     }
   }, [isActivePopup]);
 
@@ -153,7 +151,7 @@ export default function LogIn() {
               label="E-mail"
               id="email"
               type="email"
-              hasError={hasLoginError}
+              hasError={!!errors.email || hasLoginError}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("email");
@@ -185,7 +183,7 @@ export default function LogIn() {
                 label="Password"
                 id="password"
                 type={showPassword ? "text" : "password"}
-                hasError={hasLoginError}
+                hasError={!!errors.password || hasLoginError}
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("password");
@@ -208,6 +206,7 @@ export default function LogIn() {
             </p>
           )}
         </div>
+
         <UnderLined text="Forgot your password?" link="/resetpass" />
         <button
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
@@ -215,11 +214,12 @@ export default function LogIn() {
         >
           Login
         </button>
-        <DividerText reg="or login with" />
+
+        {/* <DividerText reg="or login with" />
         <div className="flex gap-[12px]">
           <BottomBtn source={google} btn="Google" />
           <BottomBtn source={apple} btn="Apple" />
-        </div>
+        </div> */}
       </div>
     </form>
   );

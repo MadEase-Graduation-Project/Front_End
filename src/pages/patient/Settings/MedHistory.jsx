@@ -67,8 +67,8 @@ export default function MedHistory() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto relative">
-      <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-6 py-6 sm:px-8 sm:py-8 flex flex-col gap-6 transition-all relative overflow-hidden">
+    <div className="w-full max-w-4xl py-8 px-4 mx-auto relative">
+      <div className="bg-white rounded-xl shadow-md border  px-6 py-6 sm:px-8 sm:py-8 flex flex-col gap-6  relative overflow-hidden">
         <AnimatePresence>
           {showSuccess && (
             <motion.div

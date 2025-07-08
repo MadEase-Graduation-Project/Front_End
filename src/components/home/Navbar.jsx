@@ -1,18 +1,20 @@
 // NavBar.jsx
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import Logo_navy from "../../assets/images/LogoNew_navy.svg";
 import { User, Mail, Menu } from "lucide-react";
 import { IoClose } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+
 import { fetchMYData } from "@/store/slices/userSlice";
 
-// ↳ selectors coming from the sign slice
-import {
-  selectSignUser,
-  selectSignRole,
-} from "@/store/selectors/signSelectors";
+// ↳ selectors
+import { selectSignRole } from "@/store/selectors/signSelectors";
+import { selectMyDetails } from "@/store/selectors/userSelectors";
+
+// UI primitives for avatar
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 /* ------------------------------------------------------------------ */
 /* Links shown in both desktop and mobile menus                       */
@@ -24,27 +26,25 @@ const navItems = [
 ];
 
 const NavBar = ({ scrolled }) => {
-  /* --- side‑menu state & refs ------------------------------------ */
+  /* --- side‑drawer state & refs ------------------------------------ */
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  /* --- router helpers ------------------------------------------- */
+  /* --- router helpers --------------------------------------------- */
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* --- auth state (Redux) --------------------------------------- */
-  const currentUser = useSelector(selectSignUser); // null if not logged in
-  const currentRole = useSelector(selectSignRole); // e.g. 'patient' | 'doctor'
-  const isLoggedIn = Boolean(currentUser);
-
+  /* --- redux: role + profile -------------------------------------- */
   const dispatch = useDispatch();
+  const currentRole = useSelector(selectSignRole); // 'Patient' | 'Doctor' | ...
+  const myDetails = useSelector(selectMyDetails); // contains ImgUrl, name, ...
 
+  /* fetch my profile *once* when we know the user is logged‑in */
   useEffect(() => {
-    if (currentRole) {
-      dispatch(fetchMYData());
-    }
+    if (currentRole === "Patient") dispatch(fetchMYData());
   }, [dispatch, currentRole]);
-  /* --- close side‑menu on outside click ------------------------- */
+
+  /* close side‑drawer on outside click ----------------------------- */
   useEffect(() => {
     const onClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target))
@@ -54,9 +54,7 @@ const NavBar = ({ scrolled }) => {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, [menuOpen]);
 
-  /* -------------------------------------------------------------- */
-  /* Convenience helpers                                            */
-  /* -------------------------------------------------------------- */
+  /* helper: navigate + scroll‑top when already at route ------------ */
   const goTo = (path) => {
     setMenuOpen(false);
     if (location.pathname === path) {
@@ -66,13 +64,13 @@ const NavBar = ({ scrolled }) => {
     }
   };
 
-  /* Where the user‑icon should send the user                       */
-  const userTarget =
-    isLoggedIn && currentRole === "Patient" ? "/settings" : "/register";
+  /* where the user icon / avatar links to -------------------------- */
+  const userTarget = currentRole === "Patient" ? "/settings" : "/register";
+
   /* -------------------------------------------------------------- */
   return (
     <>
-      {/* ── dark overlay behind mobile menu ─────────────────────── */}
+      {/* ── dark overlay behind mobile menu ───────────────────────── */}
       {menuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity"
@@ -80,7 +78,7 @@ const NavBar = ({ scrolled }) => {
         />
       )}
 
-      {/* ── mobile side‑drawer ──────────────────────────────────── */}
+      {/* ── mobile side‑drawer ───────────────────────────────────── */}
       <div
         ref={menuRef}
         className={`
@@ -92,7 +90,7 @@ const NavBar = ({ scrolled }) => {
               ? "translate-y-0 sm:translate-x-0"
               : "translate-y-full sm:-translate-x-full sm:translate-y-0"
           }
-           w-full sm:w-[300px] bottom-0 sm:top-0 left-0 h-[80%] sm:h-full
+          w-full sm:w-[300px] bottom-0 sm:top-0 left-0 h-[80%] sm:h-full
           rounded-t-[20px] sm:rounded-tl-none sm:rounded-br-[20px] sm:rounded-r-[20px]
         `}
       >
@@ -107,7 +105,8 @@ const NavBar = ({ scrolled }) => {
             <button
               key={label}
               onClick={() => goTo(path)}
-              className="font-jost text-base text-menavy font-semibold text-left"
+              className="font-jost text-base text-menavy font-semibold text-left
+           transition hover:text-mepale hover:brightness-110 duration-250"
             >
               {label}
             </button>
@@ -116,7 +115,7 @@ const NavBar = ({ scrolled }) => {
           <Link
             to="/medbot"
             onClick={() => setMenuOpen(false)}
-            className="font-jost text-base text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+            className="font-jost text-base text-transparent bg-gradient-to-r  from-violet-500 via-purple-500 to-cyan-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
           >
             Ask Medbot
           </Link>
@@ -159,7 +158,8 @@ const NavBar = ({ scrolled }) => {
               <button
                 key={label}
                 onClick={() => goTo(path)}
-                className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold"
+                className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold 
+           transition hover:text-mepale hover:brightness-110 duration-250"
               >
                 {label}
               </button>
@@ -167,7 +167,7 @@ const NavBar = ({ scrolled }) => {
 
             <Link
               to="/medbot"
-              className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r from-red-400 via-pink-400 to-meyellow bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+              className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r  from-violet-300 via-purple-600 to-cyan-400 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
             >
               Ask Medbot
             </Link>
@@ -175,19 +175,38 @@ const NavBar = ({ scrolled }) => {
 
           {/* right‑hand icons */}
           <div className="flex gap-2 sm:gap-3 md:gap-5 items-center text-menavy">
-            {/* mail icon shows ONLY when logged in  */}
-            {isLoggedIn && (
-              <button onClick={() => navigate("/test")} className="relative">
+            {/* mail icon – only for logged‑in Patient */}
+            {currentRole === "Patient" && (
+              <button onClick={() => navigate("/test")} aria-label="Messages">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7" />
               </button>
             )}
 
-            {/* user icon   */}
+            {/* avatar (Patient)  OR  generic user icon (others) */}
             <button
               onClick={() => navigate(userTarget)}
-              className="flex items-center justify-center z-40 transition"
+              className="z-40 transition flex items-center justify-center"
+              aria-label="Profile / Settings"
             >
-              <User className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7 text-menavy" />
+              {currentRole === "Patient" ? (
+                <Avatar className="w-7 h-7 sm:w-8 sm:h-8 xl:w-9 xl:h-9">
+                  <AvatarImage
+                    src={myDetails?.ImgUrl}
+                    alt={myDetails?.name || "profile"}
+                  />
+                  <AvatarFallback className="bg-menavy text-white text-xs">
+                    {myDetails?.name
+                      ? myDetails.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
+              ) : (
+                <User className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7 text-menavy" />
+              )}
             </button>
           </div>
         </div>

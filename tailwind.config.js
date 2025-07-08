@@ -73,7 +73,8 @@ export default {
         meblue: "rgba(244,244,248,255)",
         mebg: "rgba(240,247,252,255)",
         meblue2: "#e2f2fd",
-        meblue3: "#5f9fff",
+        // meblue3: "#5f9fff",
+        meblue3: "#88cce7",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -138,7 +139,7 @@ export default {
   plugins: [require("tailwindcss-animate")],
   variants: {
     extend: {
-      backdropBlur: ['responsive'],
+      backdropBlur: ["responsive"],
     },
   },
 };
