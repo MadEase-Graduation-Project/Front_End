@@ -8,7 +8,7 @@ export const Main_Grid = () => {
     <div className='px-3 pb-2 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-12 h-[calc(100vh_-_120px)]'>
         <StatCards/> 
         <ChartAreaAgeGender/>
-        <DiagnosisChart/>
+        <DiagnosisChart/>  
     </div>
   )
 }

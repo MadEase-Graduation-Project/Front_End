@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import DoctorImage from '@/assets/doctor-M.png';
-// import { Link } from 'react-router-dom';
+import { Star, StarHalf } from 'lucide-react'; // Optional: Replace with solid stars if preferred
 
 const DoctorCard = ({ doctor, onBook }) => {
   const handleBookAppointment = () => {
@@ -13,10 +13,7 @@ const DoctorCard = ({ doctor, onBook }) => {
 
 
   const cardVariants = {
-    rest: {
-      scale: 1,
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.06)',
-    },
+    rest: { scale: 1, boxShadow: '0 4px 10px rgba(0, 0, 0, 0.06)' },
     hover: {
       scale: 1.02,
       boxShadow: '0 10px 30px rgba(0, 112, 243, 0.15)',
@@ -40,12 +37,17 @@ const DoctorCard = ({ doctor, onBook }) => {
   const renderRatingStars = () => {
     const fullStars = Math.floor(rating);
     const hasHalf = rating % 1 >= 0.5;
-    return (
-      <>
-        {'★'.repeat(fullStars)}
-        {hasHalf ? '½' : ''}
-      </>
-    );
+    const stars = [];
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={`star-${i}`} className="w-4 h-4 text-yellow-400" fill="currentColor" />);
+    }
+
+    if (hasHalf) {
+      stars.push(<StarHalf key="half-star" className="w-4 h-4 text-yellow-400" fill="currentColor" />);
+    }
+
+    return stars;
   };
 
   return (
@@ -54,7 +56,8 @@ const DoctorCard = ({ doctor, onBook }) => {
       initial="rest"
       whileHover="hover"
       animate="rest"
-      className="bg-white border w-64 border-gray-200 rounded-2xl overflow-hidden group cursor-pointer flex flex-col h-full transition-all duration-300"
+      className="bg-white border border-gray-200 rounded-2xl overflow-hidden group cursor-pointer flex flex-col h-full transition-all duration-300 shadow-sm"
+      role="group"
     >
       <div className="relative flex flex-col h-full">
         <div className="relative overflow-hidden aspect-[4/3]">
@@ -62,11 +65,13 @@ const DoctorCard = ({ doctor, onBook }) => {
             <img
               className="w-full h-full object-cover transition-transform duration-300"
               src={imageUrl || DoctorImage}
-              alt={name}
+              alt={`Portrait of ${name}`}
+              loading="lazy"
               onError={(e) => {
                 e.target.src = DoctorImage;
               }}
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent opacity-90 pointer-events-none" />
           </motion.div>
         </div>
 
@@ -86,12 +91,13 @@ const DoctorCard = ({ doctor, onBook }) => {
           <div className="mt-auto space-y-4">
             <div className="flex items-center justify-between text-sm text-gray-500">
               <span>Rating</span>
-              <span className="text-yellow-400 text-lg">{renderRatingStars()}</span>
+              <div className="flex items-center gap-1">{renderRatingStars()}</div>
             </div>
 
             <Button
               onClick={handleBookAppointment}
-              className="w-full bg-cyan-600 text-white hover:bg-cyan-700 transition-transform duration-300 py-2.5 rounded-xl font-medium text-sm group-hover:scale-105"
+              className="w-full bg-cyan-600 text-white hover:bg-cyan-700 transition-transform duration-300 py-2.5 rounded-xl font-medium text-sm group-hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
+              aria-label={`Book appointment with ${name}`}
             >
               Book Appointment
             </Button>

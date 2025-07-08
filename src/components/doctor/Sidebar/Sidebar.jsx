@@ -1,8 +1,3 @@
-import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchMYData } from "@/store/slices/userSlice";
-import { selectMyDetails } from "@/store/selectors";
-import { handleNameRoute } from "@/utils/urlHelpers";
 import { Link } from "react-router-dom";
 import { GoHomeFill } from "react-icons/go";
 import {
@@ -26,22 +21,6 @@ const linkStylesSelected = cn(
 // ----------------------------------------------------------------
 
 export default function Sidebar({ currentPath, isCollapsed }) {
-  const dispatch = useDispatch();
-const doctorData = useSelector(selectMyDetails);
-
-// Fetch data on mount
-useEffect(() => {
-  dispatch(fetchMYData());
-}, [dispatch]);
-
-// Create slug from doctor name
-const slug = useMemo(() => {
-  if (doctorData?.name) {
-    return handleNameRoute(doctorData.name); // e.g. "john-doe"
-  }
-  return "";
-}, [doctorData]);
-
   // Define a constant for icon styles
   const iconStyles = cn(`min-w-[20px] flex-shrink-0`);
 
@@ -56,41 +35,56 @@ const slug = useMemo(() => {
       {/*  */}
       <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
         <img src="/logo.png" alt="logo" className="w-10 self-center" />
-        {isCollapsed && <span className="text-xl">MadEase</span>}
+        {isCollapsed && <span className="text-xl">MedEase</span>}
       </div>
       {/*  */}
       {/* All pages in the sidebar */}
       <nav className="flex flex-col items-start w-full gap-3">
-        <NavItem to={`/${slug}`} isActive={currentPath === `/${slug}`}>
-  <GoHomeFill className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Main</span>
-</NavItem>
+        <NavItem to={"/doctor"} isActive={currentPath === "/doctor"}>
+          <GoHomeFill className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Main</span>
+        </NavItem>
+        {/*  */}
+        <NavItem
+          to={"/doctor/patients"}
+          isActive={currentPath === "/doctor/patients"}
+        >
+          <HiUsers className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
+        </NavItem>
+        {/*  */}
 
-<NavItem to={`/${slug}/patients`} isActive={currentPath === `/${slug}/patients`}>
-  <HiUsers className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
-</NavItem>
-
-<NavItem to={`/${slug}/diagnosis`} isActive={currentPath === `/${slug}/diagnosis`}>
-  <FaDiagnoses className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Diagnosis</span>
-</NavItem>
-
-<NavItem to={`/${slug}/advice`} isActive={currentPath === `/${slug}/advice`}>
-  <MdArticle className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
-</NavItem>
-
-<NavItem to={`/${slug}/chat`} isActive={currentPath === `/${slug}/chat`}>
-  <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
-</NavItem>
-
-<NavItem to={`/${slug}/settings`} isActive={currentPath === `/${slug}/settings`}>
-  <MdSettingsSuggest className={iconStyles} size={20} />
-  <span className={isCollapsed ? "block" : "hidden"}>Settings</span>
-</NavItem>
+        <NavItem
+          to={"/doctor/diagnosis"}
+          isActive={currentPath === "/doctor/diagnosis"}
+        >
+          <FaDiagnoses className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Diagnosis</span>
+        </NavItem>
+        {/*  */}
+        <NavItem
+          to={"/doctor/advice"}
+          isActive={currentPath === "/doctor/advice"}
+        >
+          <MdArticle className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
+        </NavItem>
+        {/*  */}
+        <NavItem to={"/doctor/chat"} isActive={currentPath === "/doctor/chat"}>
+          <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
+        </NavItem>
       </nav>
+      {/*  */}
+      <div className="w-full mt-auto">
+        <NavItem
+          to={"/doctor/settings"}
+          isActive={currentPath === "/doctor/settings"}
+        >
+          <MdSettingsSuggest className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Settings</span>
+        </NavItem>
+      </div>
       {/*  */}
     </div>
   );

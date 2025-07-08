@@ -57,7 +57,7 @@ const fallbackPatients = [
   },
 ];
 
-export const Patients_List = ({ onPatientSelect, sortBy, onPatientsLoaded }) => {
+export const Patients_List = ({ onPatientSelect, sortBy }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [fetchedPatients, setFetchedPatients] = useState({});
   const dispatch = useDispatch();
@@ -104,31 +104,13 @@ export const Patients_List = ({ onPatientSelect, sortBy, onPatientsLoaded }) => 
 
   // Get patient list from the fetchedPatients
   const patients = useMemo(() => {
-  const result = uniquePatientIds
-    .map((id) => {
-      const patient = fetchedPatients[id];
-      if (!patient) return null;
-
-      // Attach filtered appointments for this patient
-      const patientAppointments = Appointments.filter(
-        (appt) => appt.patientId === id || appt.patient?._id === id
-      );
-
-      return {
-        ...patient,
-        appointments: patientAppointments,
-      };
-    })
-    .filter(Boolean); // remove nulls
-
-  // Notify parent with enriched result
-  if (onPatientsLoaded && typeof onPatientsLoaded === "function") {
-    onPatientsLoaded(result);
-  }
-
-  return result;
-}, [fetchedPatients, uniquePatientIds, Appointments, onPatientsLoaded]);
-
+    console.log('fetchedPatients content:', fetchedPatients);
+    console.log('uniquePatientIds:', uniquePatientIds);
+    
+    const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
+    console.log('Patients result:', result);
+    return result;
+  }, [fetchedPatients, uniquePatientIds]);
 
   // Check if we're still loading any patients
   const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
