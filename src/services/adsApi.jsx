@@ -29,7 +29,6 @@ export const addAd = async (adData) => {
   return handleApiResponse(response, "Failed to add ad");
 };
 
-
 // Update ad
 export const updateAd = async (id, adData) => {
   const response = await api.put(`${BASE_ENDPOINT}/${id}`, adData);

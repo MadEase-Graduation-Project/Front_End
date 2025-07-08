@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAd } from "@/services/adsApi";
+// import { addAd } from "@/services/adsApi";
 import { fetchMYData } from "@/store/slices/userSlice";
 import { selectMyDetails } from "@/store/selectors";
 
@@ -45,7 +45,8 @@ const AddAdForm = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = "Title is required";
-    if (!formData.description.trim()) newErrors.description = "Description is required";
+    if (!formData.description.trim())
+      newErrors.description = "Description is required";
     if (!image) newErrors.image = "Image is required";
     if (!creatorId) newErrors.creator = "User not recognized";
     setErrors(newErrors);
@@ -96,7 +97,9 @@ const AddAdForm = () => {
         </div>
 
         {submitError && (
-          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">{submitError}</div>
+          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+            {submitError}
+          </div>
         )}
 
         {submitSuccess && (
@@ -105,10 +108,15 @@ const AddAdForm = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 text-sm text-gray-800">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 text-sm text-gray-800"
+        >
           {/* Doctor Info */}
           <div>
-            <label className="block font-medium text-menavy mb-1">Doctor *</label>
+            <label className="block font-medium text-menavy mb-1">
+              Doctor *
+            </label>
             <input
               type="text"
               value={user?.name || "Loading..."}
@@ -116,12 +124,17 @@ const AddAdForm = () => {
               disabled
               className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
             />
-            {errors.creator && <p className="text-sm text-red-600 mt-1">{errors.creator}</p>}
+            {errors.creator && (
+              <p className="text-sm text-red-600 mt-1">{errors.creator}</p>
+            )}
           </div>
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block font-medium text-menavy mb-1">
+            <label
+              htmlFor="title"
+              className="block font-medium text-menavy mb-1"
+            >
               Title *
             </label>
             <input
@@ -136,12 +149,17 @@ const AddAdForm = () => {
                   : "border-mebeige focus:ring-mepale"
               }`}
             />
-            {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title}</p>}
+            {errors.title && (
+              <p className="text-sm text-red-600 mt-1">{errors.title}</p>
+            )}
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block font-medium text-menavy mb-1">
+            <label
+              htmlFor="description"
+              className="block font-medium text-menavy mb-1"
+            >
               Description *
             </label>
             <textarea
@@ -164,7 +182,10 @@ const AddAdForm = () => {
 
           {/* Image Upload */}
           <div>
-            <label htmlFor="image" className="block font-medium text-menavy mb-1">
+            <label
+              htmlFor="image"
+              className="block font-medium text-menavy mb-1"
+            >
               Upload Image *
             </label>
             <input
@@ -174,7 +195,9 @@ const AddAdForm = () => {
               onChange={handleImageChange}
               className="block"
             />
-            {errors.image && <p className="text-sm text-red-600 mt-1">{errors.image}</p>}
+            {errors.image && (
+              <p className="text-sm text-red-600 mt-1">{errors.image}</p>
+            )}
             {preview && (
               <img
                 src={preview}
