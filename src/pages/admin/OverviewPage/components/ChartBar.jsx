@@ -125,26 +125,33 @@ export default function ChartBar() {
   return (
     <div className="w-full">
       {appointments && (
-        <Card>
+        <Card className="shadow-sm border-gray-200">
           <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">Appointments Overview</h3>
-              <div className="flex gap-2">
+            <div className="flex justify-between items-center mb-6">
+              <div className="space-y-1">
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Appointments Overview
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Track appointment trends over time
+                </p>
+              </div>
+              <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
                 <button
-                  className={`px-3 py-1 rounded-md ${
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                     chartType === "day"
-                      ? "bg-[#954827] text-white"
-                      : "bg-gray-200"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                   onClick={() => setChartType("day")}
                 >
                   Daily
                 </button>
                 <button
-                  className={`px-3 py-1 rounded-md ${
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                     chartType === "month"
-                      ? "bg-[#954827] text-white"
-                      : "bg-gray-200"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                   onClick={() => setChartType("month")}
                 >
@@ -153,61 +160,79 @@ export default function ChartBar() {
               </div>
             </div>
 
-            <ChartContainer config={chartConfig}>
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                <XAxis
-                  dataKey={chartType === "day" ? "day" : "month"}
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  padding={{ left: 20, right: 20 }}
-                />
-                <ChartTooltip
-                  cursor={{ fill: "rgba(0, 0, 0, 0.05)" }}
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <ChartTooltipContent
-                          className="p-2"
-                          items={[
-                            {
-                              label: "Appointments",
-                              value: payload[0].value,
-                              color: "#954827",
-                            },
-                          ]}
-                        />
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Bar
-                  dataKey="Appointments"
-                  fill="#954827"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={60}
-                />
-              </BarChart>
-            </ChartContainer>
+            <div className="mb-6">
+              <ChartContainer config={chartConfig}>
+                <BarChart accessibilityLayer data={chartData}>
+                  <CartesianGrid
+                    vertical={false}
+                    strokeDasharray="3 3"
+                    stroke="#f1f5f9"
+                  />
+                  <XAxis
+                    dataKey={chartType === "day" ? "day" : "month"}
+                    tickLine={false}
+                    tickMargin={12}
+                    axisLine={false}
+                    padding={{ left: 20, right: 20 }}
+                    className="text-gray-600"
+                  />
+                  <ChartTooltip
+                    cursor={{ fill: "rgba(0, 0, 0, 0.05)" }}
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <ChartTooltipContent
+                            className="p-3 bg-white border border-gray-200 rounded-lg shadow-lg"
+                            items={[
+                              {
+                                label: "Appointments",
+                                value: payload[0].value,
+                                color: "#954827",
+                              },
+                            ]}
+                          />
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Bar
+                    dataKey="Appointments"
+                    fill="#954827"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={50}
+                  />
+                </BarChart>
+              </ChartContainer>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-500">Total Appointments</p>
-                <p className="text-2xl font-semibold">{totalAppointments}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+                <p className="text-sm font-medium text-blue-700 mb-1">
+                  Total Appointments
+                </p>
+                <p className="text-2xl font-bold text-blue-900">
+                  {totalAppointments}
+                </p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-500">
+              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
+                <p className="text-sm font-medium text-green-700 mb-1">
                   Average per {chartType === "day" ? "day" : "month"}
                 </p>
-                <p className="text-2xl font-semibold">{averageAppointments}</p>
+                <p className="text-2xl font-bold text-green-900">
+                  {averageAppointments}
+                </p>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between text-xs text-gray-500 px-6">
-            <div>Data based on {appointments?.length || 0} appointments</div>
-            <div>{chartType === "day" ? "Last 7 days" : "Last 6 months"}</div>
+          <CardFooter className="flex justify-between text-sm text-gray-500 px-6 py-4 bg-gray-50/50">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+              Data based on {appointments?.length || 0} appointments
+            </div>
+            <div className="font-medium">
+              {chartType === "day" ? "Last 7 days" : "Last 6 months"}
+            </div>
           </CardFooter>
         </Card>
       )}
