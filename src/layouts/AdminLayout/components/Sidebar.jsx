@@ -1,12 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { GoHomeFill } from "react-icons/go";
-import { MdDateRange, MdArticle, MdSettingsSuggest } from "react-icons/md";
-import { GiMedicines } from "react-icons/gi";
-import { TbCategoryFilled } from "react-icons/tb";
-import { HiUsers } from "react-icons/hi2";
-import { FaUserDoctor, FaUserShield } from "react-icons/fa6";
-import { FaVirus } from "react-icons/fa";
+
 import { cn } from "@/utils/cnUtils";
 import {
   Tooltip,
@@ -14,15 +8,85 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Home,
+  Calendar,
+  Users,
+  UserCheck,
+  Shield,
+  Bug,
+  FolderOpen,
+  FileText,
+  Pill,
+  Settings,
+  ChevronLeft,
+} from "lucide-react";
 
 //* links classes
 const linkStyles = cn(
   "flex items-center gap-3 pl-2 h-10 transition duration-300 ease-in text-gray-300 hover:text-[#88cce7] hover:bg-[#1d2d4a] rounded-r w-full"
 );
 const linkStylesSelected = cn(
-  "flex items-center gap-3 pl-2 h-10 bg-[#007eb1] rounded-r transition duration-300 ease-in text-white w-full border-l-4 border-white"
+  "flex items-center gap-3 pl-2 h-10 bg-blue-600 rounded-r transition duration-300 ease-in text-white w-full border-l-4 border-white"
 );
 // ----------------------------------------------------------------
+const navigationItems = [
+  {
+    id: 1,
+    title: "Overview",
+    href: "/admin/overview",
+    icon: Home,
+  },
+  {
+    id: 2,
+    title: "Appointments",
+    href: "/admin/appointments",
+    icon: Calendar,
+  },
+  {
+    id: 3,
+    title: "Patients",
+    href: "/admin/patients",
+    icon: Users,
+  },
+  {
+    id: 4,
+    title: "Doctors",
+    href: "/admin/doctors",
+    icon: UserCheck,
+  },
+  {
+    id: 5,
+    title: "Admins",
+    href: "/admin/admins",
+    icon: Shield,
+  },
+  {
+    id: 6,
+    title: "Diseases",
+    href: "/admin/diseases",
+    icon: Bug,
+  },
+  {
+    id: 7,
+    title: "Categories",
+    href: "/admin/diseaseCategories",
+    icon: FolderOpen,
+  },
+  {
+    id: 8,
+    title: "Advices",
+    href: "/admin/advices",
+    icon: FileText,
+  },
+  {
+    id: 9,
+    title: "Treatments",
+    href: "/admin/treatments",
+    icon: Pill,
+  },
+];
+// ---------------------------
 
 export default function Sidebar({ currentPath, isCollapsed }) {
   // Define a constant for icon styles
@@ -37,93 +101,43 @@ export default function Sidebar({ currentPath, isCollapsed }) {
       } transition-all duration-300 ease-in-out lg:p-2 overflow-hidden z-20`}
     >
       {/*  */}
-      <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
+      <div className="flex items-center gap-3 ">
+        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span className="text-white font-bold text-sm">M</span>
+        </div>
+        {isCollapsed && <span className="text-lg font-semibold">MadEase</span>}
+      </div>
+      {/* <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
         <img src="/logo.png" alt="logo" className="w-10 self-center" />
         {isCollapsed && <span className="text-xl">MadEase</span>}
-      </div>
+      </div> */}
       {/*  */}
 
       {/* Navigation links */}
-      <nav className="flex flex-col items-start justify-center gap-3 w-full py-2">
-        <NavItem
-          to={"/admin/overview"}
-          isActive={currentPath === "/admin/overview"}
-        >
-          <GoHomeFill className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Overview</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/appointments"}
-          isActive={currentPath === "/admin/appointments"}
-        >
-          <MdDateRange className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Appointments</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/patients"}
-          isActive={currentPath === "/admin/patients"}
-        >
-          <HiUsers className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/doctors"}
-          isActive={currentPath === "/admin/doctors"}
-        >
-          <FaUserDoctor className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Doctors</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/admins"}
-          isActive={currentPath === "/admin/admins"}
-        >
-          <FaUserShield className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Admins</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/diseases"}
-          isActive={currentPath === "/admin/diseases"}
-        >
-          <FaVirus className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Diseases</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/diseaseCategories"}
-          isActive={currentPath === "/admin/diseaseCategories"}
-        >
-          <TbCategoryFilled className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>DCategories</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/advices"}
-          isActive={currentPath === "/admin/advices"}
-        >
-          <MdArticle className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
-        </NavItem>
-        {/*  */}
-        <NavItem
-          to={"/admin/treatments"}
-          isActive={currentPath === "/admin/treatments"}
-        >
-          <GiMedicines className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Treatments</span>
-        </NavItem>
+      <nav className="flex flex-col items-start justify-center gap-3 w-full py-2 ">
+        {navigationItems.map((item) => {
+          const linkContent = (
+            <NavItem
+              key={item.id}
+              to={item.href}
+              isActive={currentPath === item.href}
+            >
+              <item.icon className={iconStyles} size={20} />
+              <span className={isCollapsed ? "block" : "hidden"}>
+                {item.title}
+              </span>
+            </NavItem>
+          );
+          return linkContent;
+        })}
       </nav>
       {/*  */}
-      <div className="w-full mt-auto">
+      <div className="w-full  ">
         <NavItem
           to={"/admin/setting"}
           isActive={currentPath === "/admin/setting"}
         >
-          <MdSettingsSuggest className={iconStyles} size={20} />
+          <Settings className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Settings</span>
         </NavItem>
       </div>
