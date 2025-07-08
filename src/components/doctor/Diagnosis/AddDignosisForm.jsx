@@ -26,8 +26,9 @@ export const AddDiagnosisForm = ({
   }, [selectedPatient]);
 
   const handleAddSymptom = () => {
-    if (symptomInput.trim()) {
-      setSymptoms([...symptoms, symptomInput.trim()]);
+    const trimmed = symptomInput.trim();
+    if (trimmed && !symptoms.includes(trimmed)) {
+      setSymptoms((prev) => [...prev, trimmed]);
       setSymptomInput("");
     }
   };
@@ -35,12 +36,9 @@ export const AddDiagnosisForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedPatientId) {
-      setMessage("Please select a patient.");
+      setMessage("❌ Please select a patient.");
       return;
     }
-
-    setLoading(true);
-    setMessage("");
 
     const payload = {
       patientId: selectedPatientId,
@@ -54,11 +52,14 @@ export const AddDiagnosisForm = ({
       notes,
     };
 
+    setLoading(true);
+    setMessage("");
+
     try {
       const response = await addDiagnosis(payload);
-
       if (response?.success) {
         setMessage("✅ Diagnosis added successfully.");
+        // Clear form
         setTitle("");
         setDescription("");
         setSymptoms([]);
@@ -71,7 +72,8 @@ export const AddDiagnosisForm = ({
         setMessage("❌ Failed to add diagnosis.");
       }
     } catch (err) {
-      setMessage("❌ " + (err?.response?.data?.message || "Something went wrong."));
+      console.error("❌ Error submitting diagnosis:", err);
+      setMessage("❌ " + (err?.message || "Something went wrong."));
     } finally {
       setLoading(false);
     }
@@ -91,7 +93,7 @@ export const AddDiagnosisForm = ({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6 text-sm text-gray-800">
-          {/* Patient */}
+          {/* Patient Selector */}
           <div>
             <label className="block font-medium mb-1 text-menavy">Select Patient</label>
             <select
@@ -174,10 +176,11 @@ export const AddDiagnosisForm = ({
                     value={med._id}
                     checked={medications.includes(med._id)}
                     onChange={(e) => {
-                      const isChecked = e.target.checked;
                       const value = e.target.value;
                       setMedications((prev) =>
-                        isChecked ? [...prev, value] : prev.filter((id) => id !== value)
+                        e.target.checked
+                          ? [...prev, value]
+                          : prev.filter((id) => id !== value)
                       );
                     }}
                   />
@@ -227,12 +230,12 @@ export const AddDiagnosisForm = ({
           <div className="flex justify-end">
             <button
               type="submit"
+              disabled={loading}
               className={`px-6 py-3 text-white font-semibold rounded-lg transition ${
                 loading
                   ? "bg-mebeige cursor-not-allowed"
                   : "bg-menavy hover:bg-mepale"
               }`}
-              disabled={loading}
             >
               {loading ? "Submitting..." : "Add Diagnosis"}
             </button>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTreatments } from "@/store/slices/treatmentSlice";
 import { fetchShowPatientById } from "@/store/slices/patientSlice";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
-import { selectAllAppointments, selectShowPatientById, selectPatientsLoading } from "@/store/selectors";
+import { selectAllAppointments, selectShowPatientById, selectPatientsLoading, selectMyDetails } from "@/store/selectors";
 import { AddDiagnosisForm } from "@/components/doctor/Diagnosis/AddDignosisForm";
 import { useLocation } from "react-router-dom";
 
@@ -59,7 +59,7 @@ const fallbackPatients = [
   },
 ];
 
-const Diagnosis_doctor = ({ doctorId }) => {
+const Diagnosis_doctor = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const selectedPatient = location.state?.patient;
@@ -71,12 +71,19 @@ const Diagnosis_doctor = ({ doctorId }) => {
   const currentPatient = useSelector(selectShowPatientById);
   const loading = useSelector(selectPatientsLoading);
   const medications = useSelector((state) => state.treatments.treatments);
+  const myDetails = useSelector(selectMyDetails);
 
   // Fetch treatments and appointments on mount
   useEffect(() => {
     dispatch(fetchAllTreatments());
     dispatch(fetchAppointments());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (myDetails && myDetails._id) {
+      dispatch(fetchShowPatientById(myDetails._id));
+    }
+  }, [dispatch, myDetails]);
 
   // Get unique patient IDs from appointments
   const uniquePatientIds = useMemo(() => {
@@ -129,7 +136,7 @@ const Diagnosis_doctor = ({ doctorId }) => {
   return (
     <div className="px-4">
       <AddDiagnosisForm
-        doctorId={doctorId}
+        doctorId={myDetails?._id}
         medicationOptions={medications}
         selectedPatient={selectedPatient}
         patients={sortedPatients}

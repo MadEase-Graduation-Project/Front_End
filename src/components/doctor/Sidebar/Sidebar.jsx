@@ -5,11 +5,19 @@ import {
   MdArticle,
   MdSettingsSuggest,
   MdChat,
+  MdMedication,
 } from "react-icons/md";
 import { HiUsers, HiChatBubbleBottomCenterText } from "react-icons/hi2";
-import { FaUserDoctor, FaUserShield, FaDisease } from "react-icons/fa6";
+import { FaUserDoctor, FaUserShield, FaDisease, FaPills } from "react-icons/fa6";
 import { cn } from "@/utils/cnUtils";
 import { FaDiagnoses } from "react-icons/fa";
+import { RiAdvertisementFill, RiBillFill } from "react-icons/ri";
+import { useLocation } from "react-router-dom";
+import { handleNameRoute } from "@/utils/urlHelpers";
+import { useSelector } from "react-redux";
+import { selectMyDetails } from "@/store/selectors";
+import { CiPillsBottle1 } from "react-icons/ci";
+
 
 //* links classes
 const linkStyles = cn(
@@ -23,6 +31,9 @@ const linkStylesSelected = cn(
 export default function Sidebar({ currentPath, isCollapsed }) {
   // Define a constant for icon styles
   const iconStyles = cn(`min-w-[20px] flex-shrink-0`);
+  const details = useSelector(selectMyDetails);
+const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallback if name isn't ready
+
 
   return (
     <div
@@ -40,14 +51,14 @@ export default function Sidebar({ currentPath, isCollapsed }) {
       {/*  */}
       {/* All pages in the sidebar */}
       <nav className="flex flex-col items-start w-full gap-3">
-        <NavItem to={"/doctor"} isActive={currentPath === "/doctor"}>
+        <NavItem to={`/${slug}`} isActive={currentPath === `/${slug}`}>
           <GoHomeFill className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Main</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={"/doctor/patients"}
-          isActive={currentPath === "/doctor/patients"}
+          to={`/${slug}/patients`}
+          isActive={currentPath === `/${slug}/patients`}
         >
           <HiUsers className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
@@ -55,31 +66,54 @@ export default function Sidebar({ currentPath, isCollapsed }) {
         {/*  */}
 
         <NavItem
-          to={"/doctor/diagnosis"}
-          isActive={currentPath === "/doctor/diagnosis"}
+          to={`/${slug}/diagnosis`}
+          isActive={currentPath === `/${slug}/diagnosis`}
         >
           <FaDiagnoses className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Diagnosis</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={"/doctor/advice"}
-          isActive={currentPath === "/doctor/advice"}
+          to={`/${slug}/advice`}
+          isActive={currentPath === `/${slug}/advice`}
         >
           <MdArticle className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
         </NavItem>
         {/*  */}
-        <NavItem to={"/doctor/chat"} isActive={currentPath === "/doctor/chat"}>
+        <NavItem
+          to={`/${slug}/diseases`}
+          isActive={currentPath === `/${slug}/diseases`}
+        >
+          <FaDisease className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Diseases</span>
+        </NavItem>
+        {/*  */}
+        <NavItem
+          to={`/${slug}/treatments`}
+          isActive={currentPath === `/${slug}/treatments`}
+        >
+          <FaPills className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Treatments</span>
+        </NavItem>
+         {/*  */}
+        <NavItem to={`/${slug}/ads`} isActive={currentPath === `/${slug}/ads`}>
+          <RiAdvertisementFill className={iconStyles} size={20} />
+          <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
+        </NavItem>
+        {/*  */}
+        <NavItem to={`/${slug}/chat`} isActive={currentPath === `/${slug}/chat`}>
           <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
         </NavItem>
+        
+        
       </nav>
       {/*  */}
       <div className="w-full mt-auto">
         <NavItem
-          to={"/doctor/settings"}
-          isActive={currentPath === "/doctor/settings"}
+          to={`/${slug}/settings`}
+          isActive={currentPath === `/${slug}/settings`}
         >
           <MdSettingsSuggest className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Settings</span>

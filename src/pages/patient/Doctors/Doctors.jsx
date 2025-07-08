@@ -114,49 +114,83 @@ export default function Doctors() {
   }
 
   return (
-    <div className="px-6 md:px-12 lg:px-48 py-16">
-      {bookingMessage && (
-        <div className={`text-center mb-6 text-sm font-medium ${
-          bookingMessage.includes('Successfully') 
-            ? 'text-green-600' 
-            : 'text-red-600'
-        }`}>
-          {bookingMessage}
-        </div>
-      )}
-
-      <div className="flex flex-wrap gap-4 justify-center">
-        {doctors.map((doctor) => (
-          <DoctorCard
-            key={doctor._id}
-            doctor={doctor}
-            onBook={openBookingModal}
-          />
-        ))}
+  <div className="px-6 md:px-12 lg:px-48 py-16 bg-gray-50 min-h-screen">
+    {bookingMessage && (
+      <div
+        className={`fixed top-0 left-0 w-full z-50 py-3 text-center text-sm font-medium shadow-md ${
+          bookingMessage.includes("Successfully")
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }`}
+      >
+        {bookingMessage}
       </div>
+    )}
 
-      {hasMore && (
-        <div className="flex justify-center mt-10">
-          <button
-            onClick={handleLoadMore}
-            className="px-6 py-3 bg-cyan-600 text-white rounded-xl font-medium hover:bg-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
-          >
-            {loading ? "Loading..." : "Load More"}
-          </button>
+    <h1 className="text-3xl font-bold text-center text-gray-800 mb-10">
+      Meet Our Doctors
+    </h1>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {doctors.map((doctor) => (
+        <div
+          key={doctor._id}
+          className="animate-fadeInUp duration-500 delay-100"
+        >
+          <DoctorCard doctor={doctor} onBook={openBookingModal} />
         </div>
-      )}
-
-      {/* Modal */}
-      {showModal && selectedDoctor && (
-        <AppointmentModal
-          isOpen={showModal}
-          onClose={closeModal}
-          doctor={selectedDoctor}
-          onConfirm={confirmBooking}
-          isLoading={isBooking}
-        />
-      )}
+      ))}
     </div>
-  );
+
+    {hasMore && (
+      <div className="flex justify-center mt-14">
+        <button
+          onClick={handleLoadMore}
+          className="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-semibold tracking-wide text-white bg-cyan-600 rounded-xl hover:bg-cyan-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <svg
+                className="w-5 h-5 mr-2 animate-spin text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
+              </svg>
+              Loading...
+            </>
+          ) : (
+            "Load More Doctors"
+          )}
+        </button>
+      </div>
+    )}
+
+    {/* Modal */}
+    {showModal && selectedDoctor && (
+      <AppointmentModal
+        isOpen={showModal}
+        onClose={closeModal}
+        doctor={selectedDoctor}
+        onConfirm={confirmBooking}
+        isLoading={isBooking}
+      />
+    )}
+  </div>
+);
+
 }

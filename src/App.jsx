@@ -51,6 +51,8 @@ import ShowAppointment from "./pages/admin/AppointmentsPage/components/ShowAppoi
 import ShowDisease from "./pages/admin/DiseasesPage/components/ShowDisease";
 import ShowDiseaseCategory from "./pages/admin/DiseasesCategoriesPage/components/ShowDiseaseCategory";
 import Messenger from "./pages/patient/Messenger/Messenger";
+import { Ads } from "./pages/doctor/Ads";
+import { Treatments } from "./pages/doctor/Treatments";
 
 function App() {
   return (
@@ -84,6 +86,9 @@ function App() {
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />
         <Route path="settings" element={<Settingss />} />
+        <Route path="ads" element={<Ads />} />
+        <Route path="treatments" element={<Treatments />} />
+        <Route path="diseases" element={<Diseases_doctor />} />
       </Route>
 
       {/* reset pass layout */}

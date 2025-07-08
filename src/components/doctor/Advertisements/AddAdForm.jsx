@@ -1,37 +1,53 @@
-import { addAdvice } from "@/services/adviceApi";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addAd } from "@/services/adsApi";
+import { fetchMYData } from "@/store/slices/userSlice";
+import { selectMyDetails } from "@/store/selectors";
 
-const AddBlogPostForm = () => {
+const AddAdForm = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(selectMyDetails);
+  const creatorId = user?._id;
+
+  useEffect(() => {
+    dispatch(fetchMYData());
+  }, [dispatch]);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "",
   });
 
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [image, setImage] = useState(null);
-const [imagePreview, setImagePreview] = useState(null);
-
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+      setErrors((prev) => ({ ...prev, image: "" }));
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim()) newErrors.description = "Description is required";
-    if (!formData.category.trim()) newErrors.category = "Category is required";
-
+    if (!image) newErrors.image = "Image is required";
+    if (!creatorId) newErrors.creator = "User not recognized";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,22 +56,28 @@ const [imagePreview, setImagePreview] = useState(null);
     e.preventDefault();
     setSubmitError("");
     setSubmitSuccess(false);
-
     if (!validateForm()) return;
 
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-      const result = await addAdvice(formData);
+      const data = new FormData();
+      data.append("creatorName", user?.name); // ✅ Correct key
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("ImgUrl", image); // ✅ corrected field name
 
+      const result = await addAd(data);
       if (result.success) {
         setSubmitSuccess(true);
-        setFormData({ title: "", description: "", category: "", image: "" });
+        setFormData({ title: "", description: "" });
+        setImage(null);
+        setPreview(null);
       } else {
-        setSubmitError(result.message || "Failed to save blog post");
+        setSubmitError(result.message || "Failed to add ad.");
       }
-    } catch (error) {
-      console.error("Failed to save blog post:", error);
-      setSubmitError("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      console.error(err);
+      setSubmitError("An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -66,26 +88,37 @@ const [imagePreview, setImagePreview] = useState(null);
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-md border border-mebeige p-4 sm:p-6 lg:p-8">
         <div className="mb-6">
           <h2 className="text-2xl sm:text-3xl font-semibold text-menavy mb-2">
-            Add Blog Post
+            Add Advertisement
           </h2>
           <p className="text-gray-700 text-sm sm:text-base">
-            Share a new piece of advice with your readers
+            Promote your services by submitting an ad
           </p>
         </div>
 
         {submitError && (
-          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
-            {submitError}
-          </div>
+          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">{submitError}</div>
         )}
 
         {submitSuccess && (
           <div className="mb-4 p-4 bg-megreen text-white rounded-md">
-            ✅ Blog post saved successfully!
+            ✅ Ad submitted successfully!
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6 text-sm text-gray-800">
+          {/* Doctor Info */}
+          <div>
+            <label className="block font-medium text-menavy mb-1">Doctor *</label>
+            <input
+              type="text"
+              value={user?.name || "Loading..."}
+              readOnly
+              disabled
+              className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
+            />
+            {errors.creator && <p className="text-sm text-red-600 mt-1">{errors.creator}</p>}
+          </div>
+
           {/* Title */}
           <div>
             <label htmlFor="title" className="block font-medium text-menavy mb-1">
@@ -96,16 +129,14 @@ const [imagePreview, setImagePreview] = useState(null);
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Enter blog post title"
+              placeholder="Enter ad title"
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.title
                   ? "border-red-400 focus:ring-red-400"
                   : "border-mebeige focus:ring-mepale"
               }`}
             />
-            {errors.title && (
-              <p className="text-sm text-red-600 mt-1">{errors.title}</p>
-            )}
+            {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title}</p>}
           </div>
 
           {/* Description */}
@@ -116,10 +147,10 @@ const [imagePreview, setImagePreview] = useState(null);
             <textarea
               id="description"
               name="description"
+              rows={6}
               value={formData.description}
               onChange={handleChange}
-              rows={10}
-              placeholder="Write the content of your post..."
+              placeholder="Describe your service or offer..."
               className={`w-full px-4 py-2 border rounded-lg resize-none focus:outline-none focus:ring-2 ${
                 errors.description
                   ? "border-red-400 focus:ring-red-400"
@@ -131,34 +162,25 @@ const [imagePreview, setImagePreview] = useState(null);
             )}
           </div>
 
-          {/* Category */}
+          {/* Image Upload */}
           <div>
-            <label htmlFor="category" className="block font-medium text-menavy mb-1">
-              Category *
+            <label htmlFor="image" className="block font-medium text-menavy mb-1">
+              Upload Image *
             </label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                errors.category
-                  ? "border-red-400 focus:ring-red-400"
-                  : "border-mebeige focus:ring-megreen"
-              }`}
-            >
-              <option value="">Select a category</option>
-              <option value="general-health">General Health</option>
-              <option value="nutrition">Nutrition</option>
-              <option value="mental-health">Mental Health</option>
-              <option value="fitness">Fitness & Exercise</option>
-              <option value="preventive-care">Preventive Care</option>
-              <option value="chronic-conditions">Chronic Conditions</option>
-              <option value="medication">Medication</option>
-              <option value="lifestyle">Lifestyle</option>
-            </select>
-            {errors.category && (
-              <p className="text-sm text-red-600 mt-1">{errors.category}</p>
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block"
+            />
+            {errors.image && <p className="text-sm text-red-600 mt-1">{errors.image}</p>}
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="mt-4 max-h-64 w-full object-contain rounded-md border"
+              />
             )}
           </div>
 
@@ -168,7 +190,9 @@ const [imagePreview, setImagePreview] = useState(null);
               type="button"
               className="w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded-md border border-mebeige text-menavy bg-white hover:bg-gray-50 transition"
               onClick={() => {
-                setFormData({ title: "", description: "", category: "" });
+                setFormData({ title: "", description: "" });
+                setImage(null);
+                setPreview(null);
                 setErrors({});
                 setSubmitError("");
                 setSubmitSuccess(false);
@@ -186,7 +210,7 @@ const [imagePreview, setImagePreview] = useState(null);
               }`}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving..." : "Save Blog Post"}
+              {isSubmitting ? "Submitting..." : "Add Ad"}
             </button>
           </div>
         </form>
@@ -195,4 +219,4 @@ const [imagePreview, setImagePreview] = useState(null);
   );
 };
 
-export default AddBlogPostForm;
+export default AddAdForm;

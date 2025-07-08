@@ -53,6 +53,8 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
         return "Patients";
       case `/${doctorSlug}/settings`:
         return "Settings";
+      case `/${doctorSlug}/ads`:
+        return "Advertisements";
       default:
         return "Dashboard";
     }

@@ -105,30 +105,52 @@ export const Patients_Main = ({ selectedPatient, patientsList }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        {/* Basic Info */}
-        <Card className="p-6 shadow-sm rounded-xl border border-gray-200 col-span-2">
-          <CardContent className="space-y-4">
-            <h2 className="text-lg font-bold mb-4 text-gray-800 border-b pb-2">
+        <Card className="p-6 shadow-md rounded-2xl border border-gray-100 bg-white col-span-2">
+          <CardContent className="space-y-6">
+            <h2 className="text-xl font-bold text-gray-800 border-b pb-3">
               Basic Info
             </h2>
-            <div className="space-y-3 text-sm">
+
+            <div className="space-y-4 text-sm text-gray-700 my-auto">
               <InfoRow
-                icon={<IoPersonOutline />}
+                icon={<IoPersonOutline className="w-5 h-5 text-menavy my-3" />}
                 label="Gender"
                 value={gender}
               />
-              <InfoRow icon={<IoLocationOutline />} label="City" value={city} />
-              <InfoRow icon={<IoCallOutline />} label="Phone" value={phone} />
-              <InfoRow icon={<IoMailOutline />} label="Email" value={email} />
+              <InfoRow
+                icon={<IoLocationOutline className="w-5 h-5 text-menavy my-3" />}
+                label="City"
+                value={city}
+              />
+              <InfoRow
+                icon={<IoCallOutline className="w-5 h-5 text-menavy my-3" />}
+                label="Phone"
+                value={phone}
+              />
+              <InfoRow
+                icon={<IoMailOutline className="w-5 h-5 text-menavy my-3" />}
+                label="Email"
+                value={email}
+              />
             </div>
-            <div>
+
+            {/* <div className="pt-4 border-t">
               <span className="text-gray-700 text-sm font-medium">Sources</span>
-              <div className="flex space-x-3 mt-2">
-                <FcGoogle className="w-5 h-5" />
-                <FaWhatsapp className="w-5 h-5 text-[#4fce5d]" />
-                <FaSquareFacebook className="w-5 h-5 text-[#1877F2]" />
+              <div className="flex space-x-4 mt-3">
+                <FcGoogle
+                  className="w-6 h-6 hover:scale-105 transition-transform"
+                  title="Google"
+                />
+                <FaWhatsapp
+                  className="w-6 h-6 text-[#4fce5d] hover:scale-105 transition-transform"
+                  title="WhatsApp"
+                />
+                <FaSquareFacebook
+                  className="w-6 h-6 text-[#1877F2] hover:scale-105 transition-transform"
+                  title="Facebook"
+                />
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
