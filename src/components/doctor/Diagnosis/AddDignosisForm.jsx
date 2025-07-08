@@ -19,7 +19,6 @@ export const AddDiagnosisForm = ({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Auto-select pre-passed patient
   useEffect(() => {
     if (selectedPatient?._id) {
       setSelectedPatientId(selectedPatient._id);
@@ -27,26 +26,19 @@ export const AddDiagnosisForm = ({
   }, [selectedPatient]);
 
   const handleAddSymptom = () => {
-    if (symptomInput.trim()) {
-      setSymptoms([...symptoms, symptomInput.trim()]);
+    const trimmed = symptomInput.trim();
+    if (trimmed && !symptoms.includes(trimmed)) {
+      setSymptoms((prev) => [...prev, trimmed]);
       setSymptomInput("");
     }
-  };
-
-  const handleMedicationChange = (e) => {
-    const selected = Array.from(e.target.selectedOptions, (option) => option.value);
-    setMedications(selected);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedPatientId) {
-      setMessage("Please select a patient.");
+      setMessage("❌ Please select a patient.");
       return;
     }
-
-    setLoading(true);
-    setMessage("");
 
     const payload = {
       patientId: selectedPatientId,
@@ -60,11 +52,14 @@ export const AddDiagnosisForm = ({
       notes,
     };
 
+    setLoading(true);
+    setMessage("");
+
     try {
       const response = await addDiagnosis(payload);
-
       if (response?.success) {
-        setMessage("Diagnosis added successfully.");
+        setMessage("✅ Diagnosis added successfully.");
+        // Clear form
         setTitle("");
         setDescription("");
         setSymptoms([]);
@@ -74,157 +69,179 @@ export const AddDiagnosisForm = ({
         setNotes("");
         setSelectedPatientId("");
       } else {
-        setMessage("Failed to add diagnosis.");
+        setMessage("❌ Failed to add diagnosis.");
       }
     } catch (err) {
-      setMessage("Error: " + (err?.response?.data?.message || "Something went wrong."));
+      console.error("❌ Error submitting diagnosis:", err);
+      setMessage("❌ " + (err?.message || "Something went wrong."));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full p-6 bg-white shadow-lg rounded-lg col-span-12">
-      <h2 className="text-2xl font-semibold mb-4">Add Diagnosis</h2>
-      {message && <p className="text-sm text-gray-700 mb-3">{message}</p>}
+    <div className="w-full min-h-[calc(100vh-120px)] flex items-start justify-center p-4 sm:p-6">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-md border border-mebeige p-4 sm:p-6 lg:p-8">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-menavy mb-6">
+          Add New Diagnosis
+        </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Patient Dropdown */}
-        <div>
-          <label className="font-medium">Select Patient</label>
-          <select
-            value={selectedPatientId}
-            onChange={(e) => setSelectedPatientId(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg"
-            required
-          >
-            <option value="">-- Select Patient --</option>
-            {(Array.isArray(patients) ? patients : []).map((patient) => (
-              <option key={patient._id} value={patient._id}>
-                {patient.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {message && (
+          <div className="text-sm mb-4 px-4 py-2 rounded-md bg-meblue2 text-menavy font-medium">
+            {message}
+          </div>
+        )}
 
-        {/* Title */}
-        <div>
-          <label className="font-medium">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Diagnosis title"
-            className="w-full px-3 py-2 border rounded-lg"
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-6 text-sm text-gray-800">
+          {/* Patient Selector */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Select Patient</label>
+            <select
+              value={selectedPatientId}
+              onChange={(e) => setSelectedPatientId(e.target.value)}
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-mepale"
+              required
+            >
+              <option value="">-- Select Patient --</option>
+              {patients.map((patient) => (
+                <option key={patient._id} value={patient._id}>
+                  {patient.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Description */}
-        <div>
-          <label className="font-medium">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Diagnosis description"
-            className="w-full px-3 py-2 border rounded-lg h-24"
-            required
-          />
-        </div>
-
-        {/* Symptoms */}
-        <div>
-          <label className="font-medium">Symptoms</label>
-          <div className="flex gap-2">
+          {/* Title */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Diagnosis Title</label>
             <input
               type="text"
-              value={symptomInput}
-              onChange={(e) => setSymptomInput(e.target.value)}
-              placeholder="e.g. headache"
-              className="flex-1 px-3 py-2 border rounded-lg"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g., Type 2 Diabetes"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-mepale"
+              required
             />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Briefly describe the diagnosis"
+              rows={4}
+              className="w-full px-4 py-2 border border-mebeige rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-mepale"
+              required
+            />
+          </div>
+
+          {/* Symptoms */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Symptoms</label>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                value={symptomInput}
+                onChange={(e) => setSymptomInput(e.target.value)}
+                placeholder="e.g., Headache"
+                className="flex-1 px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-megreen"
+              />
+              <button
+                type="button"
+                onClick={handleAddSymptom}
+                className="bg-megreen text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition"
+              >
+                Add
+              </button>
+            </div>
+            {symptoms.length > 0 && (
+              <ul className="text-sm mt-2 list-disc pl-6 text-gray-700">
+                {symptoms.map((s, idx) => (
+                  <li key={idx}>{s}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Medications */}
+          <div>
+            <label className="block font-medium mb-2 text-menavy">Medications</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              {medicationOptions.map((med) => (
+                <label key={med._id} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    value={med._id}
+                    checked={medications.includes(med._id)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setMedications((prev) =>
+                        e.target.checked
+                          ? [...prev, value]
+                          : prev.filter((id) => id !== value)
+                      );
+                    }}
+                  />
+                  <span>{med.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommendations */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Recommendations</label>
+            <input
+              type="text"
+              value={recommendations}
+              onChange={(e) => setRecommendations(e.target.value)}
+              placeholder="e.g., avoid junk food"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-meyellow"
+            />
+          </div>
+
+          {/* Follow-Up */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Follow-Up</label>
+            <input
+              type="text"
+              value={followUp}
+              onChange={(e) => setFollowUp(e.target.value)}
+              placeholder="e.g., Next Sunday"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-meyellow"
+            />
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="block font-medium mb-1 text-menavy">Notes (Optional)</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Additional notes or observations"
+              rows={3}
+              className="w-full px-4 py-2 border border-mebeige rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-mepale"
+            />
+          </div>
+
+          {/* Submit */}
+          <div className="flex justify-end">
             <button
-              type="button"
-              onClick={handleAddSymptom}
-              className="px-4 py-2 bg-[#37568d] text-white rounded-lg hover:bg-[#1e3356]"
+              type="submit"
+              disabled={loading}
+              className={`px-6 py-3 text-white font-semibold rounded-lg transition ${
+                loading
+                  ? "bg-mebeige cursor-not-allowed"
+                  : "bg-menavy hover:bg-mepale"
+              }`}
             >
-              Add
+              {loading ? "Submitting..." : "Add Diagnosis"}
             </button>
           </div>
-          {symptoms.length > 0 && (
-            <ul className="text-sm mt-2 list-disc pl-5 text-gray-600">
-              {symptoms.map((s, idx) => (
-                <li key={idx}>{s}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Medications */}
-        <div>
-          <label className="font-medium">Medications</label>
-          <select
-            multiple
-            value={medications}
-            onChange={handleMedicationChange}
-            className="w-full px-3 py-2 border rounded-lg"
-          >
-            {(medicationOptions || []).map((med) => (
-              <option key={med._id} value={med._id}>
-                {med.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Recommendations */}
-        <div>
-          <label className="font-medium">Recommendations</label>
-          <input
-            type="text"
-            value={recommendations}
-            onChange={(e) => setRecommendations(e.target.value)}
-            placeholder="e.g. avoid junk food"
-            className="w-full px-3 py-2 border rounded-lg"
-          />
-        </div>
-
-        {/* Follow-Up */}
-        <div>
-          <label className="font-medium">Follow-Up</label>
-          <input
-            type="text"
-            value={followUp}
-            onChange={(e) => setFollowUp(e.target.value)}
-            placeholder="e.g. next Sunday"
-            className="w-full px-3 py-2 border rounded-lg"
-          />
-        </div>
-
-        {/* Notes */}
-        <div>
-          <label className="font-medium">Notes</label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Optional notes"
-            className="w-full px-3 py-2 border rounded-lg h-20"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`px-4 py-2 text-white font-semibold rounded-lg ${
-              loading ? "bg-gray-400" : "bg-[#37568d] hover:bg-[#1e3356]"
-            }`}
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Add Diagnosis"}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

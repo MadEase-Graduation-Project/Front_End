@@ -21,9 +21,14 @@ export const getAdById = async (id) => {
 
 // Add new ad
 export const addAd = async (adData) => {
-  const response = await api.post(BASE_ENDPOINT, adData);
+  const response = await api.post(BASE_ENDPOINT, adData, {
+    headers: {
+      "Content-Type": "multipart/form-data", // ✅ Correct for FormData
+    },
+  });
   return handleApiResponse(response, "Failed to add ad");
 };
+
 
 // Update ad
 export const updateAd = async (id, adData) => {

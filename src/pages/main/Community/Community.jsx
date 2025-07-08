@@ -15,12 +15,22 @@ import {
   sortedAdvices,
   selectFilteredAdvices,
 } from "@/store/selectors/index";
-import Popup from "../../../components/shared/Popup";
+import Popup from "@/components/shared/Popup";
+import { useLocation } from "react-router-dom";
 
 export default function Community() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+const location = useLocation();
+const [selectedCategory, setSelectedCategory] = useState(
+  location.state?.selectedCategory || "All Categories"
+);
+
+useEffect(() => {
+  if (location.state?.selectedCategory) {
+    setSelectedCategory(location.state.selectedCategory);
+  }
+}, [location.state?.selectedCategory]);
   const [page, setPage] = useState(1);
   const [showLoader, setShowLoader] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -33,6 +43,7 @@ export default function Community() {
   const paginatedAdvices = useSelector((state) =>
     selectPaginatedAdvices(state, searchQuery, selectedCategory, page)
   );
+ 
 
   // Calculate if there is more data to load
   const hasMore =
@@ -185,13 +196,15 @@ export default function Community() {
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {paginatedAdvices.map((advice) => (
                   <div key={advice._id}>
-                    <AdviceCard
-                      advice={advice}
-                      selectedCategory={selectedCategory}
-                      link={"/community"}
-                      handleLike={handleLike}
-                      handleDisLike={handleDisLike}
-                    />
+<AdviceCard
+  advice={advice}
+  selectedCategory={selectedCategory}
+  link="/community"
+  handleLike={handleLike}
+  handleDisLike={handleDisLike}
+  state={{ selectedCategory }}
+/>
+
                   </div>
                 ))}
               </div>

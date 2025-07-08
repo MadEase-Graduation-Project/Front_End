@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTreatments } from "@/store/slices/treatmentSlice";
-import { fetchAllPatients } from "@/store/slices/patientSlice";
+import { fetchShowPatientById } from "@/store/slices/patientSlice";
+import { fetchAppointments } from "@/store/slices/appointmentSlice";
+import { selectAllAppointments, selectShowPatientById, selectPatientsLoading, selectMyDetails } from "@/store/selectors";
 import { AddDiagnosisForm } from "@/components/doctor/Diagnosis/AddDignosisForm";
 import { useLocation } from "react-router-dom";
 
@@ -57,28 +59,87 @@ const fallbackPatients = [
   },
 ];
 
-const Diagnosis_doctor = ({ doctorId }) => {
+const Diagnosis_doctor = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const patient = location.state?.patient;
+  const selectedPatient = location.state?.patient;
 
+  const [fetchedPatients, setFetchedPatients] = useState({});
+  const [sortBy] = useState("newest"); // you can expose this if needed
+
+  const appointments = useSelector(selectAllAppointments);
+  const currentPatient = useSelector(selectShowPatientById);
+  const loading = useSelector(selectPatientsLoading);
   const medications = useSelector((state) => state.treatments.treatments);
-  const allPatients = useSelector((state) => state.patients.patients);
+  const myDetails = useSelector(selectMyDetails);
 
+  // Fetch treatments and appointments on mount
   useEffect(() => {
     dispatch(fetchAllTreatments());
-    dispatch(fetchAllPatients());
+    dispatch(fetchAppointments());
   }, [dispatch]);
 
-  const finalPatients = Array.isArray(allPatients) && allPatients.length > 0 ? allPatients : fallbackPatients;
+  useEffect(() => {
+    if (myDetails && myDetails._id) {
+      dispatch(fetchShowPatientById(myDetails._id));
+    }
+  }, [dispatch, myDetails]);
+
+  // Get unique patient IDs from appointments
+  const uniquePatientIds = useMemo(() => {
+    return [...new Set(
+      appointments
+        .map(a => a.patientId?._id || a.patientId)
+        .filter(Boolean)
+    )];
+  }, [appointments]);
+
+  // Store fetched patient when available
+  useEffect(() => {
+    if (currentPatient && currentPatient._id) {
+      setFetchedPatients(prev => ({
+        ...prev,
+        [currentPatient._id]: currentPatient
+      }));
+    }
+  }, [currentPatient]);
+
+  // Fetch individual patients
+  useEffect(() => {
+    uniquePatientIds.forEach(id => {
+      if (!fetchedPatients[id]) {
+        dispatch(fetchShowPatientById(id));
+      }
+    });
+  }, [dispatch, uniquePatientIds, fetchedPatients]);
+
+  // Final list of patients from fetched data or fallback
+  const patients = useMemo(() => {
+    const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
+    return result.length > 0 ? result : fallbackPatients;
+  }, [fetchedPatients, uniquePatientIds]);
+
+  // Sort the patients
+  const sortedPatients = [...patients].sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      case "oldest":
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      case "alphabetical":
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
+    }
+  });
 
   return (
-    <div className="px-4 grid gap-3 grid-cols-12">
+    <div className="px-4">
       <AddDiagnosisForm
-        doctorId={doctorId}
+        doctorId={myDetails?._id}
         medicationOptions={medications}
-        selectedPatient={patient}
-        patients={finalPatients}
+        selectedPatient={selectedPatient}
+        patients={sortedPatients}
       />
     </div>
   );

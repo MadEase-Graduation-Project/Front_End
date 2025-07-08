@@ -19,6 +19,26 @@ export const sortedAdvices = createSelector([selectAllAdvices], (advices) => {
   );
 });
 
+export const makeSelectFilteredAdvices = (searchQuery, selectedCategory) =>
+  createSelector([selectAllAdvices], (advices) => {
+    if (!advices || advices.length === 0) return [];
+
+    const query = searchQuery.trim().toLowerCase();
+
+    return advices.filter((advice) => {
+      const matchesSearch =
+        !query ||
+        (advice.title && advice.title.toLowerCase().includes(query)) ||
+        (advice.doctorName && advice.doctorName.toLowerCase().includes(query));
+
+      const matchesCategory =
+        selectedCategory === "All Categories" ||
+        advice.diseasesCategoryName === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  });
+
 // Memoized selectors
 export const selectAdviceCategories = createSelector(
   [selectAllAdvices],

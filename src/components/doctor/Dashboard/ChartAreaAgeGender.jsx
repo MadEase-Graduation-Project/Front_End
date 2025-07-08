@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   AreaChart,
@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
+  ResponsiveContainer,
 } from "recharts"
 import { fetchAllPatients, fetchShowPatientById } from "@/store/slices/patientSlice"
 
@@ -46,37 +47,59 @@ const getAgeGroup = (age) => {
 }
 
 export default function ChartAreaAgeGender() {
+const [fetchedPatients, setFetchedPatients] = useState({});
 const dispatch = useDispatch();
 const Appointments = useSelector(selectAllAppointments);
-const patientMap = useSelector(selectShowPatientById);
+const currentPatient = useSelector(selectShowPatientById); // This is a single patient object
 const loading = useSelector(selectPatientsLoading);
 
-// Memoize IDs
+// Memoize unique patient IDs from appointments (adjusted for API structure)
 const uniquePatientIds = useMemo(() => {
-  return [...new Set(Appointments.map(a => a.patientId))];
+  return [...new Set(
+    Appointments
+      .map(a => a.patientId?._id || a.patientId) // Handle both object and string formats
+      .filter(Boolean) // Remove null/undefined values
+  )];
 }, [Appointments]);
 
-// Fetch patients
+// Store the current patient when it's fetched
+useEffect(() => {
+  if (currentPatient && currentPatient._id) {
+    setFetchedPatients(prev => ({
+      ...prev,
+      [currentPatient._id]: currentPatient
+    }));
+  }
+}, [currentPatient]);
+
+// Fetch patients individually based on appointment data
 useEffect(() => {
   if (uniquePatientIds.length > 0) {
     uniquePatientIds.forEach(id => {
-      if (!patientMap[id]) dispatch(fetchShowPatientById(id));
+      if (!fetchedPatients[id]) {
+        dispatch(fetchShowPatientById(id));
+      }
     });
   }
-}, [dispatch, uniquePatientIds, patientMap]);
+}, [dispatch, uniquePatientIds, fetchedPatients]);
 
 // Fetch appointments once
 useEffect(() => {
   dispatch(fetchAppointments());
 }, [dispatch]);
 
-// Get patient list
+// Get patient list from the fetchedPatients
 const patients = useMemo(() => {
-  return uniquePatientIds.map(id => patientMap[id]).filter(Boolean);
-}, [patientMap, uniquePatientIds]);
+  console.log('Chart - fetchedPatients content:', fetchedPatients);
+  console.log('Chart - uniquePatientIds:', uniquePatientIds);
+  
+  const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
+  console.log('Chart - Patients result:', result);
+  return result;
+}, [fetchedPatients, uniquePatientIds]);
 
-// Loading state
-const isLoading = uniquePatientIds.some(id => !patientMap[id]);
+// Check if we're still loading any patients
+const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
 
 // Chart Data
 const chartData = useMemo(() => {
@@ -101,7 +124,6 @@ const chartData = useMemo(() => {
   }));
 }, [patients]);
 
-
   const chartConfig = {
     male: {
       label: "Male",
@@ -113,68 +135,72 @@ const chartData = useMemo(() => {
     },
   }
 
-  if (loading) {
+  if (isLoading && patients.length === 0 && uniquePatientIds.length > 0) {
     return (
       <Card>
         <CardHeader>
           <CardTitle>Patient Age & Gender Distribution</CardTitle>
         </CardHeader>
-        <CardContent>Loading...</CardContent>
+        <CardContent>Loading patients... ({uniquePatientIds.length} patients to fetch)</CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="w-full border border-gray-200 bg-white shadow-sm">
-      <CardHeader>
+    <Card className="w-full border h-[calc(100vh_-_260px)] border-gray-200 bg-white shadow-sm sm:col-span-1 md:col-span-4 lg:col-span-8 overflow-hidden">
+      <CardHeader className="pb-2 px-6 pt-6">
         <CardTitle>Age & Gender Chart</CardTitle>
         <CardDescription>
-          Patient demographics by age group
+          Patient demographics by age group ({patients.length} patients)
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            data={chartData}
-            margin={{ left: 12, right: 12 }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="ageGroup"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <YAxis allowDecimals={false} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <defs>
-              <linearGradient id="fillMale" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="fillFemale" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#ec4899" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#ec4899" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <Area
-              type="natural"
-              dataKey="male"
-              stackId="a"
-              fill="url(#fillMale)"
-              stroke="#3b82f6"
-              fillOpacity={0.4}
-            />
-            <Area
-              type="natural"
-              dataKey="female"
-              stackId="a"
-              fill="url(#fillFemale)"
-              stroke="#ec4899"
-              fillOpacity={0.4}
-            />
-          </AreaChart>
-        </ChartContainer>
+      <CardContent className="p-0 h-[calc(100%-70px)]">
+        <div className="h-full w-full px-6 pb-6">
+          <ChartContainer config={chartConfig} className="h-full w-full max-h-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 10, left: 10, bottom: 30 }}
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="ageGroup"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                />
+                <YAxis allowDecimals={false} />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                <defs>
+                  <linearGradient id="fillMale" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+                  </linearGradient>
+                  <linearGradient id="fillFemale" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ec4899" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#ec4899" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <Area
+                  type="natural"
+                  dataKey="male"
+                  stackId="a"
+                  fill="url(#fillMale)"
+                  stroke="#3b82f6"
+                  fillOpacity={0.4}
+                />
+                <Area
+                  type="natural"
+                  dataKey="female"
+                  stackId="a"
+                  fill="url(#fillFemale)"
+                  stroke="#ec4899"
+                  fillOpacity={0.4}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   )
