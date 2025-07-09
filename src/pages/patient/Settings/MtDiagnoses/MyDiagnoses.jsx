@@ -8,7 +8,8 @@ import DiagnosisCard from "./components/DiagnosisCard";
 
 export default function MyDiagnoses() {
   const dispatch = useDispatch();
-  const diagnosisList = useSelector(selectAllDiagnosis) || []; // ✅ fallback to empty array
+  const rawList = useSelector((state) => state.diagnosis.totalDiagnosis); ////////////
+  const diagnosisList = Array.isArray(rawList) ? rawList : []; ////
   const loading = useSelector(selectDiagnosisLoading);
   const user = useSelector(selectMyDetails);
 

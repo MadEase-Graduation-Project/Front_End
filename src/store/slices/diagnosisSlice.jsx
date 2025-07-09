@@ -75,9 +75,9 @@ const diagnosisSlice = createSlice({
       // Fetch all diagnosis
       .addCase(fetchAllDiagnosis.pending, pendingHandler())
       .addCase(fetchAllDiagnosis.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = false;
-        state.diagnosis = action.payload?.diagnoses; // ✅ THIS LINE FIXED
+        (state.loading = false),
+          (state.error = false),
+          (state.totalDiagnosis = action.payload?.diagnoses);
       })
       .addCase(fetchAllDiagnosis.rejected, rejectedHandler())
 
