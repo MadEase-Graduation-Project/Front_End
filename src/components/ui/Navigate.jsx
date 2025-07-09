@@ -21,7 +21,7 @@ export default function Navigate({ tabs }) {
       </div>
 
       {/* Active panel */}
-      <div className="p-4 bg-mewhite rounded-md shadow-md ">
+      <div className="p-4 bg-transparent rounded-md ">
         {tabs[activeTab].content}
       </div>
     </div>

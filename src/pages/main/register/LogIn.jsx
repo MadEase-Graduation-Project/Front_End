@@ -61,7 +61,7 @@ export default function LogIn() {
   useEffect(() => {
   if (role === "Doctor" && details?.name) {
     const slug = handleNameRoute(details.name);
-    if (slug) navigate(`/${slug}`);
+    if (slug) navigate(`/doctor/${slug}`);
   }
 }, [role, details, navigate]);
 
