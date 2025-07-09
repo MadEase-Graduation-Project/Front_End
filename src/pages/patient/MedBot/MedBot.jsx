@@ -16,7 +16,6 @@ import {
 } from "@/store/selectors/chatbotSelectors";
 import Chatbot from "./components/Chatbot";
 import Popup from "@/components/shared/Popup";
-import { selectMyDetails } from "@/store/selectors";
 
 export default function MedBot() {
   const dispatch = useDispatch();

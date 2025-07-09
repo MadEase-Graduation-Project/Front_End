@@ -44,7 +44,6 @@ import TreatmentsPage from "./pages/admin/TreatmentsPage/TreatmentsPage";
 import { Settingss } from "./pages/doctor/Settingss";
 import About from "./pages/main/About";
 
-
 import ShowProfile from "./pages/admin/UsersPages/components/ShowProfile";
 import ShowTreatment from "./pages/admin/TreatmentsPage/components/ShowTreatment";
 import ShowAppointment from "./pages/admin/AppointmentsPage/components/ShowAppointment";
@@ -64,7 +63,6 @@ function App() {
         <Route path="community/:id" element={<AdviceBlogPost />} />
         <Route path="doctors" element={<Doctors />} />
         {/* <Route path="doctors/" element={</>} /> */}
-        <Route path="medbot" element={<MedBot />} />
         <Route path="settings" element={<Settings />} />
         <Route path="messenger" element={<Messenger />} />
         <Route path="about" element={<About />} />
@@ -102,6 +100,7 @@ function App() {
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
 
+      <Route path="/medbot" element={<MedBot />} />
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />

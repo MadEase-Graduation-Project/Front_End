@@ -19,17 +19,7 @@ export default function Popup({ open, onClose }) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent
-          className="sm:max-w-md border-0 p-0 overflow-hidden rounded-lg"
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            margin: 0,
-            padding: 6,
-          }}
-        >
+        <DialogContent className="sm:max-w-md">
           {/* Add DialogTitle and DialogDescription for accessibility */}
           <DialogTitle className=" hidden"></DialogTitle>
           <DialogDescription className="hidden"></DialogDescription>

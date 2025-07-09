@@ -231,7 +231,7 @@ export default function ProfilePage({ details }) {
 
       {/* Change Avatar Dialog */}
       <Dialog open={showAvatarDialog} onOpenChange={setShowAvatarDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md ">
           <DialogHeader>
             <DialogTitle>Change Avatar</DialogTitle>
             <DialogDescription>
