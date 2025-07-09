@@ -48,7 +48,22 @@ export default function LogIn() {
   }, [error]);
 
   useEffect(() => {
-    if (!clickLogin) return;
+  if (role === "Doctor") {
+    dispatch(fetchMYData());
+  }
+}, [role, dispatch]);
+
+  useEffect(() => {
+  if (role === "Doctor" && details?.name) {
+    const slug = handleNameRoute(details.name);
+    if (slug) navigate(`/doctor/${slug}`);
+  }
+}, [role, details, navigate]);
+
+  
+
+  useEffect(() => {
+    if (!role) return;
     switch (role) {
       case "Patient":
         navigate("/");
@@ -58,9 +73,6 @@ export default function LogIn() {
         break;
       case "Nurse":
         navigate("/nurse/dashboard");
-        break;
-      case "Doctor":
-        navigate("/doctor");
         break;
     }
   }, [role, navigate]);

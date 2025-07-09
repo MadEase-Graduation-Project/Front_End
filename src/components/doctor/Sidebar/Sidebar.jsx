@@ -32,8 +32,7 @@ export default function Sidebar({ currentPath, isCollapsed }) {
   // Define a constant for icon styles
   const iconStyles = cn(`min-w-[20px] flex-shrink-0`);
   const details = useSelector(selectMyDetails);
-const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallback if name isn't ready
-
+  const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallback if name isn't ready
 
   return (
     <div
@@ -51,14 +50,14 @@ const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallba
       {/*  */}
       {/* All pages in the sidebar */}
       <nav className="flex flex-col items-start w-full gap-3">
-        <NavItem to={`/${slug}`} isActive={currentPath === `/${slug}`}>
+        <NavItem to={`/doctor/${slug}`} isActive={currentPath === `/doctor/${slug}`}>
           <GoHomeFill className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Main</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={`/${slug}/patients`}
-          isActive={currentPath === `/${slug}/patients`}
+          to={`/doctor/${slug}/patients`}
+          isActive={currentPath === `/doctor/${slug}/patients`}
         >
           <HiUsers className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Patients</span>
@@ -66,43 +65,43 @@ const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallba
         {/*  */}
 
         <NavItem
-          to={`/${slug}/diagnosis`}
-          isActive={currentPath === `/${slug}/diagnosis`}
+          to={`/doctor/${slug}/diagnosis`}
+          isActive={currentPath === `/doctor/${slug}/diagnosis`}
         >
           <FaDiagnoses className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Diagnosis</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={`/${slug}/advice`}
-          isActive={currentPath === `/${slug}/advice`}
+          to={`/doctor/${slug}/advice`}
+          isActive={currentPath === `/doctor/${slug}/advice`}
         >
           <MdArticle className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Advices</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={`/${slug}/diseases`}
-          isActive={currentPath === `/${slug}/diseases`}
+          to={`/doctor/${slug}/diseases`}
+          isActive={currentPath === `/doctor/${slug}/diseases`}
         >
           <FaDisease className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Diseases</span>
         </NavItem>
         {/*  */}
         <NavItem
-          to={`/${slug}/treatments`}
-          isActive={currentPath === `/${slug}/treatments`}
+          to={`/doctor/${slug}/treatments`}
+          isActive={currentPath === `/doctor/${slug}/treatments`}
         >
           <FaPills className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Treatments</span>
         </NavItem>
          {/*  */}
-        <NavItem to={`/${slug}/ads`} isActive={currentPath === `/${slug}/ads`}>
+        <NavItem to={`/doctor/${slug}/ads`} isActive={currentPath === `/doctor/${slug}/ads`}>
           <RiAdvertisementFill className={iconStyles} size={20} />
-          <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
+          <span className={isCollapsed ? "block" : "hidden"}>Ads</span>
         </NavItem>
         {/*  */}
-        <NavItem to={`/${slug}/chat`} isActive={currentPath === `/${slug}/chat`}>
+        <NavItem to={`/doctor/${slug}/chat`} isActive={currentPath === `/doctor/${slug}/chat`}>
           <HiChatBubbleBottomCenterText className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Chat</span>
         </NavItem>
@@ -112,8 +111,8 @@ const slug = details?.name ? handleNameRoute(details.name) : "doctor"; // fallba
       {/*  */}
       <div className="w-full mt-auto">
         <NavItem
-          to={`/${slug}/settings`}
-          isActive={currentPath === `/${slug}/settings`}
+          to={`/doctor/${slug}/settings`}
+          isActive={currentPath === `/doctor/${slug}/settings`}
         >
           <MdSettingsSuggest className={iconStyles} size={20} />
           <span className={isCollapsed ? "block" : "hidden"}>Settings</span>
