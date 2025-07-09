@@ -105,7 +105,7 @@ export default function Sidebar({ currentPath, isCollapsed }) {
         <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
           <span className="text-white font-bold text-sm">M</span>
         </div>
-        {isCollapsed && <span className="text-lg font-semibold">MadEase</span>}
+        {isCollapsed && <span className="text-lg font-semibold">MedEase</span>}
       </div>
       {/* <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
         <img src="/logo.png" alt="logo" className="w-10 self-center" />

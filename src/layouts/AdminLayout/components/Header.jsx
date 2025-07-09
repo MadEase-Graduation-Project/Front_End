@@ -48,7 +48,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
 
       <div className="flex justify-between items-center w-full ">
         <div className="flex items-center gap-8">
-          {!isCollapsed && <h1 className="text-xl font-semibold">MadEase</h1>}
+          {!isCollapsed && <h1 className="text-xl font-semibold">MedEase</h1>}
           <SearchBox />
         </div>
         <DropdownMenu>
