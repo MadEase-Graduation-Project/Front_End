@@ -68,7 +68,10 @@ const chatbotSlice = createSlice({
         state.session = action.payload?.data;
         state.sessionStart = action.payload?.success || true;
       })
-      .addCase(startChatBotSession.rejected, rejectedHandler())
+      .addCase(
+        startChatBotSession.rejected,
+        rejectedHandler({ errorKey: "sessioStart" })
+      )
 
       // Send message
       .addCase(sendChatBotMsg.pending, pendingHandler())

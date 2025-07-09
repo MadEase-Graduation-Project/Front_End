@@ -33,7 +33,11 @@ export default function MedBot() {
 
   // Wait for session to be available before allowing chat
   const handleStartSession = async () => {
-    dispatch(startChatBotSession());
+    try {
+      dispatch(startChatBotSession());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -109,27 +113,19 @@ export default function MedBot() {
                 Your trusted AI medical companion for health guidance, symptom
                 analysis, and medical information support.
               </p>
-
-              {/* Medical Disclaimer */}
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 max-w-2xl">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-600" />
-                  <span className="font-semibold text-amber-800">
-                    Important Medical Disclaimer
-                  </span>
-                </div>
-                <p className="text-sm text-amber-700">
-                  This AI assistant provides general health information only.
-                  Always consult qualified healthcare professionals for medical
-                  advice, diagnosis, or treatment. In emergencies, contact
-                  emergency services immediately.
-                </p>
-              </div>
             </div>
 
             <Card className="p-8 shadow-2xl border-0 bg-white/90 backdrop-blur-sm max-w-md w-full">
               <div className="space-y-6">
-                <div className="space-y-4">
+                <Button
+                  onClick={handleStartSession}
+                  className="w-full rounded-full bg-gradient-to-r from-blue-500 to-green-500 px-8 py-4 text-lg font-semibold hover:from-blue-600 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300 h-auto group"
+                >
+                  <Heart className="mr-2 h-5 w-5 group-hover:animate-pulse" />
+                  Start Medical Consultation
+                </Button>
+
+                <div className="space-y-4 px-5">
                   <div className="flex items-center gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                     <span>Symptom analysis and health guidance</span>
@@ -156,20 +152,24 @@ export default function MedBot() {
                     <span>Wellness recommendations</span>
                   </div>
                 </div>
-
-                <Button
-                  onClick={handleStartSession}
-                  className="w-full rounded-full bg-gradient-to-r from-blue-500 to-green-500 px-8 py-4 text-lg font-semibold hover:from-blue-600 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300 h-auto group"
-                >
-                  <Heart className="mr-2 h-5 w-5 group-hover:animate-pulse" />
-                  Start Medical Consultation
-                </Button>
-
-                <p className="text-sm text-gray-500">
-                  Begin your personalized health assistance session
-                </p>
               </div>
             </Card>
+
+            {/* Medical Disclaimer */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-2xl mt-8">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-5 w-5 text-amber-600" />
+                <span className="font-semibold text-amber-800">
+                  Important Medical Disclaimer
+                </span>
+              </div>
+              <p className="text-sm text-amber-700">
+                This AI assistant provides general health information only.
+                Always consult qualified healthcare professionals for medical
+                advice, diagnosis, or treatment. In emergencies, contact
+                emergency services immediately.
+              </p>
+            </div>
 
             <div className="mt-12 flex gap-3 flex-wrap justify-center">
               <div className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors cursor-pointer">

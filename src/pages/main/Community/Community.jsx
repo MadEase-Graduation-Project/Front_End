@@ -16,21 +16,11 @@ import {
   selectFilteredAdvices,
 } from "@/store/selectors/index";
 import Popup from "@/components/shared/Popup";
-import { useLocation } from "react-router-dom";
 
 export default function Community() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-const location = useLocation();
-const [selectedCategory, setSelectedCategory] = useState(
-  location.state?.selectedCategory || "All Categories"
-);
-
-useEffect(() => {
-  if (location.state?.selectedCategory) {
-    setSelectedCategory(location.state.selectedCategory);
-  }
-}, [location.state?.selectedCategory]);
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [page, setPage] = useState(1);
   const [showLoader, setShowLoader] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -43,7 +33,6 @@ useEffect(() => {
   const paginatedAdvices = useSelector((state) =>
     selectPaginatedAdvices(state, searchQuery, selectedCategory, page)
   );
- 
 
   // Calculate if there is more data to load
   const hasMore =
@@ -196,15 +185,13 @@ useEffect(() => {
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {paginatedAdvices.map((advice) => (
                   <div key={advice._id}>
-<AdviceCard
-  advice={advice}
-  selectedCategory={selectedCategory}
-  link="/community"
-  handleLike={handleLike}
-  handleDisLike={handleDisLike}
-  state={{ selectedCategory }}
-/>
-
+                    <AdviceCard
+                      advice={advice}
+                      selectedCategory={selectedCategory}
+                      link={"/community"}
+                      handleLike={handleLike}
+                      handleDisLike={handleDisLike}
+                    />
                   </div>
                 ))}
               </div>
@@ -217,7 +204,6 @@ useEffect(() => {
             </>
           )}
         </div>
-
         {/* Popup Component */}
         <Popup open={showPopup} onClose={() => setShowPopup(false)} />
       </div>
