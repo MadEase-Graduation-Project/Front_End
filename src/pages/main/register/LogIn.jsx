@@ -26,6 +26,7 @@ export default function LogIn() {
   const navigate = useNavigate();
   const { isActivePopup, setActivePopup } = usePopup();
   const [hasLoginError, setHasLoginError] = useState(false);
+  const [clickLogin, setClickLogin] = useState(false);
 
   const {
     control,
@@ -47,10 +48,10 @@ export default function LogIn() {
   }, [error]);
 
   useEffect(() => {
-    if (!role) return;
+    if (!clickLogin) return;
     switch (role) {
       case "Patient":
-        navigate("/medbot");
+        navigate("/");
         break;
       case "Admin":
         navigate("/admin/overview");
@@ -97,6 +98,7 @@ export default function LogIn() {
 
   const onSubmit = async (data) => {
     try {
+      setClickLogin(true);
       await dispatch(login(data)).unwrap();
     } catch (error) {
       console.error("Login error:", error.message);
