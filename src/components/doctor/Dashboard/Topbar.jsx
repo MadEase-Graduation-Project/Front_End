@@ -41,19 +41,23 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
     if (!doctorSlug) return "";
 
     switch (path) {
-      case `/${doctorSlug}`:
+      case `/doctor/${doctorSlug}`:
         return `Hello, Doctor ${details?.name || ""}!`;
-      case `/${doctorSlug}/chat`:
+      case `/doctor/${doctorSlug}/chat`:
         return "Chat";
-      case `/${doctorSlug}/diagnosis`:
+      case `/doctor/${doctorSlug}/diagnosis`:
         return "Diagnosis";
-      case `/${doctorSlug}/advice`:
+      case `/doctor/${doctorSlug}/advice`:
         return "Advice";
-      case `/${doctorSlug}/patients`:
+      case `/doctor/${doctorSlug}/patients`:
         return "Patients";
-      case `/${doctorSlug}/settings`:
+      case `/doctor/${doctorSlug}/settings`:
         return "Settings";
-      case `/${doctorSlug}/ads`:
+      case `/doctor/${doctorSlug}/treatments`:
+        return "Treatments";
+      case `/doctor/${doctorSlug}/diseases`:
+        return "Diseases";
+      case `/doctor/${doctorSlug}/ads`:
         return "Advertisements";
       default:
         return "Dashboard";
