@@ -45,7 +45,8 @@ function isAuthEndpoint(url = "") {
   return (
     url.endsWith("/login") ||
     url.endsWith("/register") ||
-    url.endsWith("/resetpass")
+    url.endsWith("/resetpass") ||
+    url.endsWith("/medbot")
   );
 }
 

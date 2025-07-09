@@ -1,4 +1,3 @@
-import { GoBellFill } from "react-icons/go";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { FiLogOut } from "react-icons/fi";
 
@@ -30,7 +29,8 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
 
   function handleLogOut() {
     dispatch(logout());
-    navigate("/register/login");
+
+    navigate("/register/login", { replace: true });
   }
 
   return (

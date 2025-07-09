@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,8 +19,21 @@ export default function Popup({ open, onClose }) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md border-0 p-0 overflow-hidden">
-          <div className="relative bg-gradient-to-br from-blue-50 to-indigo-100 p-8 text-center">
+        <DialogContent
+          className="sm:max-w-md border-0 p-0 overflow-hidden rounded-lg"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            margin: 0,
+            padding: 6,
+          }}
+        >
+          {/* Add DialogTitle and DialogDescription for accessibility */}
+          <DialogTitle className=" hidden"></DialogTitle>
+          <DialogDescription className="hidden"></DialogDescription>
+          <div className="relative bg-gradient-to-br from-blue-50 to-indigo-100 p-8 text-center rounded-lg">
             <div className="mb-6">
               <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                 <Lock className="w-10 h-10 text-white" />
