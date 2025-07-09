@@ -22,7 +22,7 @@ export default function MedBot() {
   // states ---------------------
   const [sessionStarted, setSessionStarted] = useState(false);
   const [popup, setPopup] = useState(false);
-
+  const [errorAtStart, setErrorAtStart] = useState(false);
   // ---------------------------------
 
   // selectors -------------
@@ -30,19 +30,19 @@ export default function MedBot() {
   const errorStart = useSelector(selectChatbotError);
   // ----------------------
 
+  useEffect(() => {
+    if (errorStart) setErrorAtStart(true);
+  }, [errorStart]);
+
   // Wait for session to be available before allowing chat
   const handleStartSession = async () => {
-    try {
-      dispatch(startChatBotSession());
-    } catch (e) {
-      console.log(e);
-    }
+    dispatch(startChatBotSession());
   };
 
   useEffect(() => {
     if (success) setSessionStarted(true);
-    else if (errorStart) setPopup(true);
-  }, [errorStart, success]);
+    else if (errorAtStart) setPopup(true);
+  }, [errorAtStart, success]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 p-4 relative overflow-hidden">
@@ -193,7 +193,13 @@ export default function MedBot() {
           <Chatbot />
         )}
       </div>
-      <Popup open={popup} onClose={() => setPopup(false)} />
+      <Popup
+        open={popup}
+        onClose={() => {
+          setPopup(false);
+          setErrorAtStart(false);
+        }}
+      />
     </div>
   );
 }
