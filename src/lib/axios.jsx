@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Axios instance configuration
@@ -68,14 +69,14 @@ api.interceptors.response.use(
 
       config._retry = true;
       isRefreshing = true;
-
+      const navigate = useNavigate();
       try {
         await api.post("/users/refresh");
         processQueue(null);
         return api(config);
       } catch (e) {
         processQueue(e);
-        window.location.href = "/login";
+        navigate("/register/login");
         return Promise.reject(e);
       } finally {
         isRefreshing = false;

@@ -15,7 +15,7 @@ export const fetchChatbotSymptoms = createAsyncThunk(
 
 export const startChatBotSession = createAsyncThunk(
   "chatbot/startSession",
-  async (_, { dispatch }) => {
+  async ({ dispatch }) => {
     dispatch(clearChatbotSession());
     return await startSession();
   }
@@ -68,10 +68,7 @@ const chatbotSlice = createSlice({
         state.session = action.payload?.data;
         state.sessionStart = action.payload?.success || true;
       })
-      .addCase(
-        startChatBotSession.rejected,
-        rejectedHandler({ errorKey: "sessioStart" })
-      )
+      .addCase(startChatBotSession.rejected, rejectedHandler())
 
       // Send message
       .addCase(sendChatBotMsg.pending, pendingHandler())
