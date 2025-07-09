@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Phone, MapPin, CalendarClock, X, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function AppCard({ appt }) {
+export default function AppCard({ appt, doc }) {
   const [open, setOpen] = useState(false);
   const modalRef = useRef(null);
 
@@ -15,7 +15,7 @@ export default function AppCard({ appt }) {
 
   const Avatar = () => (
     <img
-      src={appt.doctorImg}
+      src={doc?.ImgUrl || "/default-avatar.jpg"} // fallback to a default image
       alt={appt.doctorName}
       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-meblue3"
     />
@@ -40,7 +40,7 @@ export default function AppCard({ appt }) {
       {/* compact card */}
       <div
         onClick={() => setOpen(true)}
-        className="relative w-full max-w-2xl bg-white rounded-2xl shadow-md hover:shadow-lg transition px-4 py-5 sm:p-6 cursor-pointer flex flex-wrap items-center gap-4"
+        className="relative w-full max-w-4xl bg-white rounded-xl transition shadow-md hover:shadow-lg px-4 py-5 sm:p-6 cursor-pointer flex flex-wrap items-center gap-4"
       >
         <Avatar />
         <div className="flex-1 min-w-0">
@@ -48,9 +48,12 @@ export default function AppCard({ appt }) {
             Dr. {appt.doctorName}
           </p>
           <p className="text-sm text-gray-500 truncate">
-            {appt.doctorSpecialty}
+            {doc?.specialization || "Unknown Specialty"}
           </p>
-          <p className="text-sm text-gray-500 truncate">{appt.doctorCity}</p>
+          <p className="text-sm text-gray-500 truncate">
+            {doc?.city || "Unknown City"}
+          </p>
+
           <p className="text-sm text-gray-500 truncate">
             {format(appt.appointmentDate)}
           </p>
@@ -94,19 +97,22 @@ export default function AppCard({ appt }) {
                     Appointment
                   </h2>
                   <p className="text-sm text-gray-600">
-                    Dr. {appt.doctorName} – {appt.doctorSpecialty}
+                    Dr. {appt.doctorName} –{" "}
+                    {doc?.specialization || "Specialist"}
                   </p>
                   <p className="text-sm text-gray-500 flex items-center gap-1">
-                    <MapPin size={14} /> {appt.doctorCity}
+                    <MapPin size={14} /> {doc?.city || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-500 flex items-center gap-1">
-                    <Phone size={14} /> {appt.doctorPhone}
+                    <Phone size={14} /> {doc?.phone || "Not provided"}
                   </p>
-                  {appt.doctorEmail && (
+                  {doc?.email && (
                     <p className="text-sm text-gray-500 flex items-center gap-1">
-                      <Mail size={14} /> {appt.doctorEmail}
+                      <Mail size={14} /> {doc.email}
                     </p>
                   )}
+
+                  {/* ezaaayyy fee .email ???????????????????????????????????????????????????????????? */}
                 </div>
               </div>
 

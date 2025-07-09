@@ -8,7 +8,6 @@ import App from "@/App";
 
 import { PopupProvider } from "@/contexts/PopupContext"; // ✅
 
-
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <BrowserRouter>
@@ -16,7 +15,6 @@ createRoot(document.getElementById("root")).render(
         <PopupProvider>
           <App />
         </PopupProvider>
-
       </React.StrictMode>
     </BrowserRouter>
   </Provider>
