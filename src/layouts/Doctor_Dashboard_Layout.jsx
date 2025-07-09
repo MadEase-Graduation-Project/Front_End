@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Main_Grid } from "@/pages/doctor/Main_Grid";
 import { Topbar } from "@/components/doctor/Dashboard/Topbar";
 import Sidebar from "@/components/doctor/Sidebar/Sidebar";
+import { useParams } from "react-router-dom";
 
 export default function Doctor_Dashboard_Layout() {
+  const { doctorName } = useParams();
   const location = useLocation();
   const currentPath = location.pathname;
   const [isCollapsed, setIsCollapsed] = useState(false);

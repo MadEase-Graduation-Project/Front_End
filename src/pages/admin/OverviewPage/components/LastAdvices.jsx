@@ -29,7 +29,7 @@ export default function LastAdvices() {
   }
 
   return (
-    <div className="flex flex-col gap-3 bg-white p-4 shadow-lg rounded-lg h-full">
+    <div className="flex flex-col gap-3 bg-white p-4 shadow-lg rounded-lg ">
       <h2 className="text-xl font-semibold mb-2">Recent Advices</h2>
 
       {advicesCount === 0 ? (

@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { fetchAllPatients, fetchShowPatients } from "@/store/slices/patientSlice";
+import { fetchShowPatientById } from "@/store/slices/patientSlice";
+import { fetchAppointments } from "@/store/slices/appointmentSlice";
+import { selectAllAppointments, selectShowPatientById, selectPatientsLoading } from "@/store/selectors";
 
 const fallbackPatients = [
   {
@@ -55,24 +57,73 @@ const fallbackPatients = [
   },
 ];
 
-
 export const Patients_List = ({ onPatientSelect, sortBy }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [fetchedPatients, setFetchedPatients] = useState({});
   const dispatch = useDispatch();
-  const patientsFromStore = useSelector(selectShowPatients);
+  
+  // Use the same selectors as the chart
+  const Appointments = useSelector(selectAllAppointments);
+  const currentPatient = useSelector(selectShowPatientById); // This is a single patient object
+  const loading = useSelector(selectPatientsLoading);
 
+  // Memoize unique patient IDs from appointments (adjusted for API structure)
+  const uniquePatientIds = useMemo(() => {
+    return [...new Set(
+      Appointments
+        .map(a => a.patientId?._id || a.patientId) // Handle both object and string formats
+        .filter(Boolean) // Remove null/undefined values
+    )];
+  }, [Appointments]);
+
+  // Fetch appointments once (same as chart)
   useEffect(() => {
-    dispatch(fetchShowPatients());
+    dispatch(fetchAppointments());
   }, [dispatch]);
 
-const handlePatientClick = (patient) => {
-  setSelectedPatientId(patient._id);
-  onPatientSelect(patient);
-};
+  // Store the current patient when it's fetched
+  useEffect(() => {
+    if (currentPatient && currentPatient._id) {
+      setFetchedPatients(prev => ({
+        ...prev,
+        [currentPatient._id]: currentPatient
+      }));
+    }
+  }, [currentPatient]);
 
+  // Fetch patients individually based on appointment data
+  useEffect(() => {
+    if (uniquePatientIds.length > 0) {
+      uniquePatientIds.forEach(id => {
+        if (!fetchedPatients[id]) {
+          dispatch(fetchShowPatientById(id));
+        }
+      });
+    }
+  }, [dispatch, uniquePatientIds, fetchedPatients]);
 
+  // Get patient list from the fetchedPatients
+  const patients = useMemo(() => {
+    console.log('fetchedPatients content:', fetchedPatients);
+    console.log('uniquePatientIds:', uniquePatientIds);
+    
+    const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
+    console.log('Patients result:', result);
+    return result;
+  }, [fetchedPatients, uniquePatientIds]);
 
-  const sortedPatients = [...(patientsFromStore ?? fallbackPatients)].sort((a, b) => {
+  // Check if we're still loading any patients
+  const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
+
+  const handlePatientClick = (patient) => {
+    setSelectedPatientId(patient._id);
+    onPatientSelect(patient);
+  };
+
+  // Use patients from store if available, otherwise fallback
+  const patientsToDisplay = patients.length > 0 ? patients : fallbackPatients;
+
+  const sortedPatients = [...patientsToDisplay].sort((a, b) => {
     switch (sortBy) {
       case "newest":
         return new Date(b.createdAt) - new Date(a.createdAt);
@@ -84,6 +135,32 @@ const handlePatientClick = (patient) => {
         return 0;
     }
   });
+
+  // Show loading state if we're fetching patients
+  if (isLoading && patients.length === 0 && uniquePatientIds.length > 0) {
+    return (
+      <div className="space-y-3">
+        <Card className="p-4">
+          <CardContent>
+            <p>Loading patients... ({uniquePatientIds.length} patients to fetch)</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show message if no appointments found
+  if (uniquePatientIds.length === 0) {
+    return (
+      <div className="space-y-3">
+        <Card className="p-4">
+          <CardContent>
+            <p>No appointments found. Using fallback patient data.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">

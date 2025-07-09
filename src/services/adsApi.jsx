@@ -1,5 +1,5 @@
 import api from "../lib/axios";
-import { handleApiResponse, handleApiError } from "../lib/apiUtils";
+import { handleApiResponse } from "../lib/apiUtils";
 
 /**
  * Ads API Service
@@ -27,7 +27,7 @@ export const addAd = async (adData) => {
 
 // Update ad
 export const updateAd = async (id, adData) => {
-  const response = await api.put(`${BASE_ENDPOINT}/${id}`, adData);
+  const response = await api.patch(`${BASE_ENDPOINT}/${id}`, adData);
   return handleApiResponse(response, "Failed to update ad");
 };
 

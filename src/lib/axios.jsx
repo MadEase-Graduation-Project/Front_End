@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Axios instance configuration
@@ -9,7 +10,7 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Default timeout in milliseconds
-const DEFAULT_TIMEOUT = 10000;
+const DEFAULT_TIMEOUT = 25000;
 
 // Create axios instance with configuration
 const api = axios.create({
@@ -45,7 +46,8 @@ function isAuthEndpoint(url = "") {
   return (
     url.endsWith("/login") ||
     url.endsWith("/register") ||
-    url.endsWith("/resetpass")
+    url.endsWith("/resetpass") ||
+    url.endsWith("/medbot")
   );
 }
 
@@ -67,14 +69,14 @@ api.interceptors.response.use(
 
       config._retry = true;
       isRefreshing = true;
-
+      const navigate = useNavigate();
       try {
         await api.post("/users/refresh");
         processQueue(null);
         return api(config);
       } catch (e) {
         processQueue(e);
-        window.location.href = "/login";
+        navigate("/register/login");
         return Promise.reject(e);
       } finally {
         isRefreshing = false;

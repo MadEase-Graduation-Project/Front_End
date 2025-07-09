@@ -77,7 +77,8 @@ const diagnosisSlice = createSlice({
       .addCase(fetchAllDiagnosis.fulfilled, (state, action) => {
         (state.loading = false),
           (state.error = false),
-          (state.totalDiagnosis = action.payload?.diagnoses);
+          (state.diagnosis = action.payload?.diagnoses);
+        state.totalDiagnosis = action.payload?.totalDiagnoses;
       })
       .addCase(fetchAllDiagnosis.rejected, rejectedHandler())
 

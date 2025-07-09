@@ -11,6 +11,7 @@ import NursePrescriptions from "@/pages/nurse/NursePrescriptions/NursePrescripti
 import NurseLabResults from "@/pages/nurse/NurseLabResults/NurseLabResults";
 import NurseEmergencies from "@/pages/nurse/NurseEmergencies/NurseEmergencies";
 import {NurseSetting} from "@/pages/nurse/NurseSetting/NurseSetting";
+import {NurseSetting} from "@/pages/nurse/NurseSetting/NurseSetting";
 import NurseHome from "@/pages/nurse/NurseHome/NurseHome";
 
 // Layout
@@ -30,8 +31,7 @@ const NurseApp = () => {
         <Route path="reports" element={<NurseReport />} />
         <Route path="medications" element={<Medications />} />
         <Route path="chat" element={<ChatDoctors />} />
-        <Route path="settings" element={<NurseSetting />} />
-
+        <Route path="settings" element={<Setting />} />
       </Route>
     </Routes>
   );

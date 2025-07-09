@@ -34,5 +34,6 @@ export async function getOneUser(id) {
  */
 export async function getMyData() {
   const response = await api.get(`${BASE_ENDPOINT}/one`);
+  console.log("API Response for My Data:", response);
   return handleApiResponse(response, "Failed to get user data");
 }

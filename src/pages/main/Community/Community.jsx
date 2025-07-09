@@ -15,7 +15,7 @@ import {
   sortedAdvices,
   selectFilteredAdvices,
 } from "@/store/selectors/index";
-import Popup from "../../../components/shared/Popup";
+import Popup from "@/components/shared/Popup";
 
 export default function Community() {
   const dispatch = useDispatch();
@@ -204,7 +204,6 @@ export default function Community() {
             </>
           )}
         </div>
-
         {/* Popup Component */}
         <Popup open={showPopup} onClose={() => setShowPopup(false)} />
       </div>

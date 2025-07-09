@@ -15,7 +15,7 @@ export const fetchChatbotSymptoms = createAsyncThunk(
 
 export const startChatBotSession = createAsyncThunk(
   "chatbot/startSession",
-  async (_, { dispatch }) => {
+  async ({ dispatch }) => {
     dispatch(clearChatbotSession());
     return await startSession();
   }

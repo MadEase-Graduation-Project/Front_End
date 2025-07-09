@@ -32,3 +32,13 @@ export const handelNameRoute = (name) => {
     return nameArr.join("-");
   }
 };
+
+export const underscoreToSpace = (string) => {
+  // Handle empty or null strings
+  if (!string || typeof string !== "string") {
+    return "";
+  }
+
+  // Replace all underscores with spaces
+  return string.replace(/_/g, " ");
+};

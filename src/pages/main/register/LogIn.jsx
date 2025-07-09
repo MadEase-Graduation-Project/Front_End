@@ -26,6 +26,7 @@ export default function LogIn() {
   const navigate = useNavigate();
   const { isActivePopup, setActivePopup } = usePopup();
   const [hasLoginError, setHasLoginError] = useState(false);
+  const [clickLogin, setClickLogin] = useState(false);
 
   const {
     control,
@@ -47,10 +48,10 @@ export default function LogIn() {
   }, [error]);
 
   useEffect(() => {
-    if (!role) return;
+    if (!clickLogin) return;
     switch (role) {
       case "Patient":
-        navigate("/medbot");
+        navigate("/");
         break;
       case "Admin":
         navigate("/admin/overview");
@@ -97,6 +98,7 @@ export default function LogIn() {
 
   const onSubmit = async (data) => {
     try {
+      setClickLogin(true);
       await dispatch(login(data)).unwrap();
     } catch (error) {
       console.error("Login error:", error.message);
@@ -135,7 +137,7 @@ export default function LogIn() {
               label="E-mail"
               id="email"
               type="email"
-              hasError={hasLoginError}
+              hasError={hasLoginError || !!errors.email}
               onChange={(e) => {
                 field.onChange(e);
                 clearErrors("email");
@@ -167,7 +169,7 @@ export default function LogIn() {
                 label="Password"
                 id="password"
                 type={showPassword ? "text" : "password"}
-                hasError={hasLoginError}
+                hasError={hasLoginError || !!errors.email}
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("password");
@@ -197,11 +199,11 @@ export default function LogIn() {
         >
           Login
         </button>
-        <DividerText reg="or login with" />
+        {/* <DividerText reg="or login with" />
         <div className="flex gap-[12px]">
           <BottomBtn source={google} btn="Google" />
           <BottomBtn source={apple} btn="Apple" />
-        </div>
+        </div> */}
       </div>
     </form>
   );

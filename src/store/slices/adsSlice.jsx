@@ -20,7 +20,9 @@ import {
 export const fetchAllAds = createAsyncThunk(
   "ads/fetchAllAds",
   async ({ page = 1 } = {}) => {
-    return await getAllAds({ page });
+    const res = await getAllAds({ page });
+    console.log("FETCHED ADS PAYLOAD:", res); // <--- check this
+    return res;
   }
 );
 
