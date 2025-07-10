@@ -5,7 +5,7 @@ const reportsData = [
     id: "r001",
     patientName: "Ahmed Mohamed",
     patientId: "p001",
-    date: "2024-06-25",
+    date: "2025-07-02",
     reportType: "Blood Test",
     summary: "Normal hemoglobin and white blood cell counts.",
     details:
@@ -15,7 +15,7 @@ const reportsData = [
     id: "r002",
     patientName: "Mona Ali",
     patientId: "p002",
-    date: "2024-06-20",
+    date: "2025-06-15",
     reportType: "MRI Brain",
     summary: "No signs of stroke or tumor.",
     details:
@@ -25,7 +25,7 @@ const reportsData = [
     id: "r003",
     patientName: "Youssef Nabil",
     patientId: "p003",
-    date: "2024-06-15",
+    date: "2025-05-20",
     reportType: "ECG",
     summary: "Mild arrhythmia detected.",
     details:
@@ -35,7 +35,7 @@ const reportsData = [
     id: "r004",
     patientName: "Fatma Hassan",
     patientId: "p004",
-    date: "2024-06-18",
+    date: "2025-06-15",
     reportType: "Kidney Function Test",
     summary: "Elevated creatinine and urea levels.",
     details:
@@ -45,7 +45,7 @@ const reportsData = [
     id: "r005",
     patientName: "Mohamed Said",
     patientId: "p005",
-    date: "2024-06-22",
+    date: "2025-05-25",
     reportType: "Pulmonary Function Test",
     summary: "Mild obstruction detected.",
     details:
@@ -126,6 +126,7 @@ function ReportDetailsModal({ report, onClose }) {
           className="text-gray-800 whitespace-pre-line"
         >
           {report.details}
+          
         </div>
       </div>
     </div>

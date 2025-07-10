@@ -5,7 +5,7 @@ const prescriptionsData = [
     id: "presc001",
     patientName: "Ahmed Mohamed",
     patientId: "p001",
-    date: "2024-07-01",
+    date: "2025-07-02",
     doctor: "Dr. Hossam Ali",
     medications: [
       {
@@ -28,7 +28,7 @@ const prescriptionsData = [
     id: "presc002",
     patientName: "Mona Ali",
     patientId: "p002",
-    date: "2024-07-03",
+    date: "2025-06-15",
     doctor: "Dr. Sara Khaled",
     medications: [
       {
@@ -44,7 +44,7 @@ const prescriptionsData = [
     id: "presc003",
     patientName: "Youssef Nabil",
     patientId: "p003",
-    date: "2024-06-28",
+    date: "2025-05-20",
     doctor: "Dr. Omar Farouk",
     medications: [
       {
@@ -67,7 +67,7 @@ const prescriptionsData = [
     id: "presc004",
     patientName: "Fatma Hassan",
     patientId: "p004",
-    date: "2024-07-05",
+    date: "2025-06-15",
     doctor: "Dr. Mona Youssef",
     medications: [
       {
@@ -83,7 +83,7 @@ const prescriptionsData = [
     id: "presc005",
     patientName: "Mohamed Said",
     patientId: "p005",
-    date: "2024-07-02",
+    date: "2025-05-25",
     doctor: "Dr. Fatma Hassan",
     medications: [
       {

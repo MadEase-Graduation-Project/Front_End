@@ -223,20 +223,6 @@ export default function AdvicesPage() {
         onClose={() => setShowColumnSelector(false)}
       />
 
-<<<<<<< HEAD
-      {/* Data table */}
-      <ViewTable
-        columns={columns}
-        data={data}
-        loading={loading}
-        selectable={true}
-        showActions={true}
-        onRowClick={handleRowClick}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        pageSize={10}
-      />
-=======
       {/* Data Display */}
       {viewMode === "table" ? (
         <ViewTable
@@ -263,7 +249,6 @@ export default function AdvicesPage() {
           pageSize={9}
         />
       )}
->>>>>>> origin/main
     </div>
   );
 }

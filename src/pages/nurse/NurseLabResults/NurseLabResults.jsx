@@ -6,7 +6,7 @@ const labResultsData = [
     patientName: "Ahmed Mohamed",
     patientId: "p001",
     testName: "Complete Blood Count (CBC)",
-    date: "2024-07-01",
+    date: "2025-07-02",
     resultsSummary: "Hemoglobin: 14.2 g/dL, WBC: 6,000 /µL, Platelets: 250,000 /µL",
     details:
       `Hemoglobin: 14.2 g/dL (Normal)\nWhite Blood Cells (WBC): 6,000 /µL (Normal)\nPlatelets: 250,000 /µL (Normal)\nNo abnormalities detected in red blood cell morphology.`,
@@ -16,7 +16,7 @@ const labResultsData = [
     patientName: "Mona Ali",
     patientId: "p002",
     testName: "Liver Function Test (LFT)",
-    date: "2024-06-28",
+    date: "2025-06-15",
     resultsSummary: "ALT: 35 U/L, AST: 30 U/L, Bilirubin: 0.8 mg/dL",
     details:
       `Alanine transaminase (ALT): 35 U/L (Normal)\nAspartate transaminase (AST): 30 U/L (Normal)\nTotal Bilirubin: 0.8 mg/dL (Normal)\nNo signs of liver dysfunction.`,
@@ -26,7 +26,7 @@ const labResultsData = [
     patientName: "Youssef Nabil",
     patientId: "p003",
     testName: "Blood Glucose",
-    date: "2024-07-02",
+    date: "2025-05-20",
     resultsSummary: "Fasting Glucose: 110 mg/dL (Pre-diabetic range)",
     details:
       `Fasting Blood Glucose: 110 mg/dL (Slightly elevated, indicating pre-diabetes)\nRecommend lifestyle modification and follow-up testing.`,
@@ -36,7 +36,7 @@ const labResultsData = [
     patientName: "Fatma Hassan",
     patientId: "p004",
     testName: "Urinalysis",
-    date: "2024-07-03",
+    date: "2025-06-15",
     resultsSummary: "pH: 6.0, Protein: Negative, Glucose: Negative",
     details:
       `Urine pH: 6.0 (Normal)\nProtein: Negative\nGlucose: Negative\nNo evidence of urinary tract infection or renal pathology.`,
@@ -46,7 +46,7 @@ const labResultsData = [
     patientName: "Mohamed Said",
     patientId: "p005",
     testName: "Thyroid Panel",
-    date: "2024-06-30",
+    date: "2025-05-25",
     resultsSummary: "TSH: 2.5 µIU/mL, Free T4: 1.2 ng/dL",
     details:
       `Thyroid Stimulating Hormone (TSH): 2.5 µIU/mL (Normal)\nFree Thyroxine (T4): 1.2 ng/dL (Normal)\nNo signs of hypothyroidism or hyperthyroidism.`,
