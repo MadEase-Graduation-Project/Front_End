@@ -76,18 +76,6 @@ function App() {
         <Route path="login" element={<LogIn />} />
       </Route>
 
-      {/* doctor layout */}
-      <Route path=":doctorName" element={<Doctor_Dashboard_Layout />}>
-        <Route index element={<Main_Grid />} />
-        <Route path="chat" element={<Messages />} />
-        <Route path="diagnosis" element={<Diagnosis_doctor />} />
-        <Route path="patients" element={<Patients_doctor />} />
-        <Route path="advice" element={<Advice />} />
-        <Route path="settings" element={<Settingss />} />
-        <Route path="ads" element={<Ads />} />
-        <Route path="treatments" element={<Treatments />} />
-        <Route path="diseases" element={<Diseases_doctor />} />
-      </Route>
 
       {/* reset pass layout */}
       <Route path="/resetpass" element={<ResetPass_Layout />}>
@@ -129,6 +117,19 @@ function App() {
 
       {/* nurse layout */}
       <Route path="nurse/*" element={<NurseApp />} />
+
+      {/* doctor layout */}
+    <Route path="/doctor/:doctorName" element={<Doctor_Dashboard_Layout />}>
+        <Route index element={<Main_Grid />} />
+        <Route path="chat" element={<Messages />} />
+        <Route path="diagnosis" element={<Diagnosis_doctor />} />
+        <Route path="patients" element={<Patients_doctor />} />
+        <Route path="advice" element={<Advice />} />
+        <Route path="settings" element={<Settingss />} />
+        <Route path="ads" element={<Ads />} />
+        <Route path="treatments" element={<Treatments />} />
+        <Route path="diseases" element={<Diseases_doctor />} />
+      </Route>
     </Routes>
   );
 }
