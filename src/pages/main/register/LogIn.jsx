@@ -52,21 +52,20 @@ export default function LogIn() {
   }, [error]);
 
   useEffect(() => {
-  if (role === "Doctor") {
-    dispatch(fetchMYData());
-  }
-}, [role, dispatch]);
+    if (role === "Doctor") {
+      dispatch(fetchMYData());
+    }
+  }, [role, dispatch]);
 
   useEffect(() => {
-  if (role === "Doctor" && details?.name) {
-    const slug = handleNameRoute(details.name);
-    if (slug) navigate(`/doctor/${slug}`);
-  }
-}, [role, details, navigate]);
-
-  
+    if (role === "Doctor" && details?.name) {
+      const slug = handleNameRoute(details.name);
+      if (slug) navigate(`/doctor/${slug}`);
+    }
+  }, [role, details, navigate]);
 
   useEffect(() => {
+    if (!clickLogin) return;
     if (!role) return;
     switch (role) {
       case "Patient":
@@ -79,7 +78,7 @@ export default function LogIn() {
         navigate("/nurse/dashboard");
         break;
     }
-  }, [role, navigate]);
+  }, [role, clickLogin, navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
   const fieldOrder = ["email", "password"];
