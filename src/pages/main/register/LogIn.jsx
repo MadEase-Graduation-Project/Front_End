@@ -20,6 +20,9 @@ import {
   selectSignLoading,
   selectSignRole,
 } from "@/store/selectors";
+import { fetchMYData } from "@/store/slices/userSlice";
+import { handleNameRoute } from "@/utils/urlHelpers";
+import { selectMyDetails } from "@/store/selectors";
 
 export default function LogIn() {
   const dispatch = useDispatch();
@@ -40,6 +43,7 @@ export default function LogIn() {
   const role = useSelector(selectSignRole);
   const loading = useSelector(selectSignLoading);
   const error = useSelector(selectSignError);
+  const details = useSelector(selectMyDetails);
 
   useEffect(() => {
     if (error) {
