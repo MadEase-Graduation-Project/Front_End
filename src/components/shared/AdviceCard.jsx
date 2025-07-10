@@ -23,7 +23,7 @@ export default function AdviceCard({
       <div className="py-4 px-7 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
           <Link
-            to={`${link}`}
+            to={`/community/${advice._id}`}
             className="block mt-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
           >
             {advice.title || "Untitled Article"}

@@ -119,6 +119,13 @@ const AdviceBlogPost = () => {
     }
   };
 
+  // Function to handle navigation to blog post
+  const navigateToPost = (postId) => {
+    navigate(`/community/${postId}`, {
+      state: { selectedCategory },
+    });
+  };
+
   // Debug logging
   console.log("Doctors:", doctors);
   console.log("Doctor query:", doctorQuery);
@@ -221,7 +228,7 @@ const AdviceBlogPost = () => {
                     <li key={item._id}>
                       <button
                         className="text-left w-full text-blue-600 hover:underline text-sm"
-                        onClick={() => navigate(`/community/${item._id}`)}
+                        onClick={() => navigateToPost(item._id)}
                       >
                         {item.title}
                       </button>

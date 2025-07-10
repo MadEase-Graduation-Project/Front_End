@@ -20,6 +20,9 @@ import {
   selectSignLoading,
   selectSignRole,
 } from "@/store/selectors";
+import { fetchMYData } from "@/store/slices/userSlice";
+import { handleNameRoute } from "@/utils/urlHelpers";
+import { selectMyDetails } from "@/store/selectors";
 
 export default function LogIn() {
   const dispatch = useDispatch();
@@ -40,6 +43,7 @@ export default function LogIn() {
   const role = useSelector(selectSignRole);
   const loading = useSelector(selectSignLoading);
   const error = useSelector(selectSignError);
+  const details = useSelector(selectMyDetails);
 
   useEffect(() => {
     if (error) {
@@ -48,7 +52,22 @@ export default function LogIn() {
   }, [error]);
 
   useEffect(() => {
-    if (!clickLogin) return;
+  if (role === "Doctor") {
+    dispatch(fetchMYData());
+  }
+}, [role, dispatch]);
+
+  useEffect(() => {
+  if (role === "Doctor" && details?.name) {
+    const slug = handleNameRoute(details.name);
+    if (slug) navigate(`/doctor/${slug}`);
+  }
+}, [role, details, navigate]);
+
+  
+
+  useEffect(() => {
+    if (!role) return;
     switch (role) {
       case "Patient":
         navigate("/");
@@ -58,9 +77,6 @@ export default function LogIn() {
         break;
       case "Nurse":
         navigate("/nurse/dashboard");
-        break;
-      case "Doctor":
-        navigate("/doctor");
         break;
     }
   }, [role, navigate]);
