@@ -56,6 +56,7 @@ import { Treatments } from "./pages/doctor/Treatments";
 function App() {
   return (
     <Routes>
+      <Route path="nurse/*" element={<NurseApp />} />
       {/* Main layout */}
       <Route path="/" element={<Landing_Layout />}>
         <Route index element={<Home />} />

@@ -4,16 +4,16 @@ const patientsData = [
   {
     id: "p001",
     name: "Ahmed Mohamed",
-    age: 29,
+    age: 33,
     gender: "Male",
-    phone: "+20 123 456 789",
-    email: "ahmed.m@example.com",
+    phone: "+201273182200",
+    email: "ahmed.m@gmail.com.com",
     address: "Cairo, Egypt",
-    admissionDate: "2024-06-01",
+    admissionDate: "2025-07-02",
     diagnosis: "Diabetes Type 2",
     severity: "Moderate",
     medicalHistory: [
-      "Diagnosed with Diabetes in 2018",
+      "Diagnosed with Diabetes in 2022",
       "Regular insulin therapy",
       "No previous hospitalizations related to diabetes"
     ],
@@ -22,12 +22,12 @@ const patientsData = [
   {
     id: "p002",
     name: "Mona Ali",
-    age: 35,
+    age: 31,
     gender: "Female",
-    phone: "+20 987 654 321",
-    email: "mona.ali@example.com",
+    phone: "+20101832078",
+    email: "mona.ali@gmail.com",
     address: "Alexandria, Egypt",
-    admissionDate: "2024-05-15",
+    admissionDate: "2025-06-15",
     diagnosis: "Hypertension",
     severity: "Mild",
     medicalHistory: [
@@ -42,10 +42,10 @@ const patientsData = [
     name: "Youssef Nabil",
     age: 42,
     gender: "Male",
-    phone: "+20 111 222 333",
-    email: "youssef.nabil@example.com",
+    phone: "+20123338676",
+    email: "youssef.nabil@gmail.com",
     address: "Giza, Egypt",
-    admissionDate: "2024-04-20",
+    admissionDate: "2025-05-20",
     diagnosis: "Coronary Artery Disease",
     severity: "High",
     medicalHistory: [
@@ -60,10 +60,10 @@ const patientsData = [
     name: "Fatma Hassan",
     age: 50,
     gender: "Female",
-    phone: "+20 444 555 666",
-    email: "fatma.hassan@example.com",
+    phone: "+20114566662",
+    email: "fatma.hassan@gmail.com",
     address: "Shubra El-Kheima, Egypt",
-    admissionDate: "2024-06-10",
+    admissionDate: "2025-06-15",
     diagnosis: "Chronic Kidney Disease",
     severity: "Moderate",
     medicalHistory: [
@@ -78,10 +78,10 @@ const patientsData = [
     name: "Mohamed Said",
     age: 38,
     gender: "Male",
-    phone: "+20 777 888 999",
-    email: "mohamed.said@example.com",
+    phone: "+201018323339",
+    email: "mohamed.said@gmail.com",
     address: "Mansoura, Egypt",
-    admissionDate: "2024-05-25",
+    admissionDate: "2025-05-25",
     diagnosis: "Asthma",
     severity: "Mild",
     medicalHistory: [
@@ -96,10 +96,10 @@ const patientsData = [
     name: "Sara Khaled",
     age: 27,
     gender: "Female",
-    phone: "+20 555 666 777",
-    email: "sara.khaled@example.com",
+    phone: "+201289766636",
+    email: "sara.khaled@gmail.com",
     address: "Tanta, Egypt",
-    admissionDate: "2024-06-12",
+    admissionDate: "2025-06-12",
     diagnosis: "Anemia",
     severity: "Low",
     medicalHistory: [
@@ -114,10 +114,10 @@ const patientsData = [
     name: "Omar Farouk",
     age: 60,
     gender: "Male",
-    phone: "+20 888 999 000",
-    email: "omar.farouk@example.com",
+    phone: "+201289766631",
+    email: "omar.farouk@gmail.com",
     address: "Ismailia, Egypt",
-    admissionDate: "2024-05-05",
+    admissionDate: "2025-05-26",
     diagnosis: "Stroke Recovery",
     severity: "High",
     medicalHistory: [
@@ -132,10 +132,10 @@ const patientsData = [
     name: "Nadia Youssef",
     age: 45,
     gender: "Female",
-    phone: "+20 999 111 222",
-    email: "nadia.youssef@example.com",
+    phone: "+201087633365",
+    email: "nadia.youssef@gmail.com",
     address: "Fayoum, Egypt",
-    admissionDate: "2024-04-30",
+    admissionDate: "2025-04-30",
     diagnosis: "Breast Cancer",
     severity: "High",
     medicalHistory: [
@@ -147,7 +147,7 @@ const patientsData = [
   },
 ];
 
-// النافذة المنبثقة مع عرض المعرف بدل الصورة
+
 function PatientDetailsModal({ patient, onClose }) {
   if (!patient) return null;
 
@@ -271,7 +271,6 @@ export default function NursePatients() {
         ))}
       </div>
 
-      {/* نافذة تفاصيل المريض */}
       {selectedPatient && (
         <PatientDetailsModal
           patient={selectedPatient}

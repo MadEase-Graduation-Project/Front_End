@@ -1,9 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-
-// Pages
 import NurseDashboard from "@/pages/nurse/NurseDashboard/NurseDashboard";
 import NursePatients from "@/pages/nurse/NursePatients/NursePatients";
-import ChatDoctors from "@/pages/nurse/ChatDoctors/ChatDoctors";
 import NurseReport from "@/pages/nurse/NurseReport/NurseReport";
 import Medications from "@/pages/nurse/Medications/Medications";
 import NurseAppointments from "./pages/nurse/NurseAppointments/NurseAppointments";
@@ -13,7 +10,7 @@ import NurseEmergencies from "@/pages/nurse/NurseEmergencies/NurseEmergencies";
 import {NurseSetting} from "@/pages/nurse/NurseSetting/NurseSetting";
 import NurseHome from "@/pages/nurse/NurseHome/NurseHome";
 
-// Layout
+
 import NurseLayout from "@/layouts/NurseLayout/NurseLayout";
 
 const NurseApp = () => {
@@ -29,8 +26,8 @@ const NurseApp = () => {
         <Route path="emergencies" element={<NurseEmergencies />} />
         <Route path="reports" element={<NurseReport />} />
         <Route path="medications" element={<Medications />} />
-        <Route path="chat" element={<ChatDoctors />} />
-        <Route path="settings" element={<NurseSetting/>} />
+        {/* Settings route */}
+        <Route path="settings" element={<NurseSetting />} />
       </Route>
     </Routes>
   );
