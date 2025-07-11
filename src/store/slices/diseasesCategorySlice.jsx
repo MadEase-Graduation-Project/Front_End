@@ -50,7 +50,8 @@ export const updateDiseaseCategory = createAsyncThunk(
 export const removeDiseaseCategory = createAsyncThunk(
   "diseasesCategories/removeDiseaseCategory",
   async (id) => {
-    return await deleteDiseaseCategory(id);
+    await deleteDiseaseCategory(id);
+    return id;
   }
 );
 
@@ -106,17 +107,36 @@ const diseaseCategorySlice = createSlice({
 
       // Create disease category
       .addCase(createDiseaseCategory.pending, pendingHandler())
-      .addCase(createDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(createDiseaseCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.categories.push(action.payload?.data);
+      })
       .addCase(createDiseaseCategory.rejected, rejectedHandler())
 
       // Update disease category
       .addCase(updateDiseaseCategory.pending, pendingHandler())
-      .addCase(updateDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(
+        updateDiseaseCategory.fulfilled,
+        fulfilledHandler({
+          detailsKey: "selectedDiseaseCategory",
+        })
+      )
       .addCase(updateDiseaseCategory.rejected, rejectedHandler())
 
       // Remove disease category
       .addCase(removeDiseaseCategory.pending, pendingHandler())
-      .addCase(removeDiseaseCategory.fulfilled, fulfilledHandler())
+      .addCase(removeDiseaseCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.categories = state.categories.filter(
+          (category) => category._id !== deletedId
+        );
+        if (state.selectedDiseaseCategory?._id === deletedId) {
+          state.selectedDiseaseCategory = {};
+        }
+      })
       .addCase(removeDiseaseCategory.rejected, rejectedHandler());
   },
 });

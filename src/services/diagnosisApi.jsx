@@ -43,9 +43,7 @@ export const updateDiagnosis = async (
 };
 
 // Delete diagnosis
-export const deleteDiagnosis = async (patient_id, diagnose_id) => {
-  const response = await api.delete(
-    `${BASE_ENDPOINT}/${patient_id}/${diagnose_id}`
-  );
+export const deleteDiagnosis = async (diagnose_id) => {
+  const response = await api.delete(`${BASE_ENDPOINT}/${diagnose_id}`);
   return handleApiResponse(response, "Failed to delete diagnosis");
 };

@@ -41,15 +41,17 @@ export const createTreatment = createAsyncThunk(
 
 export const updateTreatment = createAsyncThunk(
   "treatments/updateTreatment",
-  async ({ id, treatmentData }) => {
-    return await editTreatment(id, treatmentData);
+  async ({ id, treatmentData }, { dispatch }) => {
+    await editTreatment(id, treatmentData);
+    dispatch(fetchTreatmentById(id));
   }
 );
 
 export const removeTreatment = createAsyncThunk(
   "treatments/removeTreatment",
   async (id) => {
-    return await deleteTreatment(id);
+    await deleteTreatment(id);
+    return id;
   }
 );
 
@@ -105,7 +107,11 @@ const treatmentSlice = createSlice({
 
       // Create treatment
       .addCase(createTreatment.pending, pendingHandler())
-      .addCase(createTreatment.fulfilled, fulfilledHandler())
+      .addCase(createTreatment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.treatments.push(action.payload);
+      })
       .addCase(createTreatment.rejected, rejectedHandler())
 
       // Update treatment
@@ -115,7 +121,17 @@ const treatmentSlice = createSlice({
 
       // Remove treatment
       .addCase(removeTreatment.pending, pendingHandler())
-      .addCase(removeTreatment.fulfilled, fulfilledHandler())
+      .addCase(removeTreatment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.treatments = state.treatments.filter(
+          (treatment) => treatment._id !== deletedId
+        );
+        if (state.selectedTreatment?._id === deletedId) {
+          state.selectedTreatment = {};
+        }
+      })
       .addCase(removeTreatment.rejected, rejectedHandler());
   },
 });

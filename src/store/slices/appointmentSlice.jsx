@@ -45,14 +45,16 @@ export const updateAppointment = createAsyncThunk(
 export const removeUserAppointment = createAsyncThunk(
   "appointments/removeUserAppointment",
   async (id) => {
-    return await deleteUserAppointment(id);
+    await deleteUserAppointment(id);
+    return id;
   }
 );
 
 export const removeDoctorAppointment = createAsyncThunk(
   "appointments/removeDoctorAppointment",
   async (id) => {
-    return await deleteDoctorAppointment(id);
+    await deleteDoctorAppointment(id);
+    return id;
   }
 );
 
@@ -100,22 +102,49 @@ const appointmentSlice = createSlice({
 
       // Create appointment
       .addCase(createAppointment.pending, pendingHandler())
-      .addCase(createAppointment.fulfilled, fulfilledHandler())
+      .addCase(createAppointment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.appointments.push(action.payload?.appointment);
+      })
       .addCase(createAppointment.rejected, rejectedHandler())
 
       // Update appointment
       .addCase(updateAppointment.pending, pendingHandler())
-      .addCase(updateAppointment.fulfilled, fulfilledHandler())
+      .addCase(
+        updateAppointment.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedAppointment" })
+      )
       .addCase(updateAppointment.rejected, rejectedHandler())
 
       // Remove user appointment
       .addCase(removeUserAppointment.pending, pendingHandler())
-      .addCase(removeUserAppointment.fulfilled, fulfilledHandler())
+      .addCase(removeUserAppointment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.appointments = state.appointments.filter(
+          (appointment) => appointment._id !== deletedId
+        );
+        if (state.selectedAppointment?._id === deletedId) {
+          state.selectedAppointment = {};
+        }
+      })
       .addCase(removeUserAppointment.rejected, rejectedHandler())
 
       // Remove doctor appointment
       .addCase(removeDoctorAppointment.pending, pendingHandler())
-      .addCase(removeDoctorAppointment.fulfilled, fulfilledHandler())
+      .addCase(removeDoctorAppointment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.appointments = state.appointments.filter(
+          (appointment) => appointment._id !== deletedId
+        );
+        if (state.selectedAppointment?._id === deletedId) {
+          state.selectedAppointment = {};
+        }
+      })
       .addCase(removeDoctorAppointment.rejected, rejectedHandler());
   },
 });

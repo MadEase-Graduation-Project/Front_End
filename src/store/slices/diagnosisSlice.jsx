@@ -38,15 +38,17 @@ export const createDiagnosis = createAsyncThunk(
 
 export const editDiagnosis = createAsyncThunk(
   "diagnosis/editDiagnosis",
-  async (patient_id, diagnose_id, diagnosisData) => {
-    return await updateDiagnosis(patient_id, diagnose_id, diagnosisData);
+  async (patient_id, diagnose_id, diagnosisData, { dispatch }) => {
+    await updateDiagnosis(patient_id, diagnose_id, diagnosisData);
+    dispatch(fetchDiagnosisById(patient_id, diagnose_id));
   }
 );
 
 export const removeDiagnosis = createAsyncThunk(
   "diagnosis/removeDiagnosis",
-  async (patient_id, diagnose_id) => {
-    return await deleteDiagnosis(patient_id, diagnose_id);
+  async (diagnose_id) => {
+    await deleteDiagnosis(diagnose_id);
+    return diagnose_id;
   }
 );
 
@@ -103,7 +105,16 @@ const diagnosisSlice = createSlice({
 
       // Remove diagnosis
       .addCase(removeDiagnosis.pending, pendingHandler())
-      .addCase(removeDiagnosis.fulfilled, fulfilledHandler())
+      .addCase(removeDiagnosis.fulfilled, (state, action) => {
+        (state.loading = false),
+          (state.error = false),
+          (state.diagnosis = state.diagnosis.filter(
+            (diagnosis) => diagnosis._id !== action.payload
+          ));
+        if (state.selectedDiagnosis?._id === action.payload) {
+          state.selectedDiagnosis = {};
+        }
+      })
       .addCase(removeDiagnosis.rejected, rejectedHandler());
   },
 });
