@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { generateOtp, verifyOtp } from "@/store/slices/otpSlice";
 import UnderLined from "@/components/patientComps/register/UnderLined";
 import {
   Check,
@@ -15,6 +18,11 @@ const Otp = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [notification, setNotification] = useState(null);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
 
   const handleChange = (e, index) => {
     const value = e.target.value.replace(/\D/, "");
@@ -44,33 +52,48 @@ const Otp = () => {
     setIsVerifying(true);
     setNotification(null);
 
-    await new Promise((res) => setTimeout(res, 1500));
-
-    if (code !== "123456") {
-      setHasError(true);
-      setNotification({
-        type: "error",
-        message: "Invalid verification code. Please try again.",
-      });
-    } else {
-      setNotification({
-        type: "success",
-        message: "Code verified successfully!",
-      });
-    }
-
-    setIsVerifying(false);
+    dispatch(verifyOtp({ email, otp: code }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          navigate("/resetpass/new", { state: { token: res.data } });
+        } else {
+          setHasError(true);
+          setNotification({
+            type: "error",
+            message: "Invalid verification code. Please try again.",
+          });
+        }
+      })
+      .catch(() => {
+        setHasError(true);
+        setNotification({
+          type: "error",
+          message: "Verification failed. Please try again.",
+        });
+      })
+      .finally(() => setIsVerifying(false));
   };
 
   const handleResend = async () => {
     setIsResending(true);
     setNotification(null);
-    await new Promise((res) => setTimeout(res, 1500));
-    setNotification({
-      type: "success",
-      message: "Verification code has been resent.",
-    });
-    setIsResending(false);
+
+    dispatch(generateOtp(email))
+      .unwrap()
+      .then(() => {
+        setNotification({
+          type: "success",
+          message: "Verification code has been resent.",
+        });
+      })
+      .catch(() => {
+        setNotification({
+          type: "error",
+          message: "Failed to resend the code. Please try again.",
+        });
+      })
+      .finally(() => setIsResending(false));
   };
 
   const NotificationBanner = ({ notification, onClose }) => {
@@ -137,12 +160,14 @@ const Otp = () => {
           disabled={isVerifying}
           className="flex items-center justify-center gap-2 bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 transition-all disabled:opacity-60"
         >
-          {isVerifying ? (
-            <Loader2 className="animate-spin w-3 h-3 sm:w-5 sm:h-5" />
-          ) : (
-            <Check className="w-3 h-3 sm:w-5 sm:h-5" />
-          )}
-          {isVerifying ? "Verifying..." : "Verify Code"}
+          <span className="flex items-center gap-2">
+            {isVerifying ? (
+              <Loader2 className="animate-spin w-4 h-4 sm:w-5 sm:h-5" />
+            ) : (
+              <Check className="w-4 h-4 sm:w-5 sm:h-5" />
+            )}
+            {isVerifying ? "Verifying..." : "Verify Code"}
+          </span>
         </button>
 
         <button
@@ -151,15 +176,17 @@ const Otp = () => {
           disabled={isResending}
           className="w-full flex items-center justify-center gap-1 text-mepale hover:text-menavy font-jost text-[8px] xs:text-xs sm:text-base disabled:opacity-60"
         >
-          {isResending ? (
-            <Loader2 className="animate-spin w-3 h-3" />
-          ) : (
-            <Send className="w-3 h-3" />
-          )}
-          {isResending ? "Sending..." : "Resend Code"}
+          <span className="flex items-center gap-1">
+            {isResending ? (
+              <Loader2 className="animate-spin w-3 h-3" />
+            ) : (
+              <Send className="w-3 h-3" />
+            )}
+            {isResending ? "Sending..." : "Resend Code"}
+          </span>
         </button>
 
-        <UnderLined text="Back" link="/register/login" />
+        <UnderLined text="Back" link="/resetpass" />
       </div>
     </form>
   );

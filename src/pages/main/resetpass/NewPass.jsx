@@ -1,38 +1,45 @@
+// File: NewPass.jsx
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { resetPasswordOTP } from "@/store/slices/otpSlice";
 import FloatingInput from "@/components/patientComps/register/FloatingInput";
 import UnderLined from "@/components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { usePopup } from "@/contexts/PopupContext";
 
 const NewPass = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { setActivePopup } = usePopup();
+  const location = useLocation();
+  const token = location.state?.token;
 
   const {
     control,
     handleSubmit,
     clearErrors,
-    trigger,
     formState: { errors },
   } = useForm({ mode: "onTouched" });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showMismatchError, setShowMismatchError] = useState(false);
+  const [mismatchError, setMismatchError] = useState(false);
 
-  const onSubmit = (data) => {
-    const { newPassword, confirmPassword } = data;
-
+  const onSubmit = ({ newPassword, confirmPassword }) => {
     if (newPassword !== confirmPassword) {
-      setShowMismatchError(true);
+      setMismatchError(true);
       return;
     }
 
-    setShowMismatchError(false);
-    setActivePopup(true); // ✅ green popup
-    navigate("/register/login", { state: { successReset: true } });
+    setMismatchError(false);
+    dispatch(
+      resetPasswordOTP({ resetToken: token, newPassword, confirmPassword })
+    )
+      .unwrap()
+      .then(() =>
+        navigate("/register/login", { state: { successReset: true } })
+      )
+      .catch(() => alert("Failed to reset password."));
   };
 
   return (
@@ -59,7 +66,7 @@ const NewPass = () => {
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("newPassword");
-                  setShowMismatchError(false);
+                  setMismatchError(false);
                 }}
               />
             )}
@@ -95,7 +102,7 @@ const NewPass = () => {
                 onChange={(e) => {
                   field.onChange(e);
                   clearErrors("confirmPassword");
-                  setShowMismatchError(false);
+                  setMismatchError(false);
                 }}
               />
             )}
@@ -115,12 +122,13 @@ const NewPass = () => {
         </div>
 
         {/* Mismatch Error */}
-        {showMismatchError && (
+        {mismatchError && (
           <div className="animate-slide-up bg-red-100 text-red-800 border border-red-300 rounded-xl px-3 py-2 shadow-md transition-all duration-700 ease-in-out text-center">
             <p className="text-sm font-medium">Passwords do not match</p>
           </div>
         )}
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px]
@@ -129,7 +137,7 @@ const NewPass = () => {
           Save changes
         </button>
 
-        <UnderLined text="Back" link="/otp" />
+        <UnderLined text="Back" link="/resetpass/otp" />
       </div>
     </form>
   );
