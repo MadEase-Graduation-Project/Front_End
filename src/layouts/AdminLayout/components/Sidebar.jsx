@@ -94,14 +94,14 @@ export default function Sidebar({ currentPath, isCollapsed }) {
 
   return (
     <div
-      className={`fixed top-0 left-0 flex flex-col justify-between items-start bg-[#142139] h-screen shadow-lg shadow-gray-900/50 ${
+      className={`fixed py-2 px-1 top-0 left-0 flex flex-col justify-between items-start bg-[#142139] h-screen shadow-lg shadow-gray-900/50 ${
         isCollapsed
           ? "w-screen lg:w-44 sm:w-40"
           : "hidden lg:w-14 sm:flex sm:w-12"
       } transition-all duration-300 ease-in-out lg:p-2 overflow-hidden z-20`}
     >
       {/*  */}
-      <div className="flex items-center gap-3 ">
+      <div className="flex items-center  gap-3 ">
         <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
           <span className="text-white font-bold text-sm">M</span>
         </div>

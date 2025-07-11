@@ -20,8 +20,8 @@ export const getAdById = async (id) => {
 };
 
 // Add new ad
-export const addAd = async (adData) => {
-  const response = await api.post(BASE_ENDPOINT, adData);
+export const addAd = async (formData) => {
+  const response = await api.post(BASE_ENDPOINT, formData);
   return handleApiResponse(response, "Failed to add ad");
 };
 

@@ -175,15 +175,6 @@ export default function AdvicesPage() {
 
           {/* Right side - Actions */}
           <div className="flex items-center gap-3">
-            {/* Status Filter */}
-            <Button variant="outline" size="sm" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filter
-              <Badge variant="secondary" className="ml-1">
-                All
-              </Badge>
-            </Button>
-
             {/* Enhanced Customize Columns Button */}
             <TooltipProvider>
               <Tooltip>

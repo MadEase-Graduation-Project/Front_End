@@ -17,10 +17,6 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: DEFAULT_TIMEOUT,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
 });
 
 // Request interceptor
@@ -29,6 +25,14 @@ api.interceptors.request.use(
     if (import.meta.env.MODE !== "production") {
       console.log(`API Request: ${config.method.toUpperCase()} ${config.url}`);
     }
+    if (config.data instanceof FormData) {
+      config.headers["Content-Type"] = "multipart/form-data";
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
+
+    config.headers["Accept"] = "application/json";
+
     return config;
   },
   (error) => Promise.reject(error)

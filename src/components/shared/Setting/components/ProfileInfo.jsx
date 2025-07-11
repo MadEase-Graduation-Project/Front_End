@@ -26,9 +26,12 @@ import { formatDateShort } from "@/utils/formatDateUtils";
 import { useDispatch } from "react-redux";
 import { updateData } from "@/store/slices/userSlice";
 import { getMyData } from "@/services/userApi";
+import { logout } from "@/store/slices/signSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage({ details }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarDialog, setShowAvatarDialog] = useState(false);
   const [profile, setProfile] = useState({
@@ -80,8 +83,14 @@ export default function ProfilePage({ details }) {
 
   const handleChangeAvatar = async () => {
     if (!profile.avatar) return;
-
-    return alert("خالد مش مظبطها");
+    const formData = new FormData();
+    formData.append("image", profile.avatar);
+    try {
+      dispatch(updateData(formData));
+    } catch (e) {
+      console.log(e);
+    }
+    setShowAvatarDialog(false);
   };
 
   return (
@@ -98,7 +107,7 @@ export default function ProfilePage({ details }) {
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
               <AvatarImage
-                src={profile.avatar || "/placeholder.svg"}
+                src={profile.avatar || "https://github.com/shadcn.png"}
                 alt={profile.fullname}
               />
               <AvatarFallback>
@@ -214,17 +223,30 @@ export default function ProfilePage({ details }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-4">
-            {!isEditing ? (
-              <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
-            ) : (
-              <>
-                <Button onClick={handleSave}>Save Changes</Button>
-                <Button variant="outline" onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </>
-            )}
+          <div className="flex justify-between items-center pt-4">
+            <div className="flex gap-2">
+              {!isEditing ? (
+                <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+              ) : (
+                <>
+                  <Button onClick={handleSave}>Save Changes</Button>
+                  <Button variant="outline" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </>
+              )}
+            </div>
+            <div className="">
+              <Button
+                onClick={() => {
+                  dispatch(logout());
+                  navigate("/register/login");
+                }}
+                className="bg-red-500 hover:bg-red-600 "
+              >
+                Logout
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
