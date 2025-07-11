@@ -190,15 +190,6 @@ export default function DiseasesPage() {
 
           {/* Right side - Actions */}
           <div className="flex items-center gap-3">
-            {/* Status Filter */}
-            <Button variant="outline" size="sm" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filter
-              <Badge variant="secondary" className="ml-1">
-                All
-              </Badge>
-            </Button>
-
             {/* Enhanced Customize Columns Button */}
             <TooltipProvider>
               <Tooltip>
@@ -236,32 +227,32 @@ export default function DiseasesPage() {
         onSelectedChange={setSelectedColumnKeys}
         isOpen={showColumnSelector}
         onClose={() => setShowColumnSelector(false)}
-/>
+      />
 
-{/* Data Display */}
-{viewMode === "table" ? (
-  <ViewTable
-    columns={columns}
-    data={data}
-    loading={loading}
-    selectable={true}
-    showActions={true}
-    onEdit={handleEdit}
-    onDelete={handleDelete}
-    pageSize={10}
-  />
-) : (
-  <ViewCards
-    columns={columns}
-    data={data}
-    loading={loading}
-    selectable={true}
-    showActions={true}
-    onEdit={handleEdit}
-    onDelete={handleDelete}
-    pageSize={9}
-  />
-)}
+      {/* Data Display */}
+      {viewMode === "table" ? (
+        <ViewTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={10}
+        />
+      ) : (
+        <ViewCards
+          columns={columns}
+          data={data}
+          loading={loading}
+          selectable={true}
+          showActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          pageSize={9}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={openDeleteDialog}

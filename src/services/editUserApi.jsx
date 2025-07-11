@@ -14,19 +14,18 @@ const BASE_ENDPOINT = "/users";
  * @param {Object} userData - Updated user data
  * @returns {Promise<Object>} Updated user data
  */
-export async function updateUserData(userData) {
-  const response = await api.patch(`${BASE_ENDPOINT}`, userData);
+export async function updateUserData(formData) {
+  const response = await api.patch(`${BASE_ENDPOINT}`, formData);
   const data = handleApiResponse(response, "Failed to update user data");
   return data?.data;
 }
 
 /**
  * Deletes a user
- * @param {string} userId - User ID
  * @returns {Promise<Object>} Delete response
  */
-export async function deleteUser(userId) {
-  const response = await api.delete(`${BASE_ENDPOINT}/${userId}`);
+export async function deleteUser() {
+  const response = await api.delete(`${BASE_ENDPOINT}`);
   const data = handleApiResponse(response, "Failed to delete user");
   return data?.data;
 }

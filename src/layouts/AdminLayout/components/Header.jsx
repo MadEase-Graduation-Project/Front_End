@@ -34,7 +34,7 @@ export default function Header({ isCollapsed, setIsCollapsed }) {
   }
 
   return (
-    <header className="flex items-center gap-2 h-12 lg:h-14 px-2">
+    <header className="sticky top-0 flex items-center gap-2 h-12 lg:h-14 px-2 z-50">
       <button
         className="z-10 h-fit"
         onClick={() => setIsCollapsed(!isCollapsed)}

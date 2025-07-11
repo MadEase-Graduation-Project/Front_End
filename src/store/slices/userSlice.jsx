@@ -31,28 +31,30 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
-export const removeUser = createAsyncThunk("users/removeUser", async (id) => {
-  return await deleteUser(id);
+export const removeUser = createAsyncThunk("users/removeUser", async () => {
+  await deleteUser();
 });
 
 export const updateData = createAsyncThunk(
   "users/updateUserData",
-  async (userData) => {
-    return await updateUserData(userData);
+  async (formData) => {
+    return await updateUserData(formData);
   }
 );
 
 export const changeUserRoleThunk = createAsyncThunk(
   "users/changeUserRole",
   async ({ userId, newRole }) => {
-    return await changeUserRole(userId, { newRole });
+    await changeUserRole(userId, { newRole });
+    return newRole;
   }
 );
 
 export const rateUserThunk = createAsyncThunk(
   "users/rateUser",
   async ({ userId, rating }) => {
-    return await rateUser({ userId, rating });
+    await rateUser({ userId, rating });
+    return rating;
   }
 );
 
@@ -144,19 +146,38 @@ const userSlice = createSlice({
       )
       // remove user
       .addCase(removeUser.pending, pendingHandler())
-      .addCase(removeUser.fulfilled, fulfilledHandler())
+      .addCase(removeUser.fulfilled, (state) => {
+        (state.loading = false), (state.error = false), (state.myDetails = {});
+      })
       .addCase(removeUser.rejected, rejectedHandler())
       // update user data
       .addCase(updateData.pending, pendingHandler())
-      .addCase(updateData.fulfilled, fulfilledHandler())
+      .addCase(
+        updateData.fulfilled,
+        fulfilledHandler({ detailsKey: "myDetails" })
+      )
       .addCase(updateData.rejected, rejectedHandler())
       // change user role
       .addCase(changeUserRoleThunk.pending, pendingHandler())
-      .addCase(changeUserRoleThunk.fulfilled, fulfilledHandler())
+      .addCase(changeUserRoleThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.userDetails = {
+          ...state.userDetails,
+          role: action.payload,
+        };
+      })
       .addCase(changeUserRoleThunk.rejected, rejectedHandler())
       // rate user
       .addCase(rateUserThunk.pending, pendingHandler())
-      .addCase(rateUserThunk.fulfilled, fulfilledHandler())
+      .addCase(rateUserThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.userDetails = {
+          ...state.userDetails,
+          rate: action.payload,
+        };
+      })
       .addCase(rateUserThunk.rejected, rejectedHandler());
   },
 });

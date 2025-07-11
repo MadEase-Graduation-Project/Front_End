@@ -34,8 +34,8 @@ export const fetchAdById = createAsyncThunk(
   }
 );
 
-export const createAd = createAsyncThunk("ads/createAd", async (adData) => {
-  return await addAd(adData);
+export const createAd = createAsyncThunk("ads/createAd", async (formData) => {
+  return await addAd(formData);
 });
 
 export const editAd = createAsyncThunk("ads/editAd", async ({ id, adData }) => {
@@ -43,7 +43,8 @@ export const editAd = createAsyncThunk("ads/editAd", async ({ id, adData }) => {
 });
 
 export const removeAd = createAsyncThunk("ads/removeAd", async (id) => {
-  return await deleteAd(id);
+  await deleteAd(id);
+  return id;
 });
 
 const initialState = {
@@ -99,17 +100,26 @@ const adsSlice = createSlice({
 
       // Create ad
       .addCase(createAd.pending, pendingHandler())
+      // todo:refresh
       .addCase(createAd.fulfilled, fulfilledHandler())
       .addCase(createAd.rejected, rejectedHandler())
 
       // Edit ad
       .addCase(editAd.pending, pendingHandler())
-      .addCase(editAd.fulfilled, fulfilledHandler())
+      .addCase(editAd.fulfilled, fulfilledHandler({ detailsKey: "selectedAd" }))
       .addCase(editAd.rejected, rejectedHandler())
 
       // Remove ad
       .addCase(removeAd.pending, pendingHandler())
-      .addCase(removeAd.fulfilled, fulfilledHandler())
+      .addCase(removeAd.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.ads = state.ads.filter((ad) => ad._id !== deletedId);
+        if (state.selectedAd?._id === deletedId) {
+          state.selectedAd = {};
+        }
+      })
       .addCase(removeAd.rejected, rejectedHandler());
   },
 });
