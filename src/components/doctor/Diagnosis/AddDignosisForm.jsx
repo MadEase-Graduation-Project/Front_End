@@ -146,12 +146,12 @@ export const AddDiagnosisForm = ({
                 value={symptomInput}
                 onChange={(e) => setSymptomInput(e.target.value)}
                 placeholder="e.g., Headache"
-                className="flex-1 px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-megreen"
+                className="flex-1 px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007eb1]"
               />
               <button
                 type="button"
                 onClick={handleAddSymptom}
-                className="bg-megreen text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition"
+                className="bg-[#007eb1] text-white px-4 py-2 rounded-lg hover:bg-[#88cce7] transition"
               >
                 Add
               </button>
@@ -198,7 +198,7 @@ export const AddDiagnosisForm = ({
               value={recommendations}
               onChange={(e) => setRecommendations(e.target.value)}
               placeholder="e.g., avoid junk food"
-              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-meyellow"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-menavy"
             />
           </div>
 
@@ -210,7 +210,7 @@ export const AddDiagnosisForm = ({
               value={followUp}
               onChange={(e) => setFollowUp(e.target.value)}
               placeholder="e.g., Next Sunday"
-              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-meyellow"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg focus:outline-none focus:ring-2 focus:ring-menavy"
             />
           </div>
 
@@ -222,7 +222,7 @@ export const AddDiagnosisForm = ({
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Additional notes or observations"
               rows={3}
-              className="w-full px-4 py-2 border border-mebeige rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-mepale"
+              className="w-full px-4 py-2 border border-mebeige rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-menavy"
             />
           </div>
 
