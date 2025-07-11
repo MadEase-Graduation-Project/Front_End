@@ -4,7 +4,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { fetchShowPatientById } from "@/store/slices/patientSlice";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
-import { selectAllAppointments, selectShowPatientById, selectPatientsLoading } from "@/store/selectors";
+import {
+  selectAllAppointments,
+  selectShowPatientById,
+  selectPatientsLoading,
+} from "@/store/selectors";
 
 const fallbackPatients = [
   {
@@ -39,88 +43,102 @@ const fallbackPatients = [
       phone: "+201098765432",
     },
   },
-  {
-    _id: "fallback-3",
-    name: "Nour Khaled",
-    gender: "Female",
-    dateOfBirth: "2001-12-05",
-    email: "nour.khaled@example.com",
-    phone: "+201112223344",
-    city: "Giza",
-    country: "Egypt",
-    createdAt: "2024-01-20T09:45:00Z",
-    emergencyContact: {
-      name: "Khaled Youssef",
-      relationship: "Father",
-      phone: "+201234001122",
-    },
-  },
 ];
 
 export const Patients_List = ({ onPatientSelect, sortBy }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [fetchedPatients, setFetchedPatients] = useState({});
+  const [fetchedPatientIds, setFetchedPatientIds] = useState(new Set());
+
   const dispatch = useDispatch();
-  
-  // Use the same selectors as the chart
-  const Appointments = useSelector(selectAllAppointments);
-  const currentPatient = useSelector(selectShowPatientById); // This is a single patient object
+  const appointments = useSelector(selectAllAppointments);
   const loading = useSelector(selectPatientsLoading);
 
-  // Memoize unique patient IDs from appointments (adjusted for API structure)
+  // Extract unique patient IDs
   const uniquePatientIds = useMemo(() => {
-    return [...new Set(
-      Appointments
-        .map(a => a.patientId?._id || a.patientId) // Handle both object and string formats
-        .filter(Boolean) // Remove null/undefined values
-    )];
-  }, [Appointments]);
+    const ids = [
+      ...new Set(
+        appointments
+          .map((a) => (a.patientId?._id || a.patientId))
+          .filter(Boolean)
+      ),
+    ];
+    console.log("✅ Unique patient IDs from appointments:", ids);
+    return ids;
+  }, [appointments]);
 
-  // Fetch appointments once (same as chart)
+  // Fetch appointments on mount
   useEffect(() => {
     dispatch(fetchAppointments());
   }, [dispatch]);
 
-  // Store the current patient when it's fetched
-  useEffect(() => {
-    if (currentPatient && currentPatient._id) {
-      setFetchedPatients(prev => ({
-        ...prev,
-        [currentPatient._id]: currentPatient
-      }));
-    }
-  }, [currentPatient]);
+  // Fetch missing patients
+  const fetchMissingPatients = async () => {
+    console.log("🔁 Starting patient fetch loop");
 
-  // Fetch patients individually based on appointment data
+    for (const id of uniquePatientIds) {
+      if (!fetchedPatientIds.has(id) && !fetchedPatients[id]) {
+        console.log(`➡️ Fetching patient with ID: ${id}`);
+
+        try {
+          const resultAction = await dispatch(fetchShowPatientById(id));
+          console.log("🧾 Result Action:", resultAction);
+
+          if (fetchShowPatientById.fulfilled.match(resultAction)) {
+            const payload = resultAction.payload;
+
+            if (!payload) {
+              console.error("❌ No payload returned for patient ID:", id);
+              continue;
+            }
+
+            const patient = payload?.data || payload;
+
+            if (patient && patient._id) {
+              console.log("✅ Patient fetched:", patient);
+              setFetchedPatients((prev) => ({
+                ...prev,
+                [patient._id]: patient,
+              }));
+              setFetchedPatientIds((prev) => new Set([...prev, id]));
+            } else {
+              console.warn("⚠️ Invalid patient structure:", payload);
+            }
+          } else {
+            console.error("❌ fetchShowPatientById thunk was rejected:", resultAction);
+          }
+        } catch (err) {
+          console.error("❌ Exception during patient fetch:", err);
+        }
+      } else {
+        console.log(`⏩ Already fetched ID: ${id}`);
+      }
+    }
+  };
+
+  // Trigger fetch
   useEffect(() => {
     if (uniquePatientIds.length > 0) {
-      uniquePatientIds.forEach(id => {
-        if (!fetchedPatients[id]) {
-          dispatch(fetchShowPatientById(id));
-        }
-      });
+      fetchMissingPatients();
     }
-  }, [dispatch, uniquePatientIds, fetchedPatients]);
+  }, [uniquePatientIds]);
 
-  // Get patient list from the fetchedPatients
+  // Construct the patient list from fetched data
   const patients = useMemo(() => {
-    console.log('fetchedPatients content:', fetchedPatients);
-    console.log('uniquePatientIds:', uniquePatientIds);
-    
-    const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
-    console.log('Patients result:', result);
+    const result = uniquePatientIds.map((id) => fetchedPatients[id]).filter(Boolean);
+    console.log("📋 Current patients to render:", result);
     return result;
   }, [fetchedPatients, uniquePatientIds]);
 
-  // Check if we're still loading any patients
-  const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
+  const isLoading =
+    loading ||
+    (uniquePatientIds.length > 0 && patients.length < uniquePatientIds.length);
 
   const handlePatientClick = (patient) => {
     setSelectedPatientId(patient._id);
     onPatientSelect(patient);
   };
 
-  // Use patients from store if available, otherwise fallback
   const patientsToDisplay = patients.length > 0 ? patients : fallbackPatients;
 
   const sortedPatients = [...patientsToDisplay].sort((a, b) => {
@@ -136,20 +154,20 @@ export const Patients_List = ({ onPatientSelect, sortBy }) => {
     }
   });
 
-  // Show loading state if we're fetching patients
   if (isLoading && patients.length === 0 && uniquePatientIds.length > 0) {
     return (
       <div className="space-y-3">
         <Card className="p-4">
           <CardContent>
-            <p>Loading patients... ({uniquePatientIds.length} patients to fetch)</p>
+            <p className="text-sm text-gray-500">
+              Fetched: {patients.length} / {uniquePatientIds.length}
+            </p>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  // Show message if no appointments found
   if (uniquePatientIds.length === 0) {
     return (
       <div className="space-y-3">
