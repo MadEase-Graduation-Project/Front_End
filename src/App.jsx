@@ -56,10 +56,10 @@ import { Treatments } from "./pages/doctor/Treatments";
 function App() {
   return (
     <Routes>
-      <Route path="nurse/*" element={<NurseApp />} />
       {/* Main layout */}
       <Route path="/" element={<Landing_Layout />}>
         <Route index element={<Home />} />
+        <Route path="/medbot" element={<MedBot />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
         <Route path="doctors" element={<Doctors />} />
@@ -77,7 +77,6 @@ function App() {
         <Route path="login" element={<LogIn />} />
       </Route>
 
-
       {/* reset pass layout */}
       <Route path="/resetpass" element={<ResetPass_Layout />}>
         <Route index element={<ResetPass />} />
@@ -89,7 +88,6 @@ function App() {
       {/* children (pages that use this layout) like down */}
       {/* <Route index element={<Home/>}/> */}
 
-      <Route path="/medbot" element={<MedBot />} />
       {/* admin layout */}
       <Route path="/admin" element={<Admin_Layout />}>
         <Route path="overview" element={<OverviewPage />} />
@@ -120,7 +118,7 @@ function App() {
       <Route path="nurse/*" element={<NurseApp />} />
 
       {/* doctor layout */}
-    <Route path="/doctor/:doctorName" element={<Doctor_Dashboard_Layout />}>
+      <Route path="/doctor/:doctorName" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
         <Route path="chat" element={<Messages />} />
         <Route path="diagnosis" element={<Diagnosis_doctor />} />

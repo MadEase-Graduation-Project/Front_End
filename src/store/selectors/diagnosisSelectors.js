@@ -7,11 +7,5 @@ export const selectDiagnosisError = (state) =>
   selectDiagnosisState(state).error;
 export const selectSelectedDiagnosis = (state) =>
   selectDiagnosisState(state).selectedDiagnosis;
-
-// selectDiagnosisPagination
-export const selectDiagnosisPagination = (state) => ({
-  currentPage: selectDiagnosisState(state).currentPage,
-  totalPages: selectDiagnosisState(state).totalPages,
-  hasMore: selectDiagnosisState(state).hasMore,
-  loadingMore: selectDiagnosisState(state).loadingMore,
-});
+export const selectTotalDiagnosis = (state) =>
+  selectDiagnosisState(state).totalDiagnosis;
