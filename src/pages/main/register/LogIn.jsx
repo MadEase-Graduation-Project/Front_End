@@ -8,28 +8,24 @@ import UnderLined from "../../../components/patientComps/register/UnderLined";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 
 import { usePopup } from "@/contexts/PopupContext";
 import { login } from "@/store/slices/signSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectSignError,
-  selectSignLoading,
-  selectSignRole,
-} from "@/store/selectors";
+import { selectSignError, selectSignRole } from "@/store/selectors";
 import { fetchMYData } from "@/store/slices/userSlice";
 import { handleNameRoute } from "@/utils/urlHelpers";
 import { selectMyDetails } from "@/store/selectors";
 
 export default function LogIn() {
+  const { setIsLoading } = useOutletContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isActivePopup, setActivePopup } = usePopup();
   const [hasLoginError, setHasLoginError] = useState(false);
-  const [clickLogin, setClickLogin] = useState(false);
 
   const {
     control,
@@ -41,44 +37,45 @@ export default function LogIn() {
   } = useForm({ mode: "onTouched" });
 
   const role = useSelector(selectSignRole);
-  const loading = useSelector(selectSignLoading);
-  const error = useSelector(selectSignError);
   const details = useSelector(selectMyDetails);
+  const errorSign = useSelector(selectSignError);
 
   useEffect(() => {
-    if (error) {
+    if (errorSign) {
       setActivePopup(true);
     }
-  }, [error]);
+  }, [errorSign]);
 
   useEffect(() => {
-    if (role === "Doctor") {
+    if (role) {
       dispatch(fetchMYData());
     }
   }, [role, dispatch]);
 
   useEffect(() => {
-    if (role === "Doctor" && details?.name) {
+    if (role && details?.name) {
       const slug = handleNameRoute(details.name);
-      if (slug) navigate(`/doctor/${slug}`);
+      if (slug) {
+        switch (role) {
+          case "Doctor":
+            navigate(`/doctor/${slug}`);
+            break;
+          case "Patient":
+            navigate(`/`);
+            break;
+          case "Admin":
+            navigate(`/admin/overview`);
+            break;
+          case "Nurse":
+            navigate(`/nurse`);
+            break;
+          default:
+            navigate("/");
+            break;
+        }
+      }
     }
   }, [role, details, navigate]);
-
-  useEffect(() => {
-    if (!clickLogin) return;
-    if (!role) return;
-    switch (role) {
-      case "Patient":
-        navigate("/");
-        break;
-      case "Admin":
-        navigate("/admin/overview");
-        break;
-      case "Nurse":
-        navigate("/nurse/dashboard");
-        break;
-    }
-  }, [role, clickLogin, navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
   const fieldOrder = ["email", "password"];
@@ -113,10 +110,11 @@ export default function LogIn() {
 
   const onSubmit = async (data) => {
     try {
-      setClickLogin(true);
+      setIsLoading(true);
       await dispatch(login(data)).unwrap();
     } catch (error) {
       console.error("Login error:", error.message);
+      setIsLoading(false);
       setHasLoginError(true);
       setActivePopup(true);
     }

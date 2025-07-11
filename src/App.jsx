@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 
-import LogInPage from "./pages/general/LogInPage";
 import Admin_Layout from "@/layouts/AdminLayout/Admin_Layout";
 import OverviewPage from "@/pages/admin/OverviewPage/OverviewPage";
 import AppointmentsPage from "@/pages/admin/AppointmentsPage/AppointmentsPage";

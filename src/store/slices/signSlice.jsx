@@ -5,6 +5,7 @@ import {
   logoutUser,
 } from "../../services/signUserApi";
 import { pendingHandler, rejectedHandler } from "@/utils/casesHandlersUtils";
+import { clearMyDetails } from "./userSlice";
 
 // Async thunks
 export const login = createAsyncThunk(
@@ -21,10 +22,15 @@ export const register = createAsyncThunk("sign/register", async (userData) => {
   return response;
 });
 
-export const logout = createAsyncThunk("sign/logout", async () => {
-  const response = await logoutUser();
-  return response;
-});
+export const logout = createAsyncThunk(
+  "sign/logout",
+  async (_, { dispatch }) => {
+    dispatch(resetSignState());
+    dispatch(clearMyDetails());
+    const response = await logoutUser();
+    return response;
+  }
+);
 
 const initialState = {
   user: null,

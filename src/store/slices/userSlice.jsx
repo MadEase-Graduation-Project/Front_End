@@ -72,8 +72,10 @@ const userSlice = createSlice({
     totalHospitals: 0,
     // loading
     loading: false,
+    loadingMyData: false,
     // error
     error: false,
+    errorMyData: false,
   },
   reducers: {
     clearSelectedUser: (state) => {
@@ -83,8 +85,8 @@ const userSlice = createSlice({
     },
     clearMyDetails: (state) => {
       state.myDetails = {};
-      state.loading = false;
-      state.error = false;
+      state.loadingMyData = false;
+      state.errorMyData = false;
     },
   },
   extraReducers: (builder) => {
@@ -121,12 +123,25 @@ const userSlice = createSlice({
       )
       .addCase(fetchUserById.rejected, rejectedHandler())
       // fetch user data
-      .addCase(fetchMYData.pending, pendingHandler())
+      .addCase(
+        fetchMYData.pending,
+        pendingHandler({ loadingKey: "loadingMyData", errorKey: "errorMyData" })
+      )
       .addCase(
         fetchMYData.fulfilled,
-        fulfilledHandler({ detailsKey: "myDetails" })
+        fulfilledHandler({
+          detailsKey: "myDetails",
+          loadingKey: "loadingMyData",
+          errorKey: "errorMyData",
+        })
       )
-      .addCase(fetchMYData.rejected, rejectedHandler())
+      .addCase(
+        fetchMYData.rejected,
+        rejectedHandler({
+          loadingKey: "loadingMyData",
+          errorKey: "errorMyData",
+        })
+      )
       // remove user
       .addCase(removeUser.pending, pendingHandler())
       .addCase(removeUser.fulfilled, fulfilledHandler())

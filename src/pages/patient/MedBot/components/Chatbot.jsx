@@ -229,8 +229,11 @@ export default function Chatbot() {
                       Wellness tips
                     </div>
                   </div>
-                  <Button className="rounded-full bg-gradient-to-r from-blue-500 to-green-500 px-3 py-3 hover:from-blue-600 hover:to-green-600 disabled:opacity-50 shadow-lg hover:shadow-xl transition-all duration-200 h-auto mt-10">
-                    <button onClick={() => setStarted(true)}>start</button>
+                  <Button
+                    onClick={() => setStarted(true)}
+                    className="rounded-full bg-gradient-to-r from-blue-500 to-green-500 px-3 py-3 hover:from-blue-600 hover:to-green-600 disabled:opacity-50 shadow-lg hover:shadow-xl transition-all duration-200 h-auto mt-10"
+                  >
+                    start
                   </Button>
                 </div>
               )}
