@@ -3,9 +3,27 @@ import Logo_navy from "@/assets/images/LogoNew_navy.svg";
 import Logo_white from "@/assets/images/LogoNew_white.svg";
 
 import { usePopup } from "@/contexts/PopupContext";
+import { useState } from "react";
 
 const Register_Layout = () => {
-  const { isActivePopup } = usePopup(); // 👈 get state from context
+  const { isActivePopup } = usePopup();
+  const [isLoading, setIsLoading] = useState();
+
+  function signLoadin() {
+    if (isLoading) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-white text-lg font-jost font-light">
+              Logging in...
+            </p>
+          </div>
+        </div>
+      );
+    }
+  }
+
   return (
     <div className="w-full bg-mewhite min-h-screen flex items-center justify-center relative">
       <div className="absolute w-4/5 h-auto lg:h-[90vh] flex flex-col lg:flex-row items-stretch p-5">
@@ -44,9 +62,10 @@ const Register_Layout = () => {
               className="block lg:hidden w-2/3 sm:w-[200px] h-auto mb-2 cursor-pointer mx-auto"
             />
           </Link>
-          <Outlet />
+          <Outlet context={{ setIsLoading }} />
         </div>
       </div>
+      {signLoadin()}
     </div>
   );
 };

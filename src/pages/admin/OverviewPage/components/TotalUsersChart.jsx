@@ -264,7 +264,7 @@ export default function TotalUsersChart() {
             animate={{ scale: hoveredSegment ? 1.1 : 1 }}
             transition={{ duration: 0.2 }}
           >
-            {totalUsers.toLocaleString()}
+            {totalUsers?.toLocaleString()}
           </motion.div>
           <div className="text-xs text-gray-400 mt-1">Active</div>
         </motion.div>
@@ -276,7 +276,7 @@ export default function TotalUsersChart() {
           transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
           <PieChart
-            colors={userData.map((item) => item.color)}
+            colors={userData?.map((item) => item.color)}
             series={[
               {
                 data: userData.filter((item) => item.value > 0),
