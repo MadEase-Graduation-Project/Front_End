@@ -57,8 +57,8 @@ function App() {
     <Routes>
       {/* Main layout */}
       <Route path="/" element={<Landing_Layout />}>
-        <Route index element={<Home />} />
         <Route path="/medbot" element={<MedBot />} />
+        <Route index element={<Home />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<AdviceBlogPost />} />
         <Route path="doctors" element={<Doctors />} />

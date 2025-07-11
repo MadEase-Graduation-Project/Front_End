@@ -152,10 +152,11 @@ const userSlice = createSlice({
       .addCase(removeUser.rejected, rejectedHandler())
       // update user data
       .addCase(updateData.pending, pendingHandler())
-      .addCase(
-        updateData.fulfilled,
-        fulfilledHandler({ detailsKey: "myDetails" })
-      )
+      .addCase(updateData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.myDetails = action.payload;
+      })
       .addCase(updateData.rejected, rejectedHandler())
       // change user role
       .addCase(changeUserRoleThunk.pending, pendingHandler())

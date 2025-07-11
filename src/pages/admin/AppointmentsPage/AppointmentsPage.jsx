@@ -258,7 +258,7 @@ export default function AppointmentsPage() {
           onRowClick={handleRowClick}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={10}
+          pageSize={5}
         />
       ) : (
         <ViewCards
@@ -270,7 +270,7 @@ export default function AppointmentsPage() {
           onRowClick={handleRowClick}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={9}
+          pageSize={6}
         />
       )}
 

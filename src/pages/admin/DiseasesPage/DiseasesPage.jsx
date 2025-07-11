@@ -239,7 +239,7 @@ export default function DiseasesPage() {
           showActions={true}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={10}
+          pageSize={5}
         />
       ) : (
         <ViewCards
@@ -250,7 +250,7 @@ export default function DiseasesPage() {
           showActions={true}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={9}
+          pageSize={6}
         />
       )}
 

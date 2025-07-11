@@ -225,7 +225,7 @@ export default function AdvicesPage() {
           onRowClick={handleRowClick}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={10}
+          pageSize={5}
         />
       ) : (
         <ViewCards
@@ -237,7 +237,7 @@ export default function AdvicesPage() {
           onRowClick={handleRowClick}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          pageSize={9}
+          pageSize={6}
         />
       )}
     </div>
