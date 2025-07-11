@@ -115,7 +115,7 @@ const NavBar = ({ scrolled }) => {
           <Link
             to="/medbot"
             onClick={() => setMenuOpen(false)}
-            className="font-jost text-base text-transparent bg-gradient-to-r  from-violet-500 via-purple-500 to-cyan-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+            className="font-jost text-base text-transparent bg-gradient-to-r  from-blue-500 via-teal-500 to-green-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
           >
             Ask Medbot
           </Link>
@@ -167,7 +167,7 @@ const NavBar = ({ scrolled }) => {
 
             <Link
               to="/medbot"
-              className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r  from-violet-300 via-purple-600 to-cyan-400 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+              className="font-jost text-base lg:text-lg xl:text-xl text-transparent bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
             >
               Ask Medbot
             </Link>
