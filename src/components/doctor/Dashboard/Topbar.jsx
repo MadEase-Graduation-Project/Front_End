@@ -73,7 +73,7 @@ export const Topbar = ({ isCollapsed, setIsCollapsed }) => {
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             <TbLayoutSidebarFilled
-              className={`${isCollapsed ? "text-[#1e3356]" : "text-[#142139]"}`}
+              className={`${isCollapsed ? "text-menavy" : "text-[#1e3356]"}`}
               size={`${isCollapsed ? 17 : 20}`}
             />
           </button>
