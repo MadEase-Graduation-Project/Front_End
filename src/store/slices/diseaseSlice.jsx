@@ -35,22 +35,24 @@ export const fetchDiseaseById = createAsyncThunk(
 
 export const createDisease = createAsyncThunk(
   "diseases/createDisease",
-  async ({ diseaseData }) => {
+  async (diseaseData) => {
     return await addDisease(diseaseData);
   }
 );
 
 export const updateDisease = createAsyncThunk(
   "diseases/updateDisease",
-  async ({ id, diseaseData }) => {
-    return await editDisease(id, diseaseData);
+  async ({ id, diseaseData }, { dispatch }) => {
+    await editDisease(id, diseaseData);
+    dispatch(fetchDiseaseById(id));
   }
 );
 
 export const removeDisease = createAsyncThunk(
   "diseases/removeDisease",
   async (id) => {
-    return await deleteDisease(id);
+    await deleteDisease(id);
+    return id;
   }
 );
 
@@ -106,7 +108,11 @@ const diseaseSlice = createSlice({
 
       // Create disease
       .addCase(createDisease.pending, pendingHandler())
-      .addCase(createDisease.fulfilled, fulfilledHandler())
+      .addCase(createDisease.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.diseases.push(action.payload?.data);
+      })
       .addCase(createDisease.rejected, rejectedHandler())
 
       // Update disease
@@ -116,7 +122,17 @@ const diseaseSlice = createSlice({
 
       // Remove disease
       .addCase(removeDisease.pending, pendingHandler())
-      .addCase(removeDisease.fulfilled, fulfilledHandler())
+      .addCase(removeDisease.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.diseases = state.diseases.filter(
+          (disease) => disease._id !== deletedId
+        );
+        if (state.selectedDisease?._id === deletedId) {
+          state.selectedDisease = {};
+        }
+      })
       .addCase(removeDisease.rejected, rejectedHandler());
   },
 });

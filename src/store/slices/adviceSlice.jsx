@@ -46,7 +46,8 @@ export const updateAdvice = createAsyncThunk(
 export const removeAdvice = createAsyncThunk(
   "advices/removeAdvice",
   async (id) => {
-    return await deleteAdvice(id);
+    await deleteAdvice(id);
+    return id;
   }
 );
 
@@ -116,12 +117,25 @@ const adviceSlice = createSlice({
 
       // Update advice
       .addCase(updateAdvice.pending, pendingHandler())
-      .addCase(updateAdvice.fulfilled, fulfilledHandler())
+      .addCase(
+        updateAdvice.fulfilled,
+        fulfilledHandler({ detailsKey: "selectedAdvice" })
+      )
       .addCase(updateAdvice.rejected, rejectedHandler())
 
       // Remove advice
       .addCase(removeAdvice.pending, pendingHandler())
-      .addCase(removeAdvice.fulfilled, fulfilledHandler())
+      .addCase(removeAdvice.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        const deletedId = action.payload;
+        state.advices = state.advices.filter(
+          (advice) => advice._id !== deletedId
+        );
+        if (state.selectedAdvice?._id === deletedId) {
+          state.selectedAdvice = {};
+        }
+      })
       .addCase(removeAdvice.rejected, rejectedHandler())
 
       // Like advice
