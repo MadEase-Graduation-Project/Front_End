@@ -25,7 +25,12 @@ export async function loginUser(credentials) {
  * @returns {Promise<Object>} Registration response
  */
 export async function registerUser(userData) {
-  const response = await api.post(`${BASE_ENDPOINT}/register`, userData);
+  const response = await api.post("/users/register", userData, {
+    withCredentials: false, // 🔥 override global setting here
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   return handleApiResponse(response, "Failed to register user");
 }
 

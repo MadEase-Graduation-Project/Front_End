@@ -7,13 +7,24 @@ import apple from "@/assets/images/apple.svg";
 import FloatingInput from "../../../components/patientComps/register/FloatingInput";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-// import { registerUser, loginUser } from "@/services/userApi";
+import { useState, useEffect } from "react";
 import { usePopup } from "@/contexts/PopupContext";
+import { useDispatch, useSelector } from "react-redux";
+import { register, login } from "@/store/slices/signSlice";
+import {
+  selectSignError,
+  selectSignLoading,
+  selectSignRole,
+} from "@/store/selectors";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { showPopup } = usePopup();
+  const dispatch = useDispatch();
+  const { showPopup, isActivePopup, setActivePopup } = usePopup();
+
+  const role = useSelector(selectSignRole);
+  const loading = useSelector(selectSignLoading);
+  const error = useSelector(selectSignError);
 
   const {
     control,
@@ -51,33 +62,44 @@ export default function SignUp() {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setActivePopup(true);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!role) return;
+    switch (role) {
+      case "Patient":
+        navigate("/medbot");
+        break;
+      case "Admin":
+        navigate("/admin/overview");
+        break;
+      case "Nurse":
+        navigate("/nurse/dashboard");
+        break;
+      case "Doctor":
+        navigate("/doctor");
+        break;
+    }
+  }, [role, navigate]);
+
   const onSubmit = async (data) => {
     try {
       const payload = { ...data, role: "Patient" };
 
-      const regRes = await registerUser(payload);
-      console.log("Registered:", regRes);
-
-      if (regRes?.error) {
-        showPopup(regRes.error || "Registration failed", "error");
-        return;
-      }
-
-      const loginRes = await loginUser({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (loginRes?.accessToken) {
-        localStorage.setItem("accessToken", loginRes.accessToken);
-        localStorage.setItem("userRole", loginRes.Role || "Patient");
-        navigate("/home");
-      } else {
-        showPopup("Registered but couldn't log in automatically", "warning");
-      }
+      await dispatch(register(payload)).unwrap();
+      await dispatch(login({ email: data.email, password: data.password }))
+        .unwrap()
+        .then((res) => {
+          localStorage.setItem("accessToken", res.accessToken);
+          localStorage.setItem("userRole", res.Role || "Patient");
+        });
     } catch (err) {
-      console.error("Signup error:", err);
-      showPopup("Something went wrong. Please try again.", "error");
+      console.error("Signup error:", err.message);
+      setActivePopup(true);
     }
   };
 
@@ -308,8 +330,9 @@ export default function SignUp() {
         <button
           className="bg-mepale font-jost font-light text-white text-sm sm:text-base md:text-lg lg:text-xl w-full h-[30px] sm:h-[48px] rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250"
           type="submit"
+          disabled={loading}
         >
-          Sign up
+          {loading ? "Signing up..." : "Sign up"}
         </button>
       </div>
     </form>

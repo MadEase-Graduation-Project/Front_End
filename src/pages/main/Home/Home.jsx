@@ -3,7 +3,7 @@ import ServicesLine from "@/components/patientComps/landingPage/ServicesLine";
 import Hero from "@/components/patientComps/landingPage/Hero";
 import MedicalCasesSection from "@/components/patientComps/landingPage/MedicalCases/MedicalCasesSection";
 import FaqQuestion from "@/components/patientComps/landingPage/FaqQuestions";
-// import AdCarousel from "@/components/patientComps/landingPage/AdCard/AdCarousel";
+import AdCarousel from "@/components/patientComps/landingPage/AdCard/AdCarousel";
 
 // const adsData = [
 //   {
@@ -47,8 +47,10 @@ const Home = () => {
       </div>
       <BookApp />
       <MedicalCasesSection />
-      <section className="w-full px-4 sm:px-16">{/* <AdCarousel /> */}</section>
-      <p className="font-bold text-menavy">ana mobile</p>
+      <section className="w-full px-4 sm:px-16">
+        <AdCarousel />
+      </section>
+      {/* <p className="font-bold text-menavy">ana mobile</p> */}
       <p className="font-bold text-menavy">ana advices</p>
       <FaqQuestion />
     </div>

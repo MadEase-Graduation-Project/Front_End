@@ -1,5 +1,8 @@
 import about from "@/assets/images/about.png";
+import { useNavigate } from "react-router-dom";
+
 const BookApp = () => {
+  const navigate = useNavigate();
   return (
     <div className="w-full px-16 md:px-28 lg:px-20">
       <div className="bg-meblue2 flex flex-col-reverse lg:flex-row items-center lg:items-stretch justify-between gap-5 lg:gap-10 rounded-3xl overflow-hidden">
@@ -10,7 +13,10 @@ const BookApp = () => {
             system with continuous consultations and 24/7 access to expert
             advice.
           </p>
-          <button className="bg-mepale font-jost font-normal text-white text-xs sm:text-sm md:text-base lg:text-lg w-full lg:w-[50%] h-auto py-2 md:py-3 rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250 text-nowrap">
+          <button
+            onClick={() => navigate("/doctors")}
+            className="bg-mepale font-jost font-normal text-white text-xs sm:text-sm md:text-base lg:text-lg w-full lg:w-[50%] h-auto py-2 md:py-3 rounded-[5px] hover:bg-menavy/90 hover:brightness-110 duration-250 text-nowrap"
+          >
             Book appointment
           </button>
         </div>
