@@ -81,12 +81,13 @@ export default function AdCarousel({ interval = 7000 }) {
             Reach thousands of MedEase users every day. Showcase your service,
             medicine, or clinic in this slot.
           </p>
-          <button
+          <a
+            href="mailto:nancymosaad24@gmail.com"
             className="bg-mepale text-center w-1/2 text-white text-sm sm:text-base px-5 py-2 rounded-md
-                       hover:bg-menavy/90 transition-colors mx-auto lg:mx-0"
+             hover:bg-menavy/90 transition-colors mx-auto lg:mx-0 block no-underline"
           >
-            Contact us
-          </button>
+            Contact us
+          </a>
         </div>
       </div>
     </section>
