@@ -10,8 +10,7 @@ import {
   YAxis,
   ResponsiveContainer,
 } from "recharts"
-import { fetchAllPatients, fetchShowPatientById } from "@/store/slices/patientSlice"
-
+import { fetchShowPatientById } from "@/store/slices/patientSlice"
 import {
   Card,
   CardHeader,
@@ -24,7 +23,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { selectAllAppointments, selectAllPatients, selectPatientsLoading, selectShowPatientById } from "@/store/selectors"
+import {
+  selectAllAppointments,
+  selectShowPatientById,
+  selectPatientsLoading,
+} from "@/store/selectors"
 import { fetchAppointments } from "@/store/slices/appointmentSlice"
 
 const calculateAge = (dob) => {
@@ -39,99 +42,98 @@ const calculateAge = (dob) => {
 }
 
 const getAgeGroup = (age) => {
-  if (age < 18) return "0-17"
-  if (age < 30) return "18-29"
-  if (age < 45) return "30-44"
-  if (age < 60) return "45-59"
-  return "60+"
+  if (age < 10) return "0-9"
+  if (age < 20) return "10-19"
+  if (age < 30) return "20-29"
+  if (age < 40) return "30-39"
+  if (age < 50) return "40-49"
+  if (age < 60) return "50-59"
+  if (age < 70) return "60-69"
+  return "70+"
 }
 
 export default function ChartAreaAgeGender() {
-const [fetchedPatients, setFetchedPatients] = useState({});
-const dispatch = useDispatch();
-const Appointments = useSelector(selectAllAppointments);
-const currentPatient = useSelector(selectShowPatientById); // This is a single patient object
-const loading = useSelector(selectPatientsLoading);
+  const [fetchedPatients, setFetchedPatients] = useState({})
+  const dispatch = useDispatch()
+  const Appointments = useSelector(selectAllAppointments)
+  const currentPatient = useSelector(selectShowPatientById)
+  const loading = useSelector(selectPatientsLoading)
 
-// Memoize unique patient IDs from appointments (adjusted for API structure)
-const uniquePatientIds = useMemo(() => {
-  return [...new Set(
-    Appointments
-      .map(a => a.patientId?._id || a.patientId) // Handle both object and string formats
-      .filter(Boolean) // Remove null/undefined values
-  )];
-}, [Appointments]);
+  const uniquePatientIds = useMemo(() => {
+    return [
+      ...new Set(
+        Appointments.map((a) => a.patientId?._id || a.patientId).filter(Boolean)
+      ),
+    ]
+  }, [Appointments])
 
-// Store the current patient when it's fetched
-useEffect(() => {
-  if (currentPatient && currentPatient._id) {
-    setFetchedPatients(prev => ({
-      ...prev,
-      [currentPatient._id]: currentPatient
-    }));
-  }
-}, [currentPatient]);
-
-// Fetch patients individually based on appointment data
-useEffect(() => {
-  if (uniquePatientIds.length > 0) {
-    uniquePatientIds.forEach(id => {
-      if (!fetchedPatients[id]) {
-        dispatch(fetchShowPatientById(id));
-      }
-    });
-  }
-}, [dispatch, uniquePatientIds, fetchedPatients]);
-
-// Fetch appointments once
-useEffect(() => {
-  dispatch(fetchAppointments());
-}, [dispatch]);
-
-// Get patient list from the fetchedPatients
-const patients = useMemo(() => {
-  console.log('Chart - fetchedPatients content:', fetchedPatients);
-  console.log('Chart - uniquePatientIds:', uniquePatientIds);
-  
-  const result = uniquePatientIds.map(id => fetchedPatients[id]).filter(Boolean);
-  console.log('Chart - Patients result:', result);
-  return result;
-}, [fetchedPatients, uniquePatientIds]);
-
-// Check if we're still loading any patients
-const isLoading = loading || (uniquePatientIds.length > 0 && uniquePatientIds.some(id => !fetchedPatients[id]));
-
-// Chart Data
-const chartData = useMemo(() => {
-  const dataMap = {};
-
-  patients.forEach((patient) => {
-    const age = calculateAge(patient.dateOfBirth);
-    const ageGroup = getAgeGroup(age);
-    const gender = patient.gender?.toLowerCase();
-
-    if (!dataMap[ageGroup]) {
-      dataMap[ageGroup] = { male: 0, female: 0 };
+  useEffect(() => {
+    if (currentPatient && currentPatient._id) {
+      setFetchedPatients((prev) => ({
+        ...prev,
+        [currentPatient._id]: currentPatient,
+      }))
     }
+  }, [currentPatient])
 
-    if (gender === "male") dataMap[ageGroup].male++;
-    else if (gender === "female") dataMap[ageGroup].female++;
-  });
+  useEffect(() => {
+    if (uniquePatientIds.length > 0) {
+      uniquePatientIds.forEach((id) => {
+        if (!fetchedPatients[id]) {
+          dispatch(fetchShowPatientById(id))
+        }
+      })
+    }
+  }, [dispatch, uniquePatientIds, fetchedPatients])
 
-  return Object.entries(dataMap).map(([ageGroup, counts]) => ({
-    ageGroup,
-    ...counts,
-  }));
-}, [patients]);
+  useEffect(() => {
+    dispatch(fetchAppointments())
+  }, [dispatch])
+
+  const patients = useMemo(() => {
+    return uniquePatientIds.map((id) => fetchedPatients[id]).filter(Boolean)
+  }, [fetchedPatients, uniquePatientIds])
+
+  const isLoading =
+    loading ||
+    (uniquePatientIds.length > 0 &&
+      uniquePatientIds.some((id) => !fetchedPatients[id]))
+
+  const chartData = useMemo(() => {
+    const dataMap = {}
+
+    patients.forEach((patient) => {
+      const age = calculateAge(patient.dateOfBirth)
+      const ageGroup = getAgeGroup(age)
+      const gender = patient.gender?.toLowerCase()
+
+      if (!dataMap[ageGroup]) {
+        dataMap[ageGroup] = { male: 0, female: 0 }
+      }
+
+      if (gender === "male") dataMap[ageGroup].male++
+      else if (gender === "female") dataMap[ageGroup].female++
+    })
+
+    return Object.entries(dataMap)
+      .sort((a, b) => {
+        const parseMin = (label) => parseInt(label.split("-")[0]) || 70
+        return parseMin(a[0]) - parseMin(b[0])
+      })
+      .map(([ageGroup, counts]) => ({
+        ageGroup,
+        ...counts,
+      }))
+  }, [patients])
 
   const chartConfig = {
     male: {
       label: "Male",
-      color: "#3b82f6", // blue
+      color: "#3b82f6",
     },
     female: {
       label: "Female",
-      color: "#ec4899", // pink
+      color: "#ec4899",
     },
   }
 
@@ -141,7 +143,9 @@ const chartData = useMemo(() => {
         <CardHeader>
           <CardTitle>Patient Age & Gender Distribution</CardTitle>
         </CardHeader>
-        <CardContent>Loading patients... ({uniquePatientIds.length} patients to fetch)</CardContent>
+        <CardContent>
+          Loading patients... ({uniquePatientIds.length} patients to fetch)
+        </CardContent>
       </Card>
     )
   }
