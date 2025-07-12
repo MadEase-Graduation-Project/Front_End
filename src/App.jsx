@@ -119,7 +119,7 @@ function App() {
       {/* doctor layout */}
       <Route path="/doctor/:doctorName" element={<Doctor_Dashboard_Layout />}>
         <Route index element={<Main_Grid />} />
-        <Route path="chat" element={<Messages />} />
+        {/* <Route path="chat" element={<Messages />} /> */}
         <Route path="diagnosis" element={<Diagnosis_doctor />} />
         <Route path="patients" element={<Patients_doctor />} />
         <Route path="advice" element={<Advice />} />

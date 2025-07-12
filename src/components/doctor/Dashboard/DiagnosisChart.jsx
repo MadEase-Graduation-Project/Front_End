@@ -1,6 +1,5 @@
 import {
   selectAllAppointments,
-  selectPatientsLoading,
   selectShowPatientById,
 } from "@/store/selectors";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
@@ -62,20 +61,20 @@ const DiagnosisChart = () => {
   const dispatch = useDispatch();
   const [fetchedPatients, setFetchedPatients] = useState({});
   const [diagnosisMap, setDiagnosisMap] = useState({});
-  const [isDiagnosisLoading, setIsDiagnosisLoading] = useState(true);
   const [diagnosisError, setDiagnosisError] = useState(null);
   const diagnosisFetchedRef = useRef(new Set());
 
   const appointments = useSelector(selectAllAppointments);
   const currentPatient = useSelector(selectShowPatientById);
-  const patientsLoading = useSelector(selectPatientsLoading);
 
   const uniquePatientIds = useMemo(() => {
-    return [...new Set(
-      appointments
-        .map((a) => a.patientId?._id || a.patientId)
-        .filter(Boolean)
-    )];
+    return [
+      ...new Set(
+        appointments
+          .map((a) => a.patientId?._id || a.patientId)
+          .filter(Boolean)
+      ),
+    ];
   }, [appointments]);
 
   useEffect(() => {
@@ -105,17 +104,10 @@ const DiagnosisChart = () => {
     return uniquePatientIds.map((id) => fetchedPatients[id]).filter(Boolean);
   }, [fetchedPatients, uniquePatientIds]);
 
-  const isLoadingPatients =
-    patientsLoading ||
-    (uniquePatientIds.length > 0 &&
-      uniquePatientIds.some((id) => !fetchedPatients[id]));
-
   useEffect(() => {
     const fetchDiagnoses = async () => {
       try {
-        setIsDiagnosisLoading(true);
         const newDiagnosisMap = {};
-
         for (const patient of patients) {
           if (!diagnosisFetchedRef.current.has(patient._id)) {
             const result = await getAllDiagnosis(patient._id);
@@ -123,19 +115,16 @@ const DiagnosisChart = () => {
             diagnosisFetchedRef.current.add(patient._id);
           }
         }
-
         setDiagnosisMap((prev) => ({ ...prev, ...newDiagnosisMap }));
       } catch (err) {
         setDiagnosisError(err.message || "Failed to fetch diagnosis");
-      } finally {
-        setIsDiagnosisLoading(false);
       }
     };
 
-    if (patients.length > 0 && !isLoadingPatients) {
+    if (patients.length > 0) {
       fetchDiagnoses();
     }
-  }, [patients, isLoadingPatients]);
+  }, [patients]);
 
   const chartData = useMemo(() => {
     const counts = {};
@@ -149,26 +138,20 @@ const DiagnosisChart = () => {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [diagnosisMap]);
 
+  const allDiagnosesEmpty = useMemo(() => {
+    return Object.values(diagnosisMap).every((d) => d.length === 0);
+  }, [diagnosisMap]);
+
+  const noDiagnosisPatients = useMemo(() => {
+    return patients.filter((p) => (diagnosisMap[p._id]?.length || 0) === 0);
+  }, [patients, diagnosisMap]);
+
   const renderCardContent = (content) => (
     <div className="flex flex-col items-center justify-center h-64 text-center text-gray-500">
       <h2 className="text-lg md:text-xl font-semibold mb-4">Average Diagnoses</h2>
       {content}
     </div>
   );
-
-  if (isLoadingPatients || (isDiagnosisLoading && chartData.length === 0)) {
-    return (
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-4 col-span-4">
-        {renderCardContent(
-          <p>
-            {isLoadingPatients
-              ? `Loading patients... (${uniquePatientIds.length} patients to fetch)`
-              : "Loading diagnoses..."}
-          </p>
-        )}
-      </div>
-    );
-  }
 
   if (diagnosisError) {
     return (
@@ -188,10 +171,21 @@ const DiagnosisChart = () => {
     );
   }
 
-  if (chartData.length === 0) {
+  if (chartData.length === 0 || allDiagnosesEmpty) {
     return (
       <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-4 col-span-4">
-        {renderCardContent(<p>No diagnosis data available</p>)}
+        {renderCardContent(
+          <>
+            <p>No diagnosis data available for any patients.</p>
+            {noDiagnosisPatients.length > 0 && (
+              <ul className="mt-2 text-sm text-gray-600">
+                {noDiagnosisPatients.map((p) => (
+                  <li key={p._id}>• {p.name}</li>
+                ))}
+              </ul>
+            )}
+          </>
+        )}
       </div>
     );
   }
