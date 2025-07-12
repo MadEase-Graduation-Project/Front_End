@@ -6,7 +6,7 @@ import { usePopup } from "@/contexts/PopupContext";
 import { useState } from "react";
 
 const Register_Layout = () => {
-  const { isActivePopup } = usePopup();
+  const { isActivePopup, popupType } = usePopup();
   const [isLoading, setIsLoading] = useState();
 
   function signLoadin() {
@@ -46,9 +46,17 @@ const Register_Layout = () => {
 
         {isActivePopup && (
           <div className="absolute top-10 lg:top-10 left-1/2 lg:left-3/4 transform -translate-x-1/2 w-[80%] md:w-[70%] lg:w-[60%] max-w-[400px] z-50">
-            <div className="animate-slide-up bg-red-100 text-red-800 border border-red-300 rounded-xl px-3 sm:px-5 py-2 sm:py-3 shadow-md transition-all duration-700 ease-in-out text-center">
+            <div
+              className={`animate-slide-up rounded-xl px-3 sm:px-5 py-2 sm:py-3 shadow-md transition-all duration-700 ease-in-out text-center ${
+                popupType === "confirmation"
+                  ? "bg-green-100 text-green-800 border border-green-300"
+                  : "bg-red-100 text-red-800 border border-red-300"
+              }`}
+            >
               <p className="text-[11px] sm:text-sm md:text-base font-medium">
-                Invalid email or password
+                {popupType === "confirmation"
+                  ? "An email has been sent to confirm your account. Please check your inbox."
+                  : "Invalid email or password"}
               </p>
             </div>
           </div>

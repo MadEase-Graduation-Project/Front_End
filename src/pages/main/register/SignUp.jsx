@@ -11,18 +11,13 @@ import { useState, useEffect } from "react";
 import { usePopup } from "@/contexts/PopupContext";
 import { useDispatch, useSelector } from "react-redux";
 import { register, login } from "@/store/slices/signSlice";
-import {
-  selectSignError,
-  selectSignLoading,
-  selectSignRole,
-} from "@/store/selectors";
+import { selectSignError, selectSignLoading } from "@/store/selectors";
 
 export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showPopup, isActivePopup, setActivePopup } = usePopup();
 
-  const role = useSelector(selectSignRole);
   const loading = useSelector(selectSignLoading);
   const error = useSelector(selectSignError);
 
@@ -68,35 +63,12 @@ export default function SignUp() {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (!role) return;
-    switch (role) {
-      case "Patient":
-        navigate("/medbot");
-        break;
-      case "Admin":
-        navigate("/admin/overview");
-        break;
-      case "Nurse":
-        navigate("/nurse/dashboard");
-        break;
-      case "Doctor":
-        navigate("/doctor");
-        break;
-    }
-  }, [role, navigate]);
-
   const onSubmit = async (data) => {
     try {
-      const payload = { ...data, role: "Patient" };
-
+      const payload = { ...data };
       await dispatch(register(payload)).unwrap();
-      await dispatch(login({ email: data.email, password: data.password }))
-        .unwrap()
-        .then((res) => {
-          localStorage.setItem("accessToken", res.accessToken);
-          localStorage.setItem("userRole", res.Role || "Patient");
-        });
+      showPopup("confirmation"); // custom type (h3mlha fel layout))
+      navigate("/register/login");
     } catch (err) {
       console.error("Signup error:", err.message);
       setActivePopup(true);

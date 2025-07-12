@@ -11,7 +11,6 @@ import { fetchMYData } from "@/store/slices/userSlice";
 import { logout } from "@/store/slices/signSlice";
 
 // Selectors
-import { selectSignRole } from "@/store/selectors/signSelectors";
 import { selectMyDetails } from "@/store/selectors/userSelectors";
 
 // UI primitives
@@ -23,8 +22,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-/* ------------------------------------------------------------------ */
-/* Links shown in both desktop and mobile menus                       */
 const navItems = [
   { label: "Medical blogs", path: "/community" },
   { label: "Location", path: "/location" },
@@ -40,12 +37,17 @@ const NavBar = ({ scrolled }) => {
   const location = useLocation();
 
   const dispatch = useDispatch();
-  const currentRole = useSelector(selectSignRole); // 'Patient' | 'Doctor' | ...
-  const myDetails = useSelector(selectMyDetails); // contains ImgUrl, name, ...
+  const myDetails = useSelector(selectMyDetails);
+  const currentRole = myDetails?.role || localStorage.getItem("role") || null;
 
   useEffect(() => {
-    if (currentRole === "Patient") dispatch(fetchMYData());
-  }, [dispatch, currentRole]);
+    const token = localStorage.getItem("token");
+    if (!myDetails?.role && token) {
+      dispatch(fetchMYData());
+    } else if (myDetails?.role === "Patient") {
+      dispatch(fetchMYData());
+    }
+  }, [dispatch, myDetails?.role]);
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -72,7 +74,6 @@ const NavBar = ({ scrolled }) => {
 
   return (
     <>
-      {/* Overlay behind mobile drawer */}
       {menuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity"
@@ -80,7 +81,6 @@ const NavBar = ({ scrolled }) => {
         />
       )}
 
-      {/* Mobile menu */}
       <div
         ref={menuRef}
         className={`
@@ -107,8 +107,7 @@ const NavBar = ({ scrolled }) => {
             <button
               key={label}
               onClick={() => goTo(path)}
-              className="font-jost text-base text-menavy font-semibold text-left
-             transition hover:text-mepale hover:brightness-110 duration-250"
+              className="font-jost text-base text-menavy font-semibold text-left transition hover:text-mepale hover:brightness-110 duration-250"
             >
               {label}
             </button>
@@ -117,27 +116,23 @@ const NavBar = ({ scrolled }) => {
           <Link
             to="/medbot"
             onClick={() => setMenuOpen(false)}
-            className="font-jost text-base text-transparent bg-gradient-to-r  from-blue-500 via-teal-500 to-green-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
+            className="font-jost text-base text-transparent bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 bg-clip-text font-semibold bg-[length:200%] animate-gradient-x"
           >
             Ask Medbot
           </Link>
         </nav>
       </div>
 
-      {/* Top Navbar */}
       <nav
-        className={`w-full h-[80px] sm:h-[100px] bg-mewhite px-4 sm:px-8 py-4 fixed top-0 left-0 z-30
-        transition-shadow duration-200 ${
+        className={`w-full h-[80px] sm:h-[100px] bg-mewhite px-4 sm:px-8 py-4 fixed top-0 left-0 z-30 transition-shadow duration-200 ${
           scrolled ? "shadow-2xl" : "shadow-md"
         }`}
       >
         <div className="relative w-full h-full flex items-center justify-between">
-          {/* Hamburger menu (mobile) */}
           <button className="lg:hidden z-40" onClick={() => setMenuOpen(true)}>
             <Menu className="w-6 sm:w-7 text-menavy" />
           </button>
 
-          {/* Logo */}
           <Link
             to="/"
             onClick={(e) => {
@@ -154,14 +149,12 @@ const NavBar = ({ scrolled }) => {
             />
           </Link>
 
-          {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-10 xl:gap-20 z-40">
             {navItems.map(({ label, path }) => (
               <button
                 key={label}
                 onClick={() => goTo(path)}
-                className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold 
-               transition hover:text-mepale hover:brightness-110 duration-250"
+                className="font-jost text-base lg:text-lg xl:text-xl text-menavy font-semibold transition hover:text-mepale hover:brightness-110 duration-250"
               >
                 {label}
               </button>
@@ -175,16 +168,13 @@ const NavBar = ({ scrolled }) => {
             </Link>
           </div>
 
-          {/* Right-hand icons */}
           <div className="flex gap-2 sm:gap-3 md:gap-5 items-center text-menavy">
-            {/* Mail icon – only for logged-in Patient */}
             {currentRole === "Patient" && (
               <button onClick={() => navigate("/test")} aria-label="Messages">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 xl:w-7 xl:h-7" />
               </button>
             )}
 
-            {/* Avatar and Dropdown for Patient */}
             {currentRole === "Patient" ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

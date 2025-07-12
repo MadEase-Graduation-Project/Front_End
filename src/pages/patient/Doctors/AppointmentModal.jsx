@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 
-export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, isLoading }) {
+export default function AppointmentModal({
+  doctor,
+  isOpen,
+  onClose,
+  onConfirm,
+  isLoading,
+}) {
   const [appointmentDate, setAppointmentDate] = useState("");
-  const [priority, setPriority] = useState("Normal");
+  const [priority, setPriority] = useState("low");
 
   // Close modal on Escape key
   useEffect(() => {
@@ -30,9 +36,9 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
       return;
     }
 
-    onConfirm({ 
+    onConfirm({
       priority: priority.toLowerCase(),
-      appointmentDate 
+      appointmentDate,
     });
     // Don't call onClose() here - let the parent handle it after successful booking
   };
@@ -40,7 +46,7 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
   const handleClose = () => {
     // Reset form when closing
     setAppointmentDate("");
-    setPriority("Normal");
+    setPriority("low");
     onClose();
   };
 
@@ -53,16 +59,16 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       onClick={handleBackdropClick}
     >
-      <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto transform transition-all duration-200 scale-100"
+      <div
+        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto transform transition-all duration-400 scale-100"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-400">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
@@ -77,8 +83,18 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
               disabled={isLoading}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -96,23 +112,35 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
               className="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               disabled={isLoading}
             >
-              <option value="Normal">Normal</option>
-              <option value="Low">Low</option>
-              <option value="Important">Important</option>
-              <option value="Critical">Critical</option>
+              <option value="low">Low</option>
+              <option value="moderate">Moderate</option>
+              <option value="important">Important</option>
+              <option value="critical">Critical</option>
             </select>
             <div className="mt-2 flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${
-                priority === 'Normal' ? 'bg-green-500' :
-                priority === 'Low' ? 'bg-yellow-500' :
-                priority === 'Important' ? 'bg-orange-500' :
-                'bg-red-500'
-              }`}></div>
+              <div
+                className={`w-3 h-3 rounded-full ${
+                  priority === "low"
+                    ? "bg-green-400"
+                    : priority === "moderate"
+                    ? "bg-yellow-400"
+                    : priority === "important"
+                    ? "bg-orange-400"
+                    : priority === "critical"
+                    ? "bg-red-400"
+                    : "bg-gray-400"
+                }`}
+              ></div>
               <span className="text-sm text-gray-600">
-                {priority === 'Normal' ? 'Normal Priority' :
-                 priority === 'Low' ? 'Low Priority' :
-                 priority === 'Important' ? 'Important Priority' :
-                 'Critical Priority'}
+                {priority === "low"
+                  ? "Low Priority"
+                  : priority === "moderate"
+                  ? "Moderate Priority"
+                  : priority === "important"
+                  ? "Important Priority"
+                  : priority === "critical"
+                  ? "Critical Priority"
+                  : "Normal Priority"}
               </span>
             </div>
           </div>
@@ -132,7 +160,7 @@ export default function AppointmentModal({ doctor, isOpen, onClose, onConfirm, i
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-gray-400 flex justify-end gap-3">
           <button
             onClick={handleClose}
             disabled={isLoading}
