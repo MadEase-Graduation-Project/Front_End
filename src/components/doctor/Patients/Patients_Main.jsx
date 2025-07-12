@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,6 +14,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { fetchAllPatients } from "@/store/slices/patientSlice";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { getAllDiagnosis } from "@/services/diagnosisApi";
+import { handleNameRoute } from "@/utils/urlHelpers";
+import { selectMyDetails } from "@/store/selectors";
+import { fetchMYData } from "@/store/slices/userSlice";
 
 export const Patients_Main = ({ selectedPatient, patientsList }) => {
   const dispatch = useDispatch();
@@ -34,6 +37,17 @@ export const Patients_Main = ({ selectedPatient, patientsList }) => {
 
   const patient = selectedPatient;
   const patientId = patient?._id;
+  const myDetails = useSelector(selectMyDetails);
+
+ 
+
+  useEffect(() => {
+    dispatch(fetchMYData());
+  }, [dispatch]);
+
+  const doctorSlug = useMemo(() => {
+    return myDetails?.name ? handleNameRoute(myDetails.name) : "";
+  }, [myDetails]);
 
   // Fetch all patients and appointments on mount
   useEffect(() => {
@@ -118,7 +132,9 @@ export const Patients_Main = ({ selectedPatient, patientsList }) => {
                 value={gender}
               />
               <InfoRow
-                icon={<IoLocationOutline className="w-5 h-5 text-menavy my-3" />}
+                icon={
+                  <IoLocationOutline className="w-5 h-5 text-menavy my-3" />
+                }
                 label="City"
                 value={city}
               />
@@ -164,7 +180,9 @@ export const Patients_Main = ({ selectedPatient, patientsList }) => {
               <button
                 className="px-4 py-2 bg-[#37568d] text-white rounded-md text-sm font-medium hover:bg-[#1e3356] transition"
                 onClick={() =>
-                  navigate("/doctor/diagnosis", { state: { patient } })
+                  navigate(`/doctor/${doctorSlug}/diagnosis`, {
+                    state: { patient },
+                  })
                 }
               >
                 + Add Diagnosis

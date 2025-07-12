@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { selectMyDetails } from "@/store/selectors";
 import { CiPillsBottle1 } from "react-icons/ci";
 
+import logo from "../../../assets/logo-sidebar-white.png";
 
 //* links classes
 const linkStyles = cn(
@@ -36,7 +37,7 @@ export default function Sidebar({ currentPath, isCollapsed }) {
 
   return (
     <div
-      className={`fixed top-0 left-0 flex flex-col bg-[#142139] h-screen shadow-lg shadow-gray-900/50 ${
+      className={`fixed top-0 left-0 flex flex-col bg-menavy h-screen shadow-lg shadow-gray-900/50 ${
         isCollapsed
           ? "w-screen lg:w-44 sm:w-40"
           : "hidden lg:w-14 sm:flex sm:w-12"
@@ -44,7 +45,7 @@ export default function Sidebar({ currentPath, isCollapsed }) {
     >
       {/*  */}
       <div className="w-full flex items-center gap-3 h-10 text-white mb-12">
-        <img src="/logo.png" alt="logo" className="w-10 self-center" />
+        <img src={logo} alt="logo" className="w-10 self-center rounded-md" />
         {isCollapsed && <span className="text-xl">MedEase</span>}
       </div>
       {/*  */}

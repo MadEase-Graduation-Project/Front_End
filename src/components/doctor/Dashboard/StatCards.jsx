@@ -6,23 +6,39 @@ import { fetchShowPatientById } from "@/store/slices/patientSlice";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { selectAllAppointments, selectShowPatientById, selectPatientsLoading } from "@/store/selectors";
 
+// Helper function to calculate percentage change
+const calculateTrend = (current, previous) => {
+  if (previous === 0) {
+    return current > 0 ? "+100%" : "0%";
+  }
+  
+  const percentChange = ((current - previous) / previous) * 100;
+  const sign = percentChange >= 0 ? "+" : "";
+  return `${sign}${Math.round(percentChange)}%`;
+};
+
+// Helper function to determine trend direction
+const getTrendDirection = (trendString) => {
+  return trendString.startsWith("+") || trendString === "0%" ? "up" : "down";
+};
+
 export const StatCards = () => {
   const [fetchedPatients, setFetchedPatients] = useState({});
   const dispatch = useDispatch();
   
   // Use the same selectors as other components
-  const Appointments = useSelector(selectAllAppointments);
+  const appointments = useSelector(selectAllAppointments);
   const currentPatient = useSelector(selectShowPatientById);
   const loading = useSelector(selectPatientsLoading);
 
   // Memoize unique patient IDs from appointments
   const uniquePatientIds = useMemo(() => {
     return [...new Set(
-      Appointments
+      appointments
         .map(a => a.patientId?._id || a.patientId)
         .filter(Boolean)
     )];
-  }, [Appointments]);
+  }, [appointments]);
 
   // Store the current patient when it's fetched
   useEffect(() => {
@@ -56,62 +72,124 @@ export const StatCards = () => {
   }, [fetchedPatients, uniquePatientIds]);
 
   // Calculate date ranges
-  const today = new Date();
-  const todaydate = `to ${today.toLocaleDateString()}`;
-  const weekAgo = new Date();
-  weekAgo.setDate(today.getDate() - 7);
-  const weekAgoDate = weekAgo.toLocaleDateString();
-  const weekperiod = `${weekAgoDate} ${todaydate}`;
+  const { today, weekAgo, previousWeekStart, todayDate, weekPeriod } = useMemo(() => {
+    const today = new Date();
+    const weekAgo = new Date();
+    weekAgo.setDate(today.getDate() - 7);
+    
+    const previousWeekStart = new Date();
+    previousWeekStart.setDate(today.getDate() - 14);
+    
+    return {
+      today,
+      weekAgo,
+      previousWeekStart,
+      todayDate: `to ${today.toLocaleDateString()}`,
+      weekPeriod: `${weekAgo.toLocaleDateString()} to ${today.toLocaleDateString()}`
+    };
+  }, []);
 
-  // Calculate patients registered this week
-  const patientsThisWeek = useMemo(() => {
-    return patients.filter(patient => {
+  // Calculate metrics with proper trend analysis
+  const metrics = useMemo(() => {
+    // Debug logging
+    console.log('Debug - patients:', patients);
+    console.log('Debug - appointments:', appointments);
+    console.log('Debug - patients length:', patients?.length);
+    console.log('Debug - appointments length:', appointments?.length);
+    
+    if (!patients || !appointments || patients.length === 0 || appointments.length === 0) {
+      console.log('Debug - Missing data, returning zeros');
+      return {
+        totalPatients: uniquePatientIds?.length || 0,
+        patientsThisWeek: 0,
+        patientsTrend: "0%",
+        totalAppointments: appointments?.length || 0,
+        appointmentsThisWeek: 0,
+        appointmentsTrend: "0%"
+      };
+    }
+
+    // Calculate patients registered this week
+    const patientsThisWeek = patients.filter(patient => {
       const createdDate = new Date(patient.createdAt);
       return createdDate >= weekAgo && createdDate <= today;
     }).length;
-  }, [patients, weekAgo, today]);
 
-  // Calculate appointments this week
-  const appointmentsThisWeek = useMemo(() => {
-    return Appointments.filter(appointment => {
+    // Calculate patients registered previous week for trend
+    const patientsPreviousWeek = patients.filter(patient => {
+      const createdDate = new Date(patient.createdAt);
+      return createdDate >= previousWeekStart && createdDate < weekAgo;
+    }).length;
+
+    // Calculate appointments this week
+    const appointmentsThisWeek = appointments.filter(appointment => {
       const appointmentDate = new Date(appointment.createdAt || appointment.date);
       return appointmentDate >= weekAgo && appointmentDate <= today;
     }).length;
-  }, [Appointments, weekAgo, today]);
 
-  // Calculate trends (you can implement more sophisticated logic here)
-  const patientsTrend = patientsThisWeek > 0 ? "+100%" : "0%";
-  const appointmentsTrend = appointmentsThisWeek > 0 ? "+100%" : "0%";
+    // Calculate appointments previous week for trend
+    const appointmentsPreviousWeek = appointments.filter(appointment => {
+      const appointmentDate = new Date(appointment.createdAt || appointment.date);
+      return appointmentDate >= previousWeekStart && appointmentDate < weekAgo;
+    }).length;
+
+    // Calculate trends
+    const patientsTrend = calculateTrend(patientsThisWeek, patientsPreviousWeek);
+    const appointmentsTrend = calculateTrend(appointmentsThisWeek, appointmentsPreviousWeek);
+
+    return {
+      totalPatients: uniquePatientIds.length,
+      patientsThisWeek,
+      patientsTrend,
+      totalAppointments: appointments.length,
+      appointmentsThisWeek,
+      appointmentsTrend
+    };
+  }, [patients, appointments, weekAgo, today, previousWeekStart]);
+
+  if (loading) {
+    return (
+      <>
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="p-4 bg-gray-100 col-span-1 sm:col-span-1 md:col-span-3 lg:col-span-3 rounded-lg animate-pulse">
+            <div className="h-4 bg-gray-300 rounded mb-2"></div>
+            <div className="h-8 bg-gray-300 rounded mb-4"></div>
+            <div className="h-3 bg-gray-300 rounded"></div>
+          </div>
+        ))}
+      </>
+    );
+  }
 
   return (
     <>
       <Card
         title="Patients"
-        value={patients.length}
-        pilltext={patientsTrend}
-        trend="up"
-        period={todaydate}
+        value={metrics.totalPatients}
+        pilltext={metrics.patientsTrend}
+        trend={getTrendDirection(metrics.patientsTrend)}
+        period={todayDate}
       />
       <Card
         title="New this Week"
-        value={patientsThisWeek}
-        pilltext={patientsThisWeek > 0 ? "+100%" : "0%"}
-        trend={patientsThisWeek > 0 ? "up" : "down"}
-        period={weekperiod}
+        value={metrics.patientsThisWeek}
+        pilltext={metrics.patientsTrend}
+        trend={getTrendDirection(metrics.patientsTrend)}
+        period={weekPeriod}
       />
       <Card
         title="Appointments"
-        value={Appointments.length}
-        pilltext={appointmentsTrend}
-        trend="up"
-        period={todaydate}
+        value={metrics.totalAppointments}
+        pilltext={metrics.appointmentsTrend}
+        trend={getTrendDirection(metrics.appointmentsTrend)}
+        period={todayDate}
       />
       <Card
         title="New this week"
-        value={appointmentsThisWeek}
-        pilltext={appointmentsThisWeek > 0 ? "+100%" : "0%"}
-        trend={appointmentsThisWeek > 0 ? "up" : "down"}
-        period={weekperiod}
+        value={metrics.appointmentsThisWeek}
+        pilltext={metrics.appointmentsTrend}
+        trend={getTrendDirection(metrics.appointmentsTrend)}
+        period={weekPeriod}
       />
     </>
   );
